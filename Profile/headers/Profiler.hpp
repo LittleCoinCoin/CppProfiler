@@ -103,5 +103,5 @@ namespace Profile
 		PROFILE_API void Report() noexcept;
 	};
 
-	PROFILE_API extern void SetProfiler(Profiler* _profiler);
+	extern PROFILE_API void SetProfiler(Profiler* _profiler);
 }

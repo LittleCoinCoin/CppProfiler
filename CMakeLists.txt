@@ -5,8 +5,7 @@ cmake_minimum_required (VERSION 3.20)
 project ("CppProfiler")
 
 # In Windows, generated dlls and .exe must be at the same place
-# This makes sure that the libsbml.dll will be at the same place
-# as the tests.exe 
+# This makes sure that the .dll will be at the same place as the .exe 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" CACHE STRING "" )
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" CACHE STRING "" )
 
@@ -16,7 +15,20 @@ set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON)
 # For consistency we separate the potential .lib generated
 set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" CACHE STRING "")
 
-add_compile_definitions(PROFILER_ENABLED PROFILE_LIB_SHARED)
-add_subdirectory ("Profile")
+#In this project, by default we want to build the tests
+option(BUILD_PROFILER_TESTS "Build the test executable for the profiler" ON)
+if (BUILD_PROFILER_TESTS)
+	add_subdirectory ("Tests")
+endif()
 
-add_subdirectory ("Tests")
+# We want to build the profiler as a shared library
+option(BUILD_PROFILER_LIB "Build the profiler as a library" ON)
+option(ENABLE_PROFILER "This has an effect only if option BUILD_PROFILER_LIB is ON.
+						The profiler will record data if this option is ON.
+						Otherwise, it will just ignore the recording MACROS." ON)
+if (BUILD_PROFILER_LIB)
+	if (ENABLE_PROFILER)
+		add_compile_definitions(PROFILER_ENABLED)
+	endif()
+	add_subdirectory ("Profile")
+endif()

@@ -1,4 +1,7 @@
 ﻿# ~/Profiler/CMakeList.txt
+
+add_compile_definitions(BUILD_PROFILER_LIB)
+
 add_library (Profile SHARED
 
 "src/Profiler.cpp"
