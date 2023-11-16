@@ -1,4 +1,4 @@
-#include "Profiler.hpp"
+#include "Profile/Profiler.hpp"
 
 static Profile::Profiler* s_Profiler = nullptr;
 

@@ -1,8 +1,4 @@
-﻿// Profiler.cpp : Defines the entry point for the application.
-//
-
-#include <iostream>
-#include "Profiler.hpp"
+﻿#include "Profile/Profiler.hpp"
 
 void TestFunction(Profile::u64 _arr[], Profile::u64 _count)
 {
@@ -22,7 +18,6 @@ int main()
 	profiler.Initialize();
 	profiler.tracks[0].Initialize();
 
-	std::cout << "Hello CMake." << std::endl;
 	Profile::u64 arr[8192];
 	TestFunction(arr, 8192);
 

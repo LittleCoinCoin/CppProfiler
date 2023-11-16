@@ -8,7 +8,7 @@
 #include <sys/time.h>
 #endif
 
-#include "types.hpp"
+#include "Types.hpp"
 
 namespace Profile
 {
