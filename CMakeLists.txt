@@ -19,8 +19,6 @@ set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" CACHE STRING "")
 set(BUILD_SHARED_LIBS True)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS True)
 
-add_subdirectory ("Timer")
-
 add_compile_definitions(PROFILER_ENABLED)
 add_subdirectory ("Profiler")
 

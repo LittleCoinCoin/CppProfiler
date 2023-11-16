@@ -2,14 +2,14 @@
 
 #if _WIN32
 
-u64 Profile::Timer::GetOSTimerFreq(void)
+Profile::u64 Profile::Timer::GetOSTimerFreq(void)
 {
 	LARGE_INTEGER freq;
 	QueryPerformanceFrequency(&freq);
 	return freq.QuadPart;
 }
 
-u64 Profile::Timer::GetOSTimer(void)
+Profile::u64 Profile::Timer::GetOSTimer(void)
 {
 	LARGE_INTEGER value;
 	QueryPerformanceCounter(&value);
@@ -18,29 +18,29 @@ u64 Profile::Timer::GetOSTimer(void)
 
 #else
 
-u64 Profile::Timer::GetOSTimerFreq(void)
+Profile::u64 Profile::Timer::GetOSTimerFreq(void)
 {
 	return 1000000;
 }
 
-u64 Profile::Timer::GetOSTimer(void)
+Profile::u64 Profile::Timer::GetOSTimer(void)
 {
 	struct timeval value;
 	gettimeofday(&value, 0);
 
-	u64 Result = Profile::Timer::GetOSTimerFreq() * (u64)value.tv_sec + (u64)value.tv_usec;
+	Profile::u64 Result = Profile::Timer::GetOSTimerFreq() * (Profile::u64)value.tv_sec + (Profile::u64)value.tv_usec;
 	return Result;
 }
 
 #endif
 
-u64 Profile::Timer::GetCPUTimer(void)
+Profile::u64 Profile::Timer::GetCPUTimer(void)
 {
 	return __rdtsc();
 }
 
 
-u64 Profile::Timer::EstimateCPUFreq(u64 _msToWait)
+Profile::u64 Profile::Timer::EstimateCPUFreq(u64 _msToWait)
 {
 	u64 OSFreq = GetOSTimerFreq();
 	u64 CPUStart = GetCPUTimer();
