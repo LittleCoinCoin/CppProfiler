@@ -3,9 +3,9 @@
 #include <array>
 #include <vector>
 
+#include "Export.hpp"
 #include "Timing.hpp"
-
-#include "types.hpp"
+#include "Types.hpp"
 
 #ifndef PROFILER_ENABLED
 #define PROFILER_ENABLED 0
@@ -18,7 +18,7 @@ namespace Profile
 
 #if PROFILER_ENABLED
 
-	struct ProfileBlock
+	struct PROFILE_API ProfileBlock
 	{
 		const char* name;
 		u64 start;
@@ -75,11 +75,11 @@ namespace Profile
 			++timings[_timingIdx].hitCount;
 		}
 
-		void Initialize() noexcept;
+		PROFILE_API void Initialize() noexcept;
 
-		void End() noexcept;
+		PROFILE_API void End() noexcept;
 
-		void Report(u64 _totalElapsedReference) noexcept;
+		PROFILE_API void Report(u64 _totalElapsedReference) noexcept;
 	};
 
 	struct Profiler
@@ -94,14 +94,14 @@ namespace Profile
 
 		}
 
-		bool AddTrack(const char* _name);
+		PROFILE_API bool AddTrack(const char* _name);
 
-		void End() noexcept;
+		PROFILE_API void End() noexcept;
 
-		void Initialize() noexcept;
+		PROFILE_API void Initialize() noexcept;
 
-		void Report() noexcept;
+		PROFILE_API void Report() noexcept;
 	};
 
-	extern void SetProfiler(Profiler* _profiler);
+	PROFILE_API extern void SetProfiler(Profiler* _profiler);
 }

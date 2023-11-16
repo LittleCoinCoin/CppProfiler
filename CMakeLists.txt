@@ -16,10 +16,7 @@ set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON)
 # For consistency we separate the potential .lib generated
 set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" CACHE STRING "")
 
-set(BUILD_SHARED_LIBS True)
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS True)
-
-add_compile_definitions(PROFILER_ENABLED)
-add_subdirectory ("Profiler")
+add_compile_definitions(PROFILER_ENABLED PROFILE_LIB_SHARED)
+add_subdirectory ("Profile")
 
 add_subdirectory ("Tests")

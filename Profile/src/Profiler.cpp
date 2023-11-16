@@ -2,7 +2,7 @@
 
 static Profile::Profiler* s_Profiler = nullptr;
 
-void Profile::SetProfiler(Profiler* _profiler)
+PROFILE_API void Profile::SetProfiler(Profiler* _profiler)
 {
 	s_Profiler = _profiler;
 }
