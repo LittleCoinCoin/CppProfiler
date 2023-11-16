@@ -4,11 +4,11 @@
 #include <iostream>
 #include "Profiler.hpp"
 
-void TestFunction(u64 _arr[], u64 _count)
+void TestFunction(Profile::u64 _arr[], Profile::u64 _count)
 {
 	PROFILE_FUNCTION_TIME(0);
 
-	for (u64 i = 0; i < _count; ++i)
+	for (Profile::u64 i = 0; i < _count; ++i)
 	{
 		_arr[i] = i;
 	}
@@ -23,7 +23,7 @@ int main()
 	profiler.tracks[0].Initialize();
 
 	std::cout << "Hello CMake." << std::endl;
-	u64 arr[8192];
+	Profile::u64 arr[8192];
 	TestFunction(arr, 8192);
 
 	profiler.tracks[0].End();

@@ -16,7 +16,7 @@ namespace Profile
 	@brief A struct to give access to the OS and CPU timers
 			and frequencies.
 	*/
-	static struct Timer
+	struct Timer
 	{
 		/*!
 		@brief A wrapper to get the current counter in the OS.
