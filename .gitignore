@@ -1,3 +1,11 @@
+# Ignore build
+out
+build
+
+# Ignore Visual Studio
+.vs
+
+# Cmake gitignore template
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
