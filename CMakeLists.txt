@@ -21,14 +21,14 @@ if (BUILD_PROFILER_TESTS)
 	add_subdirectory ("src/Tests")
 endif()
 
+option(ENABLE_PROFILER "The profiler will record data if this option is ON.
+						Otherwise, it will just ignore the recording MACROS." ON)
+if (ENABLE_PROFILER)
+	add_compile_definitions(PROFILER_ENABLED)
+endif()
+
 # We want to build the profiler as a shared library
 option(BUILD_PROFILER_LIB "Build the profiler as a library" ON)
-option(ENABLE_PROFILER "This has an effect only if option BUILD_PROFILER_LIB is ON.
-						The profiler will record data if this option is ON.
-						Otherwise, it will just ignore the recording MACROS." ON)
 if (BUILD_PROFILER_LIB)
-	if (ENABLE_PROFILER)
-		add_compile_definitions(PROFILER_ENABLED)
-	endif()
 	add_subdirectory ("src/Profile")
 endif()
