@@ -7,9 +7,11 @@
 #include "Timing.hpp"
 #include "Types.hpp"
 
-#ifndef PROFILER_ENABLED
+#ifdef _PROFILER_ENABLED
+#define PROFILER_ENABLED 1
+#else
 #define PROFILER_ENABLED 0
-#endif // !PROFILER_ENABLED
+#endif // _PROFILER_ENABLED
 
 namespace Profile
 {

@@ -1,6 +1,6 @@
 # ~/src/Tests/CMakeLists.txt
 
-add_compile_definitions(PROFILER_ENABLED) # The Profiler must be enabled for the tests
+add_compile_definitions(_PROFILER_ENABLED) # The Profiler must be enabled for the tests
 
 add_executable(CppProfilerTests 
 
