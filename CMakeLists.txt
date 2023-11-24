@@ -18,17 +18,20 @@ set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" CACHE STRING "")
 #In this project, by default we want to build the tests
 option(BUILD_PROFILER_TESTS "Build the test executable for the profiler" ON)
 if (BUILD_PROFILER_TESTS)
+	message("Building tests")
 	add_subdirectory ("src/Tests")
 endif()
 
 option(ENABLE_PROFILER "The profiler will record data if this option is ON.
 						Otherwise, it will just ignore the recording MACROS." ON)
 if (ENABLE_PROFILER)
+	message("Enabling profiler")
 	add_compile_definitions(PROFILER_ENABLED)
 endif()
 
 # We want to build the profiler as a shared library
 option(BUILD_PROFILER_LIB "Build the profiler as a library" ON)
 if (BUILD_PROFILER_LIB)
+	message("Building profiler as a library")
 	add_subdirectory ("src/Profile")
 endif()
