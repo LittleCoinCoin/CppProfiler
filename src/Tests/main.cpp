@@ -27,3 +27,5 @@ int main()
 
 	return 0;
 }
+
+PROFILER_END_CHECK;
