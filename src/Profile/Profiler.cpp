@@ -73,7 +73,7 @@ bool Profile::Profiler::AddTrack(const char* _name)
 		}
 	}
 
-	printf("Profiler can only track %u tracks\n", NB_TRACKS);
+	printf("Track named \"%s\" could not be added because the profiler has reached the maximum number of tracks (%u)\n", _name, NB_TRACKS);
 	return false;
 }
 

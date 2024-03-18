@@ -48,6 +48,10 @@ int main()
 	TestFunction_Track2(arr, 8192);
 	profiler.tracks[1].End();
 
+	//This should lead to a message in the application that the track could not
+	//be added because only 2 tracks are allowed currently.
+	profiler.AddTrack("Failing Track");
+
 	profiler.End();
 	profiler.Report();
 
