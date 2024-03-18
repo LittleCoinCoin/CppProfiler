@@ -64,13 +64,11 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 
 bool Profile::Profiler::AddTrack(const char* _name)
 {
-	for (u16 trackIdx = 0; trackIdx < NB_TRACKS; ++trackIdx)
+	if (trackCount < NB_TRACKS)
 	{
-		if (tracks[trackIdx].name == nullptr)
-		{
-			tracks[trackIdx].name = _name;
-			return true;
-		}
+		tracks[trackCount].name = _name;
+		trackCount++;
+		return true;
 	}
 
 	printf("Track named \"%s\" could not be added because the profiler has reached the maximum number of tracks (%u)\n", _name, NB_TRACKS);

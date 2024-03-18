@@ -15,8 +15,13 @@
 
 namespace Profile
 {
-#define NB_TIMINGS 1024
-#define NB_TRACKS 2
+#ifndef NB_TIMINGS //Possibly defined at compile time
+	#define NB_TIMINGS 1024
+#endif // !NB_TIMINGS
+
+#ifndef NB_TRACKS //Possibly defined at compile time, cannot exceed 256 (u8)
+	#define NB_TRACKS 2
+#endif // !NB_TRACKS
 
 #if PROFILER_ENABLED
 
@@ -89,6 +94,7 @@ namespace Profile
 		const char* name = nullptr;
 		u64 start = 0;
 		u64 elapsed = 0;
+		u8 trackCount = 0;
 		std::array<ProfileTrack, NB_TRACKS> tracks;
 
 		Profiler(const char* _name) : name(_name)
