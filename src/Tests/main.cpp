@@ -1,4 +1,4 @@
-﻿#include "Profile/Profiler.hpp"
+#include "Profile/Profiler.hpp"
 
 /*!
 @brief Tests the macro time profiling macro on track 0: PROFILE_FUNCTION_TIME(0).
@@ -91,5 +91,3 @@ int main()
 
 	return 0;
 }
-
-PROFILER_END_CHECK;

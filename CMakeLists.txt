@@ -17,7 +17,7 @@ set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" CACHE STRING "")
 
 # In this project, we are setting the number of timings and tracks to a default value
 # In this project, we are setting the number of timings and tracks to a default value
-add_compile_definitions(NB_TIMINGS=2048)
+add_compile_definitions(NB_TIMINGS=64)
 add_compile_definitions(NB_TRACKS=8) # cannot exceed 256 (u8)
 
 #In this project, by default we want to build the tests

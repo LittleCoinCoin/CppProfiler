@@ -15,8 +15,8 @@
 
 namespace Profile
 {
-#ifndef NB_TIMINGS //Possibly defined at compile time
-	#define NB_TIMINGS 1024
+#ifndef NB_TIMINGS //Possibly defined at compile time, cannot exceed 256 (u8)
+	#define NB_TIMINGS 256 
 #endif // !NB_TIMINGS
 
 #ifndef NB_TRACKS //Possibly defined at compile time, cannot exceed 256 (u8)
@@ -25,61 +25,58 @@ namespace Profile
 
 #if PROFILER_ENABLED
 
+#define NAME_CONCAT2(a, b) a##b
+#define NAME_CONCAT(a, b) NAME_CONCAT2(a, b)
+
+#define PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileResultIdx, byteCount, ...)                                        \
+    static Profile::u8 profileResult_##profileResultIdx = Profile::Profiler::GetProfileResultIndex(trackIdx, __FILE__, __LINE__, blockName); \
+    Profile::ProfileBlock ProfiledBlock_##profileResultIdx(trackIdx, profileResult_##profileResultIdx, byteCount, ## __VA_ARGS__)
+#define PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, profileResultIdx, byteCount, ...) PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileResultIdx, byteCount, ## __VA_ARGS__)
+
+#define PROFILE_BLOCK_TIME_BANDWIDTH(blockName, trackIdx, byteCount, ...) PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, __LINE__, ## __VA_ARGS__)
+#define PROFILE_BLOCK_TIME(blockName, trackIdx, ...) PROFILE_BLOCK_TIME_BANDWIDTH(#blockName, trackIdx, 0, ## __VA_ARGS__)
+
+#define PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, byteCount, ...) PROFILE_BLOCK_TIME_BANDWIDTH_(__FUNCTION__, trackIdx, __LINE__, byteCount, ## __VA_ARGS__)
+#define PROFILE_FUNCTION_TIME(trackIdx,...) PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, 0, ## __VA_ARGS__)
+
+	/*!
+	@brief A hash function to generate a unique index for a profile result.
+	@details The index is determined by the hash of the file name and line number.
+	@param _fileName The name of the file where the block is located.
+	@param _lineNumber The line number in the file where the block is located.
+	*/
+	static u64 Hash(const char* _fileName, u32 _lineNumber)
+	{
+		u64 res = _lineNumber;
+		for (const char* At = _fileName; *At; ++At)
+		{
+			res = res * 65599 + *At;
+		}
+		res = ((res << 16) ^ (res >> 16)) * 73244475;
+		res = ((res << 16) ^ (res >> 16)) * 73244475;
+		res = ((res << 16) ^ (res >> 16));
+		return res ;
+	}
+
 	/*!
 	@brief A struct to profile a block of code.
 	*/
 	struct PROFILE_API ProfileBlock
 	{
 		/*!
-		@brief The name of the block.
-		*/
-		const char* name;
-
-		/*!
-		@brief The start time of the block.
-		*/
-		u64 start;
-
-		/*!
-		@brief The accumulated time every the program went through the block.
-		*/
-		u64 elapsedBuffer;
-
-		/*!
 		@brief The index of the profiling track this block belongs to.
 		*/
-		u16 trackIdx;
+		u8 trackIdx = 0;
 
 		/*!
 		@brief The index of this block in the profiling track.
 		*/
-		u16 selfIdx;
+		u8 profileResultIdx = 0;
 
-		ProfileBlock(const char* _name, u16 _trackIdx, u16 _selfIdx, u64 _byteCount);
+		ProfileBlock(u8 _trackIdx, u8 _profileResultIdx, u64 _byteCount);
 
 		~ProfileBlock();
 	};
-
-#define NAME_CONCAT2(a, b) a##b
-#define NAME_CONCAT(a, b) NAME_CONCAT2(a, b)
-
-#define PROFILE_BLOCK_TIME_BANDWIDTH(name, trackIdx, byteCount) Profile::ProfileBlock NAME_CONCAT(Block, __LINE__)(name, trackIdx, __COUNTER__ + 1, byteCount)
-#define PROFILE_BLOCK_TIME(name, trackIdx) PROFILE_BLOCK_TIME_BANDWIDTH(name, trackIdx, 0)
-
-#define PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, byteCount) PROFILE_BLOCK_TIME_BANDWIDTH(__FUNCTION__, trackIdx, byteCount)
-#define PROFILE_FUNCTION_TIME(trackIdx) PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, 0)
-
-#define PROFILER_END_CHECK static_assert(__COUNTER__ < NB_TIMINGS, "Number of profile blocks exceeds size of ProfileTrack::timings array")
-
-#else // PROFILER_ENABLED
-
-#define PROFILE_BLOCK_TIME_BANDWIDTH(...)
-#define PROFILE_BLOCK_TIME(...)
-#define PROFILE_FUNCTION_TIME_BANDWIDTH(...)
-#define PROFILE_FUNCTION_TIME(...)
-#define PROFILER_END_CHECK
-
-#endif // PROFILER_ENABLED
 
 	/*!
 	@brief A struct to store the profiling statistices of a profiled block.
@@ -87,9 +84,24 @@ namespace Profile
 	struct ProfileResult
 	{
 		/*!
+		@brief The name of the file where the block is located.
+		*/
+		const char* fileName = nullptr;
+
+		/*!
+		@brief The line number in the file where the block is located.
+		*/
+		u32 lineNumber;
+
+		/*!
 		@brief The name of the block.
 		*/
-		const char* name = nullptr;
+		const char* blockName = nullptr;
+
+		/*!
+		@brief The start time of the block.
+		*/
+		u64 start = 0;
 
 		/*!
 		@brief The accumulated time the block was executed.
@@ -105,7 +117,36 @@ namespace Profile
 		@brief The number of bytes processed by the block.
 		*/
 		u64 processedByteCount = 0;
+
+		/*!
+		@brief Update the profiling statistics of the block upon execution.
+		@param _byteCount The number of bytes processed by the block.
+		*/
+		inline void Open(u64 _byteCount)
+		{
+			start = Timer::GetCPUTimer();
+			hitCount++;
+			processedByteCount += _byteCount;
+		}
+
+		/*!
+		@brief Update the profiling statistics of the block upon completion.
+		*/
+		inline void Close()
+		{
+			elapsed += Timer::GetCPUTimer() - start;
+		}
 	};
+
+#else // PROFILER_ENABLED
+
+#define PROFILE_BLOCK_TIME_BANDWIDTH(...)
+#define PROFILE_BLOCK_TIME(...)
+#define PROFILE_FUNCTION_TIME_BANDWIDTH(...)
+#define PROFILE_FUNCTION_TIME(...)
+#define PROFILER_END_CHECK
+
+#endif // PROFILER_ENABLED
 
 	/*!
 	@brief A struct to define a track in the profiler that will contain profile
@@ -135,27 +176,11 @@ namespace Profile
 		std::array<ProfileResult, NB_TIMINGS> timings;
 
 		/*!
-		@brief Adds (or updates) the profiling statistics of a block at index
-				@p _timingIdx in ::timings.
-		@param _name The name of the block. (Unfortunatly, this is added every
-					 time a result is added).
-		@param _elapsed The total time the block took to execute, including every
-						previous execution.
-		@param _timingIdx The index of the block in ::timings.
-		*/
-		inline void AddResult(const char* _name, u64 _elapsed, u16 _timingIdx)
-		{
-			timings[_timingIdx].name = _name;
-			timings[_timingIdx].elapsed = _elapsed;
-			++timings[_timingIdx].hitCount;
-		}
-		
-		/*!
 		@brief Starts the track.
 		@details Sets ::start to the current time.
 		*/
 		PROFILE_API void Initialize() noexcept;
-
+		
 		/*!
 		@brief Ends the track.
 		@details Sets ::elapsed to the time since ::Initialize was called.
@@ -208,6 +233,17 @@ namespace Profile
 		}
 
 		/*!
+		@brief Gets an idex for a profile result.
+		@details The index is determined by the hash of the file name and line number.
+		@param _trackIdx The index of the track the profile result belongs to.
+		@param _fileName The name of the file where the block is located.
+		@param _lineNumber The line number in the file where the block is located.
+		@param _blockName The name of the block.
+		@return The index of the profile result.
+		*/
+		static u8 GetProfileResultIndex(u8 _trackIdx, const char* _fileName, u32 _lineNumber, const char* _blockName);
+
+		/*!
 		@brief Adds a track to the profiler.
 		@details The track will be added only if the profiler has not reached
 				 the maximum number of tracks (NB_TRACKS). Effectively, "adding
@@ -216,6 +252,16 @@ namespace Profile
 		@param _name The name of the track.
 		*/
 		PROFILE_API bool AddTrack(const char* _name);
+
+		/*!
+		@brief Closes a block.
+		@param _trackIdx The index of the track the block belongs to.
+		@param _profileResultIdx The index of the profile result.
+		*/
+		PROFILE_API inline void CloseBlock(u8 _trackIdx, u8 _profileResultIdx)
+		{
+			tracks[_trackIdx].timings[_profileResultIdx].Close();
+		}
 
 		/*!
 		@brief Ends the profiler.
@@ -228,6 +274,17 @@ namespace Profile
 		@details Sets ::start to the current time.
 		*/
 		PROFILE_API void Initialize() noexcept;
+		
+		/*!
+		@brief Opens a block.
+		@param _trackIdx The index of the track the block belongs to.
+		@param _profileResultIdx The index of the profile result.
+		@param _byteCount The number of bytes processed by the block.
+		*/
+		PROFILE_API inline void OpenBlock(u8 _trackIdx, u8 _profileResultIdx, u64 _byteCount)
+		{
+			tracks[_trackIdx].timings[_profileResultIdx].Open(_byteCount);
+		}
 
 		/*!
 		@brief Outputs the profiling statistics of all tracks in the profiler.

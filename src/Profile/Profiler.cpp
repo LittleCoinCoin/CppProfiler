@@ -9,20 +9,16 @@ PROFILE_API void Profile::SetProfiler(Profiler* _profiler)
 
 #if PROFILER_ENABLED
 
-Profile::ProfileBlock::ProfileBlock(const char* _name, u16 _trackIdx, u16 _selfIdx, u64 _byteCount) :
-	name(_name), trackIdx(_trackIdx), selfIdx(_selfIdx)
+//Profile::ProfileBlock::ProfileBlock(const char* _name, u16 _trackIdx, u16 _selfIdx, u64 _byteCount) :
+Profile::ProfileBlock::ProfileBlock(u8 _trackIdx, u8 _profileResultIdx, u64 _byteCount) :
+	trackIdx(_trackIdx), profileResultIdx(_profileResultIdx)
 {
-	start = Timer::GetCPUTimer();
-	s_Profiler->tracks[trackIdx].timings[selfIdx].processedByteCount += _byteCount;
-	elapsedBuffer = s_Profiler->tracks[trackIdx].timings[selfIdx].elapsed;
+	s_Profiler->OpenBlock(trackIdx, profileResultIdx, _byteCount);
 }
 
 Profile::ProfileBlock::~ProfileBlock()
 {
-	if (trackIdx < NB_TRACKS)
-	{
-		s_Profiler->tracks[trackIdx].AddResult(name, elapsedBuffer + Timer::GetCPUTimer() - start, selfIdx);
-	}
+	s_Profiler->CloseBlock(trackIdx, profileResultIdx);
 }
 
 #endif
@@ -47,10 +43,10 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 
 	for (ProfileResult& result : timings)
 	{
-		if (result.name != nullptr)
+		if (result.blockName != nullptr)
 		{
 			printf("%s[%llu]: %llu (%.2f%% of track; %.2f%% of total",
-				result.name, result.hitCount, result.elapsed, 100.0f * (f64)result.elapsed / (f64)elapsed,
+				result.blockName, result.hitCount, result.elapsed, 100.0f * (f64)result.elapsed / (f64)elapsed,
 				100.0f * (f64)result.elapsed / (f64)_totalElapsedReference);
 			if (result.processedByteCount > 0)
 			{
@@ -60,6 +56,33 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 			printf(")\n");
 		}
 	}
+}
+
+Profile::u8 Profile::Profiler::GetProfileResultIndex(u8 _trackIdx, const char* _fileName, u32 _lineNumber, const char* _blockName)
+{
+	u8 profileResultIndex = Hash(_fileName, _lineNumber) % NB_TIMINGS;
+
+	ProfileResult* profileResult = &s_Profiler->tracks[_trackIdx].timings[profileResultIndex];
+	ProfileResult* InitialprofileResult = profileResult;
+
+	// no need to compare _fileName and LinenNumber values, because for
+	// each (_fileName, _lineNumber) pair function will be called only once,
+	// so simply find first unused place in table
+	while (profileResult->fileName)
+	{
+		profileResultIndex = (profileResultIndex + 1) % NB_TIMINGS;
+		profileResult = &s_Profiler->tracks[_trackIdx].timings[profileResultIndex];
+
+		// if we examined every entry in hash table that means hash table has less entries
+		// than debug records we are putting in source code! Increase MAX_DEBUG_RECORD_COUNT!
+		//Assert(profileResult != InitialprofileResult);
+	}
+
+	profileResult->fileName = _fileName;
+	profileResult->lineNumber = _lineNumber;
+	profileResult->blockName = _blockName;
+
+	return profileResultIndex;
 }
 
 bool Profile::Profiler::AddTrack(const char* _name)
