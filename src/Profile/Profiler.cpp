@@ -9,8 +9,7 @@ PROFILE_API void Profile::SetProfiler(Profiler* _profiler)
 
 #if PROFILER_ENABLED
 
-//Profile::ProfileBlock::ProfileBlock(const char* _name, u16 _trackIdx, u16 _selfIdx, u64 _byteCount) :
-Profile::ProfileBlock::ProfileBlock(u8 _trackIdx, u8 _profileResultIdx, u64 _byteCount) :
+Profile::ProfileBlock::ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileResultIdx, u64 _byteCount) :
 	trackIdx(_trackIdx), profileResultIdx(_profileResultIdx)
 {
 	s_Profiler->OpenBlock(trackIdx, profileResultIdx, _byteCount);
@@ -58,9 +57,9 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 	}
 }
 
-Profile::u8 Profile::Profiler::GetProfileResultIndex(u8 _trackIdx, const char* _fileName, u32 _lineNumber, const char* _blockName)
+NB_TIMINGS_TYPE Profile::Profiler::GetProfileResultIndex(NB_TRACKS_TYPE _trackIdx, const char* _fileName, u32 _lineNumber, const char* _blockName)
 {
-	u8 profileResultIndex = Hash(_fileName, _lineNumber) % NB_TIMINGS;
+	NB_TIMINGS_TYPE profileResultIndex = Hash(_fileName, _lineNumber) % NB_TIMINGS;
 
 	ProfileResult* profileResult = &s_Profiler->tracks[_trackIdx].timings[profileResultIndex];
 	ProfileResult* InitialprofileResult = profileResult;

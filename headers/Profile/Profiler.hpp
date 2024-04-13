@@ -1,42 +1,104 @@
 #pragma once
 
-#include <array>
-#include <vector>
+#include <array> // for the timings and tracks arrays
+#include <cstdio> // for printf
+#include <type_traits> // for std::conditional_t in U_SIZE_ADAPTER
 
 #include "Export.hpp"
 #include "Timing.hpp"
 #include "Types.hpp"
 
-#ifdef _PROFILER_ENABLED
-#define PROFILER_ENABLED 1
+#ifdef _PROFILER_ENABLED // Possibly defined as compilation variable
+#define PROFILER_ENABLED 1 // Just an alias for _PROFILER_ENABLED to be used as `#if PROFILER_ENABLED` instead of `#ifdef _PROFILER_ENABLED`
 #else
 #define PROFILER_ENABLED 0
 #endif // _PROFILER_ENABLED
 
 namespace Profile
 {
-#ifndef NB_TIMINGS //Possibly defined at compile time, cannot exceed 256 (u8)
+#ifndef NB_TIMINGS //Possibly defined as compilation variable
 	#define NB_TIMINGS 256 
 #endif // !NB_TIMINGS
 
-#ifndef NB_TRACKS //Possibly defined at compile time, cannot exceed 256 (u8)
+#ifndef NB_TRACKS //Possibly defined as compilation variable
 	#define NB_TRACKS 2
 #endif // !NB_TRACKS
 
+
 #if PROFILER_ENABLED
 
-#define NAME_CONCAT2(a, b) a##b
-#define NAME_CONCAT(a, b) NAME_CONCAT2(a, b)
+/*!
+@brief Expands to adapt the type of the unsigned integer to be
+		u8, u16, u32, or u64 depending on the value of @p x.
+		@details For example, if 0 <= x < 256, it will return u8; if 256 <= x < 65532
+		it will return u16; and so on.
+*/
+#define U_SIZE_ADAPTER(x) \
+	std::conditional_t<(x < (1<<8)), Profile::u8, \
+	std::conditional_t<(x < (1<<16)), Profile::u16, \
+	std::conditional_t<(x < (1<<32)), Profile::u32, Profile::u64>>>
 
+/*!
+@brief The macro used to adapt the type of the different variables used to
+		represent the number or index of Profile Blocks based on the value of the 
+		max number of profile blocks (NB_TIMINGS).
+@details -1 because U_SIZE_ADAPTER is 0 indexed and NB_TIMINGS is a number of elements, not an index.
+*/
+#define NB_TIMINGS_TYPE U_SIZE_ADAPTER(NB_TIMINGS-1)
+
+/*!
+@brief The macro used to adapt the type of the different variables used to
+		represent the number or index of Profile Tracks based on the value of the
+		max number of profile tracks (NB_TRACKS).
+@details -1 because U_SIZE_ADAPTER is 0 indexed and NB_TIMINGS is a number of elements, not an index.
+*/
+#define NB_TRACKS_TYPE U_SIZE_ADAPTER(NB_TRACKS-1)
+
+/*!
+@brief DO NOT USE in code. Prefer using PROFILE_BLOCK_TIME_BANDWIDTH, PROFILE_FUNCTION_TIME_BANDWIDTH,
+		PROFILE_BLOCK_TIME, or PROFILE_FUNCTION_TIME depending on your situation.
+		The final macro expanding to generate the unique profile block index
+		as well as the profile block opbject itself. 
+*/
 #define PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileResultIdx, byteCount, ...)                                        \
-    static Profile::u8 profileResult_##profileResultIdx = Profile::Profiler::GetProfileResultIndex(trackIdx, __FILE__, __LINE__, blockName); \
-    Profile::ProfileBlock ProfiledBlock_##profileResultIdx(trackIdx, profileResult_##profileResultIdx, byteCount, ## __VA_ARGS__)
+	static NB_TIMINGS_TYPE profileResult_##profileResultIdx = Profile::Profiler::GetProfileResultIndex(trackIdx, __FILE__, __LINE__, blockName); \
+	Profile::ProfileBlock ProfiledBlock_##profileResultIdx(trackIdx, profileResult_##profileResultIdx, byteCount, ## __VA_ARGS__)
+
+/*!
+@brief DO NOT USE in code. Prefer using PROFILE_BLOCK_TIME_BANDWIDTH, PROFILE_FUNCTION_TIME_BANDWIDTH,
+		PROFILE_BLOCK_TIME, or PROFILE_FUNCTION_TIME depending on your situation.
+		The intermediate macro expanding PROFILE_BLOCK_TIME_BANDWIDTH__. Used to handle
+		the VA_ARGS and the profileResultIdx parameters.
+*/
 #define PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, profileResultIdx, byteCount, ...) PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileResultIdx, byteCount, ## __VA_ARGS__)
 
+/*!
+@brief USE in code. The macro to profile an arbitrary block of code with a name
+		you can choose. This macro also accepts a number of bytes in parameter
+		to monitor data throughput as well.
+*/
 #define PROFILE_BLOCK_TIME_BANDWIDTH(blockName, trackIdx, byteCount, ...) PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, __LINE__, ## __VA_ARGS__)
+
+/*!
+@brief USE in code. The macro to profile an arbitrary block of code with a name
+		you can choose. This expands to PROFILE_BLOCK_TIME_BANDWIDTH with byteCount=0.
+		So, you this when you only wish to profile processing time.
+*/
 #define PROFILE_BLOCK_TIME(blockName, trackIdx, ...) PROFILE_BLOCK_TIME_BANDWIDTH(#blockName, trackIdx, 0, ## __VA_ARGS__)
 
+/*!
+@brief USE in code. The macro to profile a function. This macro also accepts a
+		number of bytes in parameter to monitor data throughput as well. This
+		expands to PROFILE_BLOCK_TIME_BANDWIDTH_ with the function's name as the
+		blockName (i.e., using __FUNCTION__).
+*/
 #define PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, byteCount, ...) PROFILE_BLOCK_TIME_BANDWIDTH_(__FUNCTION__, trackIdx, __LINE__, byteCount, ## __VA_ARGS__)
+
+/*!
+@brief USE in code. The macro to profile a function. This expands to PROFILE_FUNCTION_TIME_BANDWIDTH
+		with byteCount=0. So, you this when you only wish to profile processing time
+		of the function.
+*/
 #define PROFILE_FUNCTION_TIME(trackIdx,...) PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, 0, ## __VA_ARGS__)
 
 	/*!
@@ -66,14 +128,14 @@ namespace Profile
 		/*!
 		@brief The index of the profiling track this block belongs to.
 		*/
-		u8 trackIdx = 0;
+		NB_TIMINGS_TYPE trackIdx = 0;
 
 		/*!
 		@brief The index of this block in the profiling track.
 		*/
-		u8 profileResultIdx = 0;
+		NB_TIMINGS_TYPE profileResultIdx = 0;
 
-		ProfileBlock(u8 _trackIdx, u8 _profileResultIdx, u64 _byteCount);
+		ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileResultIdx, u64 _byteCount);
 
 		~ProfileBlock();
 	};
@@ -220,7 +282,7 @@ namespace Profile
 		@details This counts the tracks in ::tracks that have been given a name. 
 		@remarks It cannot exceed NB_TRACKS.
 		*/
-		u8 trackCount = 0;
+		NB_TRACKS_TYPE trackCount = 0;
 
 		/*!
 		@brief The tracks in the profiler.
@@ -241,7 +303,7 @@ namespace Profile
 		@param _blockName The name of the block.
 		@return The index of the profile result.
 		*/
-		static u8 GetProfileResultIndex(u8 _trackIdx, const char* _fileName, u32 _lineNumber, const char* _blockName);
+		static NB_TIMINGS_TYPE GetProfileResultIndex(NB_TRACKS_TYPE _trackIdx, const char* _fileName, u32 _lineNumber, const char* _blockName);
 
 		/*!
 		@brief Adds a track to the profiler.
@@ -258,7 +320,7 @@ namespace Profile
 		@param _trackIdx The index of the track the block belongs to.
 		@param _profileResultIdx The index of the profile result.
 		*/
-		PROFILE_API inline void CloseBlock(u8 _trackIdx, u8 _profileResultIdx)
+		PROFILE_API inline void CloseBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileResultIdx)
 		{
 			tracks[_trackIdx].timings[_profileResultIdx].Close();
 		}
@@ -281,7 +343,7 @@ namespace Profile
 		@param _profileResultIdx The index of the profile result.
 		@param _byteCount The number of bytes processed by the block.
 		*/
-		PROFILE_API inline void OpenBlock(u8 _trackIdx, u8 _profileResultIdx, u64 _byteCount)
+		PROFILE_API inline void OpenBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileResultIdx, u64 _byteCount)
 		{
 			tracks[_trackIdx].timings[_profileResultIdx].Open(_byteCount);
 		}

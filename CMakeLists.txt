@@ -16,9 +16,8 @@ set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON)
 set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" CACHE STRING "")
 
 # In this project, we are setting the number of timings and tracks to a default value
-# In this project, we are setting the number of timings and tracks to a default value
-add_compile_definitions(NB_TIMINGS=64)
-add_compile_definitions(NB_TRACKS=8) # cannot exceed 256 (u8)
+add_compile_definitions(NB_TIMINGS=256)
+add_compile_definitions(NB_TRACKS=8)
 
 #In this project, by default we want to build the tests
 option(BUILD_PROFILER_TESTS "Build the test executable for the profiler" ON)
