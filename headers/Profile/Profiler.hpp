@@ -253,6 +253,11 @@ namespace Profile
 		@brief Outputs the profiling statistics of all blocks in the track.
 		*/
 		PROFILE_API void Report(u64 _totalElapsedReference) noexcept;
+
+		/*!
+		@brief Resets the values of all blocks in the track that have a name.
+		*/
+		PROFILE_API void ResetExistingTimings() noexcept;
 	};
 
 	/*!
@@ -295,7 +300,7 @@ namespace Profile
 		}
 
 		/*!
-		@brief Gets an idex for a profile result.
+		@brief Gets an index for a profile result.
 		@details The index is determined by the hash of the file name and line number.
 		@param _trackIdx The index of the track the profile result belongs to.
 		@param _fileName The name of the file where the block is located.
@@ -352,6 +357,11 @@ namespace Profile
 		@brief Outputs the profiling statistics of all tracks in the profiler.
 		*/
 		PROFILE_API void Report() noexcept;
+
+		/*!
+		@brief Resets the values of all blocks in all tracks that have a name.
+		*/
+		PROFILE_API void ResetExistingTracks() noexcept;
 	};
 
 	/*!
