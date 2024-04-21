@@ -146,14 +146,14 @@ namespace Profile
 	struct ProfileResult
 	{
 		/*!
-		@brief The name of the file where the block is located.
-		*/
-		const char* fileName = nullptr;
-
-		/*!
 		@brief The line number in the file where the block is located.
 		*/
 		u32 lineNumber;
+
+		/*!
+		@brief The name of the file where the block is located.
+		*/
+		const char* fileName = nullptr;
 
 		/*!
 		@brief The name of the block.
@@ -181,6 +181,14 @@ namespace Profile
 		u64 processedByteCount = 0;
 
 		/*!
+		@brief Update the profiling statistics of the block upon completion.
+		*/
+		inline void Close()
+		{
+			elapsed += Timer::GetCPUTimer() - start;
+		}
+		
+		/*!
 		@brief Update the profiling statistics of the block upon execution.
 		@param _byteCount The number of bytes processed by the block.
 		*/
@@ -192,12 +200,10 @@ namespace Profile
 		}
 
 		/*!
-		@brief Update the profiling statistics of the block upon completion.
+		@brief Resets the values of the block.
+		@details Resetting do not change the ::blockName, the ::fileName, or the ::lineNumber.
 		*/
-		inline void Close()
-		{
-			elapsed += Timer::GetCPUTimer() - start;
-		}
+		void Reset() noexcept;
 	};
 
 #else // PROFILER_ENABLED
@@ -255,9 +261,17 @@ namespace Profile
 		PROFILE_API void Report(u64 _totalElapsedReference) noexcept;
 
 		/*!
-		@brief Resets the values of all blocks in the track that have a name.
+		@brief Resets the values of the track and its blocks.
+		@details Resetting do not change the names.
+		@see ::ResetTimings
 		*/
-		PROFILE_API void ResetExistingTimings() noexcept;
+		PROFILE_API void Reset() noexcept;
+
+		/*!
+		@brief Resets the values of all blocks in the track that have a name.
+		@details Resetting do not change the names.
+		*/
+		PROFILE_API void ResetTimings() noexcept;
 	};
 
 	/*!
@@ -359,7 +373,14 @@ namespace Profile
 		PROFILE_API void Report() noexcept;
 
 		/*!
+		@brief Resets the profiler's values as well as all its initialized tracks.
+		@details Resetting do not change the names.
+		*/
+		PROFILE_API void Reset() noexcept;
+
+		/*!
 		@brief Resets the values of all blocks in all tracks that have a name.
+		@details Resetting do not change the names.
 		*/
 		PROFILE_API void ResetExistingTracks() noexcept;
 	};

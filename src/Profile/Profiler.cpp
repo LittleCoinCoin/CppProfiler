@@ -20,6 +20,13 @@ Profile::ProfileBlock::~ProfileBlock()
 	s_Profiler->CloseBlock(trackIdx, profileResultIdx);
 }
 
+void Profile::ProfileResult::Reset() noexcept
+{
+	start = 0;
+	elapsed = 0;
+	hitCount = 0;
+	processedByteCount = 0;
+}
 #endif
 
 void Profile::ProfileTrack::End() noexcept
@@ -57,21 +64,26 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 	}
 }
 
-void Profile::ProfileTrack::ResetExistingTimings() noexcept
+void Profile::ProfileTrack::Reset() noexcept
+{
+	start = 0;
+	elapsed = 0;
+	ResetTimings();
+}
+
+void Profile::ProfileTrack::ResetTimings() noexcept
 {
 	for (ProfileResult& result : timings)
 	{
 		if (result.blockName != nullptr)
 		{
-			result.start = 0;
-			result.elapsed = 0;
-			result.hitCount = 0;
-			result.processedByteCount = 0;
+			result.Reset();
 		}
 	}
 }
 
-NB_TIMINGS_TYPE Profile::Profiler::GetProfileResultIndex(NB_TRACKS_TYPE _trackIdx, const char* _fileName, u32 _lineNumber, const char* _blockName)
+NB_TIMINGS_TYPE Profile::Profiler::GetProfileResultIndex(NB_TRACKS_TYPE _trackIdx,
+	const char* _fileName, u32 _lineNumber, const char* _blockName)
 {
 	NB_TIMINGS_TYPE profileResultIndex = Hash(_fileName, _lineNumber) % NB_TIMINGS;
 
@@ -130,15 +142,20 @@ void Profile::Profiler::Report() noexcept
 	}
 }
 
+void Profile::Profiler::Reset() noexcept
+{
+	start = 0;
+	elapsed = 0;
+	ResetExistingTracks();
+}
+
 void Profile::Profiler::ResetExistingTracks() noexcept
 {
 	for (ProfileTrack& track : tracks)
 	{
 		if (track.name != nullptr)
 		{
-			track.start = 0;
-			track.elapsed = 0;
-			track.ResetExistingTimings();
+			track.Reset();
 		}
 	}
 };
