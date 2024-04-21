@@ -60,17 +60,17 @@ namespace Profile
 		The final macro expanding to generate the unique profile block index
 		as well as the profile block opbject itself. 
 */
-#define PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileResultIdx, byteCount, ...)                                        \
-	static NB_TIMINGS_TYPE profileResult_##profileResultIdx = Profile::Profiler::GetProfileResultIndex(trackIdx, __FILE__, __LINE__, blockName); \
-	Profile::ProfileBlock ProfiledBlock_##profileResultIdx(trackIdx, profileResult_##profileResultIdx, byteCount, ## __VA_ARGS__)
+#define PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount, ...)                                        \
+	static NB_TIMINGS_TYPE profileBlockRecorder_##profileBlockRecorderIdx = Profile::Profiler::GetProfileBlockRecorderIndex(trackIdx, __FILE__, __LINE__, blockName); \
+	Profile::ProfileBlock ProfiledBlock_##profileBlockRecorderIdx(trackIdx, profileBlockRecorder_##profileBlockRecorderIdx, byteCount, ## __VA_ARGS__)
 
 /*!
 @brief DO NOT USE in code. Prefer using PROFILE_BLOCK_TIME_BANDWIDTH, PROFILE_FUNCTION_TIME_BANDWIDTH,
 		PROFILE_BLOCK_TIME, or PROFILE_FUNCTION_TIME depending on your situation.
 		The intermediate macro expanding PROFILE_BLOCK_TIME_BANDWIDTH__. Used to handle
-		the VA_ARGS and the profileResultIdx parameters.
+		the VA_ARGS and the profileBlockRecorderIdx parameters.
 */
-#define PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, profileResultIdx, byteCount, ...) PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileResultIdx, byteCount, ## __VA_ARGS__)
+#define PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, profileBlockRecorderIdx, byteCount, ...) PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount, ## __VA_ARGS__)
 
 /*!
 @brief USE in code. The macro to profile an arbitrary block of code with a name
@@ -127,7 +127,7 @@ namespace Profile
 			destruction. The result of the profiling will be forwarded to the
 			profile track with the index ::trackIdx in the profiler. The index
 			in the track that will actually store the profiling statistics is
-			::profileResultIdx.
+			::profileBlockRecorderIdx.
 	*/
 	struct PROFILE_API ProfileBlock
 	{
@@ -139,9 +139,9 @@ namespace Profile
 		/*!
 		@brief The index of this block in the profiling track.
 		*/
-		NB_TIMINGS_TYPE profileResultIdx = 0;
+		NB_TIMINGS_TYPE profileBlockRecorderIdx = 0;
 
-		ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileResultIdx, u64 _byteCount);
+		ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount);
 
 		~ProfileBlock();
 	};
@@ -149,7 +149,7 @@ namespace Profile
 	/*!
 	@brief A struct to store the profiling statistics of a profiled block.
 	*/
-	struct ProfileResult
+	struct ProfileBlockRecorder
 	{
 		/*!
 		@brief The line number in the file where the block is located.
@@ -236,7 +236,7 @@ namespace Profile
 		@details This is might be set to true only once a block is added to the track.
 				 This is used to avoid outputting the track's statistics, or reseting its data
 				 if it has none.
-		@see Profile::Profiler::GetProfileResultIndex(...)
+		@see Profile::Profiler::GetProfileBlockRecorderIndex(...)
 		*/
 		bool hasBlock = false;
 
@@ -254,27 +254,27 @@ namespace Profile
 		/*!
 		@brief The profiling statistics of the blocks in the track.
 		*/
-		std::array<ProfileResult, NB_TIMINGS> timings;
+		std::array<ProfileBlockRecorder, NB_TIMINGS> timings;
 
 		/*!
 		@brief Closes a block and updates the track's elapsed time.
-		@param _profileResultIdx The index of block timing in the track.
-		@see Profile::ProfileResult::Close()
+		@param _profileBlockRecorderIdx The index of block timing in the track.
+		@see Profile::ProfileBlockRecorder::Close()
 		*/
-		PROFILE_API inline void CloseBlock(NB_TIMINGS_TYPE _profileResultIdx)
+		PROFILE_API inline void CloseBlock(NB_TIMINGS_TYPE _profileBlockRecorderIdx)
 		{
-			elapsed += timings[_profileResultIdx].Close();
+			elapsed += timings[_profileBlockRecorderIdx].Close();
 		}
 
 		/*!
 		@brief Opens a block of the track.
-		@param _profileResultIdx The index of the block timing in the track.
+		@param _profileBlockRecorderIdx The index of the block timing in the track.
 		@param _byteCount The number of bytes processed by the block.
-		@see Profile::ProfileResult::Open(Profile::u64 _byteCount)
+		@see Profile::ProfileBlockRecorder::Open(Profile::u64 _byteCount)
 		*/
-		PROFILE_API inline void OpenBlock(NB_TIMINGS_TYPE _profileResultIdx, u64 _byteCount)
+		PROFILE_API inline void OpenBlock(NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount)
 		{
-			timings[_profileResultIdx].Open(_byteCount);
+			timings[_profileBlockRecorderIdx].Open(_byteCount);
 		}
 
 		/*!
@@ -337,7 +337,7 @@ namespace Profile
 		@param _blockName The name of the block.
 		@return The index of the profile result.
 		*/
-		static NB_TIMINGS_TYPE GetProfileResultIndex(NB_TRACKS_TYPE _trackIdx, const char* _fileName, u32 _lineNumber, const char* _blockName);
+		static NB_TIMINGS_TYPE GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _trackIdx, const char* _fileName, u32 _lineNumber, const char* _blockName);
 
 		/*!
 		@brief Sets the name of a track.
@@ -355,11 +355,11 @@ namespace Profile
 		/*!
 		@brief Closes a block.
 		@param _trackIdx The index of the track the block belongs to.
-		@param _profileResultIdx The index of the profile result.
+		@param _profileBlockRecorderIdx The index of the profile result.
 		*/
-		PROFILE_API inline void CloseBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileResultIdx)
+		PROFILE_API inline void CloseBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx)
 		{
-			tracks[_trackIdx].CloseBlock(_profileResultIdx);
+			tracks[_trackIdx].CloseBlock(_profileBlockRecorderIdx);
 		}
 
 		/*!
@@ -377,12 +377,12 @@ namespace Profile
 		/*!
 		@brief Opens a block.
 		@param _trackIdx The index of the track the block belongs to.
-		@param _profileResultIdx The index of the profile result.
+		@param _profileBlockRecorderIdx The index of the profile result.
 		@param _byteCount The number of bytes processed by the block.
 		*/
-		PROFILE_API inline void OpenBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileResultIdx, u64 _byteCount)
+		PROFILE_API inline void OpenBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount)
 		{
-			tracks[_trackIdx].OpenBlock(_profileResultIdx, _byteCount);
+			tracks[_trackIdx].OpenBlock(_profileBlockRecorderIdx, _byteCount);
 		}
 
 		/*!
@@ -408,6 +408,13 @@ namespace Profile
 	*/
 	extern PROFILE_API void SetProfiler(Profiler* _profiler);
 
+	/*!
+	@brief A global function to get the pointer to the global profiler.
+	@details The profiler must be set with ::SetProfiler before calling this function.
+	@remarks Mainly useful to get the profiler in functions defined in the header, given
+			 that the profiler is defined in the source file.
+	@return The pointer to the global profiler.
+	*/
 	extern PROFILE_API Profiler* GetProfiler();
 
 	struct RepetitionProfiler
@@ -432,4 +439,4 @@ namespace Profile
 			profilerPtr->Report();
 		}
 	};
-}
+} // namespace Profile

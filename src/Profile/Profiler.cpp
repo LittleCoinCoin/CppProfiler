@@ -14,18 +14,18 @@ PROFILE_API Profile::Profiler* Profile::GetProfiler()
 
 #if PROFILER_ENABLED
 
-Profile::ProfileBlock::ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileResultIdx, u64 _byteCount) :
-	trackIdx(_trackIdx), profileResultIdx(_profileResultIdx)
+Profile::ProfileBlock::ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount) :
+	trackIdx(_trackIdx), profileBlockRecorderIdx(_profileBlockRecorderIdx)
 {
-	s_Profiler->OpenBlock(trackIdx, profileResultIdx, _byteCount);
+	s_Profiler->OpenBlock(trackIdx, profileBlockRecorderIdx, _byteCount);
 }
 
 Profile::ProfileBlock::~ProfileBlock()
 {
-	s_Profiler->CloseBlock(trackIdx, profileResultIdx);
+	s_Profiler->CloseBlock(trackIdx, profileBlockRecorderIdx);
 }
 
-void Profile::ProfileResult::Reset() noexcept
+void Profile::ProfileBlockRecorder::Reset() noexcept
 {
 	start = 0;
 	elapsed = 0;
@@ -43,17 +43,17 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 	static f64 megaByte = 1<<20;
 	static f64 gigaByte = 1<<30;
 
-	for (ProfileResult& result : timings)
+	for (ProfileBlockRecorder& record : timings)
 	{
-		if (result.blockName != nullptr)
+		if (record.blockName != nullptr)
 		{
 			printf("%s[%llu]: %llu (%.2f%% of track; %.2f%% of total",
-				result.blockName, result.hitCount, result.elapsed, elapsed == 0 ? 0 : 100.0f * (f64)result.elapsed / (f64)elapsed,
-				_totalElapsedReference == 0 ? 0 : 100.0f * (f64)result.elapsed / (f64)_totalElapsedReference);
-			if (result.processedByteCount > 0)
+				record.blockName, record.hitCount, record.elapsed, elapsed == 0 ? 0 : 100.0f * (f64)record.elapsed / (f64)elapsed,
+				_totalElapsedReference == 0 ? 0 : 100.0f * (f64)record.elapsed / (f64)_totalElapsedReference);
+			if (record.processedByteCount > 0)
 			{
-				f64 bandwidth = (f64)result.processedByteCount / (((f64)result.elapsed / (f64)elapsed) * elapsedSec);
-				printf("; %.2fMB at %.2fMB/s | %.2fGB/s", (f64)result.processedByteCount / megaByte, bandwidth / megaByte, bandwidth / gigaByte);
+				f64 bandwidth = (f64)record.processedByteCount / (((f64)record.elapsed / (f64)elapsed) * elapsedSec);
+				printf("; %.2fMB at %.2fMB/s | %.2fGB/s", (f64)record.processedByteCount / megaByte, bandwidth / megaByte, bandwidth / gigaByte);
 			}
 			printf(")\n");
 		}
@@ -68,42 +68,42 @@ void Profile::ProfileTrack::Reset() noexcept
 
 void Profile::ProfileTrack::ResetTimings() noexcept
 {
-	for (ProfileResult& result : timings)
+	for (ProfileBlockRecorder& record : timings)
 	{
-		if (result.blockName != nullptr)
+		if (record.blockName != nullptr)
 		{
-			result.Reset();
+			record.Reset();
 		}
 	}
 }
 
-NB_TIMINGS_TYPE Profile::Profiler::GetProfileResultIndex(NB_TRACKS_TYPE _trackIdx,
+NB_TIMINGS_TYPE Profile::Profiler::GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _trackIdx,
 	const char* _fileName, u32 _lineNumber, const char* _blockName)
 {
-	NB_TIMINGS_TYPE profileResultIndex = Hash(_fileName, _lineNumber) % NB_TIMINGS;
+	NB_TIMINGS_TYPE profileBlockRecorderIndex = Hash(_fileName, _lineNumber) % NB_TIMINGS;
 
-	ProfileResult* profileResult = &s_Profiler->tracks[_trackIdx].timings[profileResultIndex];
-	ProfileResult* InitialprofileResult = profileResult;
+	ProfileBlockRecorder* profileBlockRecorder = &s_Profiler->tracks[_trackIdx].timings[profileBlockRecorderIndex];
+	ProfileBlockRecorder* InitialprofileBlockRecorder = profileBlockRecorder;
 
 	// no need to compare _fileName and LinenNumber values, because for
 	// each (_fileName, _lineNumber) pair function will be called only once,
 	// so simply find first unused place in table
-	while (profileResult->fileName)
+	while (profileBlockRecorder->fileName)
 	{
-		profileResultIndex = (profileResultIndex + 1) % NB_TIMINGS;
-		profileResult = &s_Profiler->tracks[_trackIdx].timings[profileResultIndex];
+		profileBlockRecorderIndex = (profileBlockRecorderIndex + 1) % NB_TIMINGS;
+		profileBlockRecorder = &s_Profiler->tracks[_trackIdx].timings[profileBlockRecorderIndex];
 
 		// if we examined every entry in hash table that means hash table has less entries
 		// than debug records we are putting in source code! Increase MAX_DEBUG_RECORD_COUNT!
-		//Assert(profileResult != InitialprofileResult);
+		//Assert(profileBlockRecorder != InitialprofileBlockRecorder);
 	}
 
 	s_Profiler->tracks[_trackIdx].hasBlock = true;
-	profileResult->fileName = _fileName;
-	profileResult->lineNumber = _lineNumber;
-	profileResult->blockName = _blockName;
+	profileBlockRecorder->fileName = _fileName;
+	profileBlockRecorder->lineNumber = _lineNumber;
+	profileBlockRecorder->blockName = _blockName;
 
-	return profileResultIndex;
+	return profileBlockRecorderIndex;
 }
 
 void Profile::Profiler::End() noexcept
