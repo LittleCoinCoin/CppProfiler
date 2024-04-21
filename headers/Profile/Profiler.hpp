@@ -148,7 +148,7 @@ namespace Profile
 		/*!
 		@brief The line number in the file where the block is located.
 		*/
-		u32 lineNumber;
+		u32 lineNumber = 0;
 
 		/*!
 		@brief The name of the file where the block is located.
@@ -351,11 +351,21 @@ namespace Profile
 		PROFILE_API void End() noexcept;
 
 		/*!
+		@brief Ends all tracks in the profiler.
+		*/
+		PROFILE_API void EndTracks() noexcept;
+
+		/*!
 		@brief Starts the profiler.
 		@details Sets ::start to the current time.
 		*/
 		PROFILE_API void Initialize() noexcept;
 		
+		/*!
+		@brief Starts all tracks in the profiler.
+		*/
+		PROFILE_API void InitializeTracks() noexcept;
+
 		/*!
 		@brief Opens a block.
 		@param _trackIdx The index of the track the block belongs to.

@@ -128,9 +128,25 @@ void Profile::Profiler::End() noexcept
 	elapsed = Timer::GetCPUTimer() - start;
 }
 
+void Profile::Profiler::EndTracks() noexcept
+{
+	for (ProfileTrack& track : tracks)
+	{
+		track.End();
+	}
+}
+
 void Profile::Profiler::Initialize() noexcept
 {
 	start = Timer::GetCPUTimer();
+}
+
+void Profile::Profiler::InitializeTracks() noexcept
+{
+	for (ProfileTrack& track : tracks)
+	{
+		track.Initialize();
+	}
 }
 
 void Profile::Profiler::Report() noexcept
