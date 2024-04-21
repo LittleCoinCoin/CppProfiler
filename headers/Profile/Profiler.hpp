@@ -121,7 +121,13 @@ namespace Profile
 	}
 
 	/*!
-	@brief A struct to profile a block of code.
+	@brief An object that will live and die within the scope of a target block
+			of code to profile.
+	@details The object will open the block upon construction and close it upon
+			destruction. The result of the profiling will be forwarded to the
+			profile track with the index ::trackIdx in the profiler. The index
+			in the track that will actually store the profiling statistics is
+			::profileResultIdx.
 	*/
 	struct PROFILE_API ProfileBlock
 	{
@@ -141,7 +147,7 @@ namespace Profile
 	};
 
 	/*!
-	@brief A struct to store the profiling statistices of a profiled block.
+	@brief A struct to store the profiling statistics of a profiled block.
 	*/
 	struct ProfileResult
 	{
@@ -226,6 +232,15 @@ namespace Profile
 	struct ProfileTrack
 	{
 		/*!
+		@brief Whether the track is used for at least one block.
+		@details This is might be set to true only once a block is added to the track.
+				 This is used to avoid outputting the track's statistics, or reseting its data
+				 if it has none.
+		@see Profile::Profiler::GetProfileResultIndex(...)
+		*/
+		bool hasBlock = false;
+
+		/*!
 		@brief The name of the track.
 		*/
 		const char* name = nullptr;
@@ -304,13 +319,6 @@ namespace Profile
 		u64 elapsed = 0;
 
 		/*!
-		@brief The number of tracks in the profiler.
-		@details This counts the tracks in ::tracks that have been given a name. 
-		@remarks It cannot exceed NB_TRACKS.
-		*/
-		NB_TRACKS_TYPE trackCount = 0;
-
-		/*!
 		@brief The tracks in the profiler.
 		*/
 		std::array<ProfileTrack, NB_TRACKS> tracks;
@@ -332,14 +340,17 @@ namespace Profile
 		static NB_TIMINGS_TYPE GetProfileResultIndex(NB_TRACKS_TYPE _trackIdx, const char* _fileName, u32 _lineNumber, const char* _blockName);
 
 		/*!
-		@brief Adds a track to the profiler.
-		@details The track will be added only if the profiler has not reached
-				 the maximum number of tracks (NB_TRACKS). Effectively, "adding
-				 a track" means giving a name to the first track in ::tracks
-				 that has not been given one yet.
+		@brief Sets the name of a track.
+		@param _trackIdx The index of the track.
 		@param _name The name of the track.
 		*/
-		PROFILE_API bool AddTrack(const char* _name);
+		PROFILE_API inline void SetTrackName(NB_TRACKS_TYPE _trackIdx, const char* _name) noexcept
+		{
+			if (_trackIdx < NB_TRACKS)
+			{
+				tracks[_trackIdx].name = _name;
+			}
+		}
 
 		/*!
 		@brief Closes a block.

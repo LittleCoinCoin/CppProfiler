@@ -98,24 +98,12 @@ NB_TIMINGS_TYPE Profile::Profiler::GetProfileResultIndex(NB_TRACKS_TYPE _trackId
 		//Assert(profileResult != InitialprofileResult);
 	}
 
+	s_Profiler->tracks[_trackIdx].hasBlock = true;
 	profileResult->fileName = _fileName;
 	profileResult->lineNumber = _lineNumber;
 	profileResult->blockName = _blockName;
 
 	return profileResultIndex;
-}
-
-bool Profile::Profiler::AddTrack(const char* _name)
-{
-	if (trackCount < NB_TRACKS)
-	{
-		tracks[trackCount].name = _name;
-		trackCount++;
-		return true;
-	}
-
-	printf("Track named \"%s\" could not be added because the profiler has reached the maximum number of tracks (%u)\n", _name, NB_TRACKS);
-	return false;
 }
 
 void Profile::Profiler::End() noexcept
@@ -133,7 +121,10 @@ void Profile::Profiler::Report() noexcept
 	printf("\n---- Profiler: %s (%fms) ----\n", name, 1000 * (f64)elapsed / (f64)Timer::EstimateCPUFreq(100));
 	for (ProfileTrack& track : tracks)
 	{
-		track.Report(elapsed);
+		if (track.hasBlock)
+		{
+			track.Report(elapsed);
+		}
 	}
 }
 
@@ -148,7 +139,7 @@ void Profile::Profiler::ResetExistingTracks() noexcept
 {
 	for (ProfileTrack& track : tracks)
 	{
-		if (track.name != nullptr)
+		if (track.hasBlock)
 		{
 			track.Reset();
 		}

@@ -48,42 +48,27 @@ void TestFunction_Track2(Profile::u64 _arr[], Profile::u64 _count)
 	}
 }
 
-/*!
-@brief Tests the overflow of tracks.
-@details Adds NB_TRACKS - _profiler.trackCount + 1 subtracks to overflow NB_TRACKS
-		 maximum tracks when the profiler has already been added _profiler.trackCount tracks.
-@param _profiler The profiler to test.
-*/
-void TestFunction_OverflowTracks(Profile::Profiler& _profiler)
-{
-	printf("Adding %u subtracks to overflow %u maximum tracks when %u have already been added.\n",
-		NB_TRACKS - _profiler.trackCount + 1, NB_TRACKS, _profiler.trackCount);
-	for (Profile::u8 trackIdx = _profiler.trackCount; trackIdx <= NB_TRACKS; ++trackIdx)
-	{
-		_profiler.AddTrack("SubtrackToOverflow");
-	}
-}
-
 int main()
 {
 	Profile::Profiler profiler("Tests");
 	Profile::SetProfiler(&profiler);
-	profiler.AddTrack("main");
+	profiler.SetTrackName(0, "Main");
 	profiler.Initialize();
 	Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * 8192);
 
 	TestFunction(arr, 8192);
 	TestFunction_Bandwidth(arr, 8192);
 
-	profiler.AddTrack("subtrack");
+	profiler.SetTrackName(1, "SubTrack");
 	TestFunction_Track2(arr, 8192);
-
-	//This should lead to a message in the application that the track could not
-	//be added because only NB_TRACKS tracks are allowed.
-	TestFunction_OverflowTracks(profiler);
 
 	profiler.End();
 	profiler.Report();
+	
+	Profile::RepetitionProfiler repetitionProfiler;
+	repetitionProfiler.FixedCountRepetitionTesting(5, TestFunction, arr, 8192);
+
+	free(arr);
 
 	return 0;
 }
