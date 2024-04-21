@@ -182,10 +182,13 @@ namespace Profile
 
 		/*!
 		@brief Update the profiling statistics of the block upon completion.
+		@return The time increment since the block was opened.
 		*/
-		inline void Close()
+		inline u64 Close()
 		{
-			elapsed += Timer::GetCPUTimer() - start;
+			u64 increment = Timer::GetCPUTimer() - start;
+			elapsed += increment;
+			return increment;
 		}
 		
 		/*!
@@ -217,8 +220,8 @@ namespace Profile
 #endif // PROFILER_ENABLED
 
 	/*!
-	@brief A struct to define a track in the profiler that will contain profile
-			blocks.	
+	@brief A container for several profiling blocks.
+	@details The goal is to profile a series of blocks that are related to each other.
 	*/
 	struct ProfileTrack
 	{
@@ -226,11 +229,6 @@ namespace Profile
 		@brief The name of the track.
 		*/
 		const char* name = nullptr;
-
-		/*!
-		@brief The start time of the track.
-		*/
-		u64 start = 0;
 
 		/*!
 		@brief The accumulated time since the track was initialized (when
@@ -244,16 +242,25 @@ namespace Profile
 		std::array<ProfileResult, NB_TIMINGS> timings;
 
 		/*!
-		@brief Starts the track.
-		@details Sets ::start to the current time.
+		@brief Closes a block and updates the track's elapsed time.
+		@param _profileResultIdx The index of block timing in the track.
+		@see Profile::ProfileResult::Close()
 		*/
-		PROFILE_API void Initialize() noexcept;
-		
+		PROFILE_API inline void CloseBlock(NB_TIMINGS_TYPE _profileResultIdx)
+		{
+			elapsed += timings[_profileResultIdx].Close();
+		}
+
 		/*!
-		@brief Ends the track.
-		@details Sets ::elapsed to the time since ::Initialize was called.
+		@brief Opens a block of the track.
+		@param _profileResultIdx The index of the block timing in the track.
+		@param _byteCount The number of bytes processed by the block.
+		@see Profile::ProfileResult::Open(Profile::u64 _byteCount)
 		*/
-		PROFILE_API void End() noexcept;
+		PROFILE_API inline void OpenBlock(NB_TIMINGS_TYPE _profileResultIdx, u64 _byteCount)
+		{
+			timings[_profileResultIdx].Open(_byteCount);
+		}
 
 		/*!
 		@brief Outputs the profiling statistics of all blocks in the track.
@@ -341,7 +348,7 @@ namespace Profile
 		*/
 		PROFILE_API inline void CloseBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileResultIdx)
 		{
-			tracks[_trackIdx].timings[_profileResultIdx].Close();
+			tracks[_trackIdx].CloseBlock(_profileResultIdx);
 		}
 
 		/*!
@@ -351,20 +358,10 @@ namespace Profile
 		PROFILE_API void End() noexcept;
 
 		/*!
-		@brief Ends all tracks in the profiler.
-		*/
-		PROFILE_API void EndTracks() noexcept;
-
-		/*!
 		@brief Starts the profiler.
 		@details Sets ::start to the current time.
 		*/
 		PROFILE_API void Initialize() noexcept;
-		
-		/*!
-		@brief Starts all tracks in the profiler.
-		*/
-		PROFILE_API void InitializeTracks() noexcept;
 
 		/*!
 		@brief Opens a block.
@@ -374,7 +371,7 @@ namespace Profile
 		*/
 		PROFILE_API inline void OpenBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileResultIdx, u64 _byteCount)
 		{
-			tracks[_trackIdx].timings[_profileResultIdx].Open(_byteCount);
+			tracks[_trackIdx].OpenBlock(_profileResultIdx, _byteCount);
 		}
 
 		/*!
@@ -413,7 +410,6 @@ namespace Profile
 
 			profilerPtr->Reset();
 			profilerPtr->Initialize();
-			profilerPtr->InitializeTracks();
 
 			for (u64 i = 0; i < _repetitionCount; ++i)
 			{
@@ -421,7 +417,6 @@ namespace Profile
 				//profilerPtr->ResetExistingTracks();
 			}
 
-			profilerPtr->EndTracks();
 			profilerPtr->End();
 			profilerPtr->Report();
 		}

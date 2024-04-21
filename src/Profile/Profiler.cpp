@@ -34,20 +34,11 @@ void Profile::ProfileResult::Reset() noexcept
 }
 #endif
 
-void Profile::ProfileTrack::End() noexcept
-{
-	elapsed = Timer::GetCPUTimer() - start;
-}
-
-void Profile::ProfileTrack::Initialize() noexcept
-{
-	start = Timer::GetCPUTimer();
-}
-
 void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 {
 	f64 elapsedSec = (f64)elapsed / (f64)Timer::EstimateCPUFreq(100);
-	printf("\n---- Profile Track: %s (%fms; %.2f%% of total) ----\n", name, 1000 * elapsedSec, 100.0f * (f64)elapsed / (f64)_totalElapsedReference);
+	printf("\n---- Profile Track: %s (%fms; %.2f%% of total) ----\n", name, 1000 * elapsedSec,
+		_totalElapsedReference == 0 ? 0 : 100.0f * (f64)elapsed / (f64)_totalElapsedReference);
 	
 	static f64 megaByte = 1<<20;
 	static f64 gigaByte = 1<<30;
@@ -57,8 +48,8 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 		if (result.blockName != nullptr)
 		{
 			printf("%s[%llu]: %llu (%.2f%% of track; %.2f%% of total",
-				result.blockName, result.hitCount, result.elapsed, 100.0f * (f64)result.elapsed / (f64)elapsed,
-				100.0f * (f64)result.elapsed / (f64)_totalElapsedReference);
+				result.blockName, result.hitCount, result.elapsed, elapsed == 0 ? 0 : 100.0f * (f64)result.elapsed / (f64)elapsed,
+				_totalElapsedReference == 0 ? 0 : 100.0f * (f64)result.elapsed / (f64)_totalElapsedReference);
 			if (result.processedByteCount > 0)
 			{
 				f64 bandwidth = (f64)result.processedByteCount / (((f64)result.elapsed / (f64)elapsed) * elapsedSec);
@@ -71,7 +62,6 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 
 void Profile::ProfileTrack::Reset() noexcept
 {
-	start = 0;
 	elapsed = 0;
 	ResetTimings();
 }
@@ -133,25 +123,9 @@ void Profile::Profiler::End() noexcept
 	elapsed = Timer::GetCPUTimer() - start;
 }
 
-void Profile::Profiler::EndTracks() noexcept
-{
-	for (ProfileTrack& track : tracks)
-	{
-		track.End();
-	}
-}
-
 void Profile::Profiler::Initialize() noexcept
 {
 	start = Timer::GetCPUTimer();
-}
-
-void Profile::Profiler::InitializeTracks() noexcept
-{
-	for (ProfileTrack& track : tracks)
-	{
-		track.Initialize();
-	}
 }
 
 void Profile::Profiler::Report() noexcept

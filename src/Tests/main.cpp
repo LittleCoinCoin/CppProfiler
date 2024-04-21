@@ -70,17 +70,13 @@ int main()
 	Profile::SetProfiler(&profiler);
 	profiler.AddTrack("main");
 	profiler.Initialize();
-	Profile::u64 arr[8192];
+	Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * 8192);
 
-	profiler.tracks[0].Initialize();
 	TestFunction(arr, 8192);
 	TestFunction_Bandwidth(arr, 8192);
-	profiler.tracks[0].End();
 
 	profiler.AddTrack("subtrack");
-	profiler.tracks[1].Initialize();
 	TestFunction_Track2(arr, 8192);
-	profiler.tracks[1].End();
 
 	//This should lead to a message in the application that the track could not
 	//be added because only NB_TRACKS tracks are allowed.
