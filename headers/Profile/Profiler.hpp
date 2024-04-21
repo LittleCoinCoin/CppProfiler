@@ -396,8 +396,34 @@ namespace Profile
 	};
 
 	/*!
-	@brief A global function to set the pointer to the profiler that will be
-			used by the profiling macros.
+	@brief A global function to set the pointer to the global profiler.
 	*/
 	extern PROFILE_API void SetProfiler(Profiler* _profiler);
+
+	extern PROFILE_API Profiler* GetProfiler();
+
+	struct RepetitionProfiler
+	{
+		RepetitionProfiler() = default;
+
+		template<typename... Args>
+		void FixedCountRepetitionTesting(u64 _repetitionCount, void* _function, Args... _functionArgs)
+		{
+			Profiler* profilerPtr = GetProfiler();
+
+			profilerPtr->Reset();
+			profilerPtr->Initialize();
+			profilerPtr->InitializeTracks();
+
+			for (u64 i = 0; i < _repetitionCount; ++i)
+			{
+				((void(*)(Args...))_function)(_functionArgs...);
+				//profilerPtr->ResetExistingTracks();
+			}
+
+			profilerPtr->EndTracks();
+			profilerPtr->End();
+			profilerPtr->Report();
+		}
+	};
 }

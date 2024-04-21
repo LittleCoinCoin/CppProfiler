@@ -7,6 +7,11 @@ PROFILE_API void Profile::SetProfiler(Profiler* _profiler)
 	s_Profiler = _profiler;
 }
 
+PROFILE_API Profile::Profiler* Profile::GetProfiler()
+{
+	return s_Profiler;
+}
+
 #if PROFILER_ENABLED
 
 Profile::ProfileBlock::ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileResultIdx, u64 _byteCount) :
