@@ -36,7 +36,7 @@ void Profile::ProfileBlockRecorder::Reset() noexcept
 
 void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 {
-	f64 elapsedSec = (f64)elapsed / (f64)Timer::EstimateCPUFreq(100);
+	f64 elapsedSec = (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq();
 	printf("\n---- Profile Track: %s (%fms; %.2f%% of total) ----\n", name, 1000 * elapsedSec,
 		_totalElapsedReference == 0 ? 0 : 100.0f * (f64)elapsed / (f64)_totalElapsedReference);
 	
@@ -118,7 +118,8 @@ void Profile::Profiler::Initialize() noexcept
 
 void Profile::Profiler::Report() noexcept
 {
-	printf("\n---- Profiler: %s (%fms) ----\n", name, 1000 * (f64)elapsed / (f64)Timer::EstimateCPUFreq(100));
+	printf("Estimated CPU Frequency: %llu\n", Timer::GetEstimatedCPUFreq());
+	printf("\n---- Profiler: %s (%fms) ----\n", name, 1000 * (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
 	for (ProfileTrack& track : tracks)
 	{
 		if (track.hasBlock)

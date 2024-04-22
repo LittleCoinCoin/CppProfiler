@@ -19,6 +19,26 @@ namespace Profile
 	struct Timer
 	{
 		/*!
+		@brief The estimated CPU frequency.
+		@details This value is pre-computed once in the cpp file (so at compile time).
+				 It is used to estimate the CPU frequency at runtime. You can also
+				 recompute it at runtime by calling ::SetEstimatedCPUFreq.
+		@see ::EstimateCPUFreq, ::SetEstimatedCPUFreq, ::GetEstimatedCPUFreq
+		*/
+		static u64 s_estimatedCPUFreq;
+
+		/*!
+		@brief A wrapper to __rdtsc() to get the CPU timer.
+		*/
+		static u64 GetCPUTimer(void);
+		
+		/*!
+		@brief Returns an estimated CPU frequency. You must call ::SetEstimatedCPUFreq
+				at least once before calling this function.
+		*/
+		static u64 GetEstimatedCPUFreq();
+		
+		/*!
 		@brief A wrapper to get the current counter in the OS.
 		@details On Windows, it uses QueryPerformanceCounter.
 				 On Linux, it uses gettimeofday.
@@ -33,9 +53,10 @@ namespace Profile
 		static u64 GetOSTimerFreq(void);
 
 		/*!
-		@brief A wrapper to __rdtsc() to get the CPU timer.
+		@brief Sets the value of the estimated CPU frequency (::s_EstimatedCPUFreq).
+		@param _msToWait The amount of time to wait in milliseconds. Default is 1000 (1 second).
 		*/
-		static u64 GetCPUTimer(void);
+		static void SetEstimatedCPUFreq(u64 _msToWait = 1000);
 
 		/*!
 		@brief Estimates the CPU frequency by waiting for a

@@ -64,3 +64,15 @@ Profile::u64 Profile::Timer::EstimateCPUFreq(u64 _msToWait)
 
 	return CPUFreq;
 }
+
+Profile::u64 Profile::Timer::s_estimatedCPUFreq = Profile::Timer::EstimateCPUFreq(1000);
+
+Profile::u64 Profile::Timer::GetEstimatedCPUFreq()
+{
+	return s_estimatedCPUFreq;
+}
+
+void Profile::Timer::SetEstimatedCPUFreq(u64 _msToWait)
+{
+	s_estimatedCPUFreq = EstimateCPUFreq(_msToWait);
+}
