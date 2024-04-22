@@ -34,6 +34,52 @@ void Profile::ProfileBlockRecorder::Reset() noexcept
 }
 #endif
 
+void Profile::ProfileBlockResult::Capture(ProfileBlockRecorder& _record, NB_TRACKS_TYPE _trackIdx,
+	NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _trackElapsedReference, u64 _totalElapsedReference) noexcept
+{
+	lineNumber = _record.lineNumber;
+	trackIdx = _trackIdx;
+	profileBlockRecorderIdx = _profileBlockRecorderIdx;
+	fileName = _record.fileName;
+	blockName = _record.blockName;
+	elapsed = _record.elapsed;
+	elapsedSec = (f64)_record.elapsed / (f64)Timer::GetEstimatedCPUFreq();
+	hitCount = _record.hitCount;
+	processedByteCount = _record.processedByteCount;
+	proportionInTrack = _trackElapsedReference == 0 ? 0 : 100.0f * (f64)_record.elapsed / (f64)_trackElapsedReference;
+	proportionInTotal = _totalElapsedReference == 0 ? 0 : 100.0f * (f64)_record.elapsed / (f64)_totalElapsedReference;
+	bandwidthInB = _trackElapsedReference == 0 ? 0 : _record.processedByteCount / (((f64)_record.elapsed / (f64)_trackElapsedReference) * elapsedSec);
+}
+
+void Profile::ProfileBlockResult::Report() noexcept
+{
+	printf("%s[%llu]: %llu (%.2f%% of track; %.2f%% of total",
+		blockName, hitCount, elapsed, proportionInTrack,proportionInTotal);
+	if (processedByteCount > 0)
+	{
+		printf("; %lluMB at %.2fMB/s | %.2fGB/s", processedByteCount / (1<<20), bandwidthInB / (1<<20), bandwidthInB / (1<<30));
+	}
+	printf(")\n");
+}
+
+void Profile::ProfileTrackResult::Capture(ProfileTrack& _track, u64 _trackIdx, u64 _totalElapsedReference) noexcept
+{
+	name = _track.name;
+	elapsed = _track.elapsed;
+	elapsedSec = (f64)_track.elapsed / (f64)Timer::GetEstimatedCPUFreq();
+	proportionInTotal = _totalElapsedReference == 0 ? 0 : 100.0f * (f64)_track.elapsed / (f64)_totalElapsedReference;
+	NB_TIMINGS_TYPE _profileBlockRecorderIdx = 0;
+	for (ProfileBlockRecorder record : _track.timings)
+	{
+		if (record.blockName != nullptr)
+		{
+			timings[blockCount].Capture(record, _trackIdx, _profileBlockRecorderIdx, _track.elapsed, _totalElapsedReference);
+			blockCount++;
+		}
+		_profileBlockRecorderIdx++;
+	}
+}
+
 void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 {
 	f64 elapsedSec = (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq();
@@ -73,6 +119,18 @@ void Profile::ProfileTrack::ResetTimings() noexcept
 		if (record.blockName != nullptr)
 		{
 			record.Reset();
+		}
+	}
+}
+
+void Profile::ProfileTrackResult::Report() noexcept
+{
+	printf("\n---- Profile Track Results: %s (%fms; %.2f%% of total) ----\n", name, 1000 * elapsedSec, proportionInTotal);
+	for (ProfileBlockResult& record : timings)
+	{
+		if (record.blockName != nullptr)
+		{
+			record.Report();
 		}
 	}
 }
@@ -146,3 +204,87 @@ void Profile::Profiler::ResetExistingTracks() noexcept
 		}
 	}
 };
+
+void Profile::ProfilerResults::Capture(Profiler* _profiler) noexcept
+{
+	name = _profiler->name;
+	elapsed = _profiler->elapsed;
+	elapsedSec = (f64)_profiler->elapsed / (f64)Timer::GetEstimatedCPUFreq();
+	NB_TRACKS_TYPE trackIdx = 0;
+	for (ProfileTrack& track : _profiler->tracks)
+	{
+		if (track.hasBlock)
+		{
+			tracks[trackCount].Capture(track, trackIdx, _profiler->elapsed);
+			trackCount++;
+		}
+		trackIdx++;
+	}
+}
+
+void Profile::ProfilerResults::Report() noexcept
+{
+	printf("\n---- ProfilerResults: %s (%fms) ----\n", name, 1000 * elapsedSec);
+	
+	for (NB_TRACKS_TYPE i = 0; i < trackCount; ++i)
+	{
+		tracks[i].Report();
+	}
+}
+
+void Profile::RepetitionProfiler::Report(ProfilerResults* _results, u64 _repetitionCount) noexcept
+{
+	char* name = (char*)malloc(strlen(_results->name) + 100); //100 is enough for the string below (average of profiler "%s" over %llu
+	sprintf(name, "Reporting average of profiler \"%s\" over %llu repetitions", _results->name, _repetitionCount);
+	averageResults.name = name;
+	for (u64 i = 0; i < _repetitionCount; ++i)
+	{
+		averageResults.elapsed += _results[i].elapsed;
+		averageResults.elapsedSec += _results[i].elapsedSec;
+		if (averageResults.trackCount < _results[i].trackCount)
+		{
+			averageResults.trackCount = _results[i].trackCount;
+		}
+		for (NB_TRACKS_TYPE j = 0; j < _results[i].trackCount; ++j)
+		{
+			averageResults.tracks[j].name = _results[i].tracks[j].name;
+			averageResults.tracks[j].elapsed += _results[i].tracks[j].elapsed;
+			averageResults.tracks[j].elapsedSec += _results[i].tracks[j].elapsedSec;
+			if (averageResults.tracks[j].blockCount < _results[i].tracks[j].blockCount)
+			{
+				averageResults.tracks[j].blockCount = _results[i].tracks[j].blockCount;
+			}
+			for (NB_TIMINGS_TYPE k = 0; k < _results[i].tracks[j].blockCount; ++k)
+			{
+				averageResults.tracks[j].timings[k].blockName = _results[i].tracks[j].timings[k].blockName;
+				averageResults.tracks[j].timings[k].elapsed += _results[i].tracks[j].timings[k].elapsed;
+				averageResults.tracks[j].timings[k].hitCount += _results[i].tracks[j].timings[k].hitCount;
+				averageResults.tracks[j].timings[k].processedByteCount += _results[i].tracks[j].timings[k].processedByteCount;
+				averageResults.tracks[j].timings[k].proportionInTrack += _results[i].tracks[j].timings[k].proportionInTrack;
+				averageResults.tracks[j].timings[k].proportionInTotal += _results[i].tracks[j].timings[k].proportionInTotal;
+				averageResults.tracks[j].timings[k].bandwidthInB += _results[i].tracks[j].timings[k].bandwidthInB;
+			}
+
+		}
+	}
+
+	averageResults.elapsed /= _repetitionCount;
+	averageResults.elapsedSec /= _repetitionCount;
+	for (NB_TRACKS_TYPE j = 0; j < averageResults.trackCount; ++j)
+	{
+		averageResults.tracks[j].elapsed /= _repetitionCount;
+		averageResults.tracks[j].elapsedSec /= _repetitionCount;
+		for (NB_TIMINGS_TYPE k = 0; k < averageResults.tracks[j].blockCount; ++k)
+		{
+			averageResults.tracks[j].timings[k].elapsed /= _repetitionCount;
+			averageResults.tracks[j].timings[k].hitCount /= _repetitionCount;
+			averageResults.tracks[j].timings[k].processedByteCount /= _repetitionCount;
+			averageResults.tracks[j].timings[k].proportionInTrack /= _repetitionCount;
+			averageResults.tracks[j].timings[k].proportionInTotal /= _repetitionCount;
+			averageResults.tracks[j].timings[k].bandwidthInB /= _repetitionCount;
+		}
+	}
+
+	//Report the average results
+	averageResults.Report();
+}
