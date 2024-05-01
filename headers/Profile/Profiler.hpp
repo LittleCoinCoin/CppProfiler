@@ -655,15 +655,90 @@ struct RepetitionProfiler
 	
 	ProfilerResults averageResults;
 	ProfilerResults cumulatedResults;
+	ProfilerResults maxResults;
+	ProfilerResults minResults;
+	ProfilerResults stdResults;
 
 	inline void SetRepetitionResults(ProfilerResults* _repetitionResults) noexcept
 	{
 		ptr_repetitionResults = _repetitionResults;
 	}
 
+private:
+
+	inline void MaxAssign(u64& _a, u64& _b) noexcept
+	{
+		if (_a < _b)
+		{
+			_a = _b;
+		}
+	}
+
+	inline void MaxAssign(f32& _a, f32& _b) noexcept
+	{
+		if (_a < _b)
+		{
+			_a = _b;
+		}
+	}
+
+	inline void MaxAssign(f64& _a, f64& _b) noexcept
+	{
+		if (_a < _b)
+		{
+			_a = _b;
+		}
+	}
+
+	inline void MinAssign(u64& _a, u64& _b) noexcept
+	{
+		if (_a == 0)
+		{
+			_a = _b;
+		}
+
+		else if (_a > _b)
+		{
+			_a = _b;
+		}
+	}
+
+	inline void MinAssign(f32& _a, f32& _b) noexcept
+	{
+		if (_a == 0.0f)
+		{
+			_a = _b;
+		}
+
+		else if (_a > _b)
+		{
+			_a = _b;
+		}
+	}
+
+	inline void MinAssign(f64& _a, f64& _b) noexcept
+	{
+		if (_a == 0.0)
+		{
+			_a = _b;
+		}
+
+		else if (_a > _b)
+		{
+			_a = _b;
+		}
+	}
+
+public:
 	void ComputeAverageResults(u64 _repetitionCount) noexcept;
 
+	void ComputeStdResults(u64 _repetitionCount) noexcept;
+
 	void CumulateResults(u64 _repetitionCount) noexcept;
+
+	void FindMaxResults(u64 _repetitionCount) noexcept;
+
+	void FindMinResults(u64 _repetitionCount) noexcept;
 
 	template<typename... Args>
 	void FixedCountRepetitionTesting(u64 _repetitionCount, void* _function, Args... _functionArgs)
@@ -682,6 +757,6 @@ struct RepetitionProfiler
 		}
 	}
 
-	void Report() noexcept;
+	void Report(u64 _repetitionCount) noexcept;
 };
 } // namespace Profile

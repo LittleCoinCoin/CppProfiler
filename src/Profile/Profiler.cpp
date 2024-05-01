@@ -263,6 +263,116 @@ void Profile::RepetitionProfiler::ComputeAverageResults(u64 _repetitionCount) no
 	}
 }
 
+void Profile::RepetitionProfiler::ComputeStdResults(u64 _repetitionCount) noexcept
+{
+	if (averageResults.name == nullptr)
+	{
+		ComputeAverageResults(_repetitionCount);
+	}
+
+	stdResults.name = averageResults.name;
+	for (u64 i = 0; i < _repetitionCount; ++i)
+	{
+		stdResults.elapsed += (ptr_repetitionResults[i].elapsed - averageResults.elapsed)* (ptr_repetitionResults[i].elapsed - averageResults.elapsed);
+		stdResults.elapsedSec += (ptr_repetitionResults[i].elapsedSec - averageResults.elapsedSec) * (ptr_repetitionResults[i].elapsedSec - averageResults.elapsedSec);
+		if (stdResults.trackCount < ptr_repetitionResults[i].trackCount)
+		{
+			stdResults.trackCount = ptr_repetitionResults[i].trackCount;
+		}
+		for (NB_TRACKS_TYPE j = 0; j < ptr_repetitionResults[i].trackCount; ++j)
+		{
+			stdResults.tracks[j].name = ptr_repetitionResults[i].tracks[j].name;
+			stdResults.tracks[j].elapsed += (ptr_repetitionResults[i].tracks[j].elapsed - averageResults.tracks[j].elapsed) * (ptr_repetitionResults[i].tracks[j].elapsed - averageResults.tracks[j].elapsed);
+			stdResults.tracks[j].elapsedSec += (ptr_repetitionResults[i].tracks[j].elapsedSec - averageResults.tracks[j].elapsedSec) * (ptr_repetitionResults[i].tracks[j].elapsedSec - averageResults.tracks[j].elapsedSec);
+			stdResults.tracks[j].proportionInTotal += (ptr_repetitionResults[i].tracks[j].proportionInTotal - averageResults.tracks[j].proportionInTotal) * (ptr_repetitionResults[i].tracks[j].proportionInTotal - averageResults.tracks[j].proportionInTotal);
+			if (stdResults.tracks[j].blockCount < ptr_repetitionResults[i].tracks[j].blockCount)
+			{
+				stdResults.tracks[j].blockCount = ptr_repetitionResults[i].tracks[j].blockCount;
+			}
+			for (NB_TIMINGS_TYPE k = 0; k < ptr_repetitionResults[i].tracks[j].blockCount; ++k)
+			{
+				stdResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
+				stdResults.tracks[j].timings[k].elapsed += (ptr_repetitionResults[i].tracks[j].timings[k].elapsed - averageResults.tracks[j].timings[k].elapsed) * (ptr_repetitionResults[i].tracks[j].timings[k].elapsed - averageResults.tracks[j].timings[k].elapsed);
+				stdResults.tracks[j].timings[k].hitCount += (ptr_repetitionResults[i].tracks[j].timings[k].hitCount - averageResults.tracks[j].timings[k].hitCount) * (ptr_repetitionResults[i].tracks[j].timings[k].hitCount - averageResults.tracks[j].timings[k].hitCount);
+				stdResults.tracks[j].timings[k].processedByteCount += (ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount - averageResults.tracks[j].timings[k].processedByteCount) * (ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount - averageResults.tracks[j].timings[k].processedByteCount);
+				stdResults.tracks[j].timings[k].proportionInTrack += (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTrack - averageResults.tracks[j].timings[k].proportionInTrack) * (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTrack - averageResults.tracks[j].timings[k].proportionInTrack);
+				stdResults.tracks[j].timings[k].proportionInTotal += (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTotal - averageResults.tracks[j].timings[k].proportionInTotal) * (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTotal - averageResults.tracks[j].timings[k].proportionInTotal);
+				stdResults.tracks[j].timings[k].bandwidthInB += (ptr_repetitionResults[i].tracks[j].timings[k].bandwidthInB - averageResults.tracks[j].timings[k].bandwidthInB) * (ptr_repetitionResults[i].tracks[j].timings[k].bandwidthInB - averageResults.tracks[j].timings[k].bandwidthInB);
+			}
+		}
+	}
+}
+
+void Profile::RepetitionProfiler::FindMaxResults(u64 _repetitionCount) noexcept
+{
+	maxResults.name = averageResults.name;
+	for (u64 i = 0; i < _repetitionCount; ++i)
+	{
+		MaxAssign(maxResults.elapsed, ptr_repetitionResults[i].elapsed);
+		MaxAssign(maxResults.elapsedSec, ptr_repetitionResults[i].elapsedSec);
+		if (maxResults.trackCount < ptr_repetitionResults[i].trackCount)
+		{
+			maxResults.trackCount = ptr_repetitionResults[i].trackCount;
+		}
+		for (NB_TRACKS_TYPE j = 0; j < ptr_repetitionResults[i].trackCount; ++j)
+		{
+			maxResults.tracks[j].name = ptr_repetitionResults[i].tracks[j].name;
+			MaxAssign(maxResults.tracks[j].elapsed, ptr_repetitionResults[i].tracks[j].elapsed);
+			MaxAssign(maxResults.tracks[j].elapsedSec, ptr_repetitionResults[i].tracks[j].elapsedSec);
+			MaxAssign(maxResults.tracks[j].proportionInTotal, ptr_repetitionResults[i].tracks[j].proportionInTotal);
+			if (maxResults.tracks[j].blockCount < ptr_repetitionResults[i].tracks[j].blockCount)
+			{
+				maxResults.tracks[j].blockCount = ptr_repetitionResults[i].tracks[j].blockCount;
+			}
+			for (NB_TIMINGS_TYPE k = 0; k < ptr_repetitionResults[i].tracks[j].blockCount; ++k)
+			{
+				maxResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
+				MaxAssign(maxResults.tracks[j].timings[k].elapsed, ptr_repetitionResults[i].tracks[j].timings[k].elapsed);
+				MaxAssign(maxResults.tracks[j].timings[k].hitCount, ptr_repetitionResults[i].tracks[j].timings[k].hitCount);
+				MaxAssign(maxResults.tracks[j].timings[k].processedByteCount, ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount);
+				MaxAssign(maxResults.tracks[j].timings[k].proportionInTrack, ptr_repetitionResults[i].tracks[j].timings[k].proportionInTrack);
+				MaxAssign(maxResults.tracks[j].timings[k].proportionInTotal, ptr_repetitionResults[i].tracks[j].timings[k].proportionInTotal);
+				MaxAssign(maxResults.tracks[j].timings[k].bandwidthInB, ptr_repetitionResults[i].tracks[j].timings[k].bandwidthInB);
+			}
+		}
+	}
+}
+
+void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
+{
+	minResults.name = averageResults.name;
+	for (u64 i = 0; i < _repetitionCount; ++i)
+	{
+		MinAssign(minResults.elapsed, ptr_repetitionResults[i].elapsed);
+		MinAssign(minResults.elapsedSec, ptr_repetitionResults[i].elapsedSec);
+		if (minResults.trackCount > ptr_repetitionResults[i].trackCount)
+		{
+			minResults.trackCount = ptr_repetitionResults[i].trackCount;
+		}
+		for (NB_TRACKS_TYPE j = 0; j < ptr_repetitionResults[i].trackCount; ++j)
+		{
+			minResults.tracks[j].name = ptr_repetitionResults[i].tracks[j].name;
+			MinAssign(minResults.tracks[j].elapsed, ptr_repetitionResults[i].tracks[j].elapsed);
+			MinAssign(minResults.tracks[j].elapsedSec, ptr_repetitionResults[i].tracks[j].elapsedSec);
+			MinAssign(minResults.tracks[j].proportionInTotal, ptr_repetitionResults[i].tracks[j].proportionInTotal);
+			if (minResults.tracks[j].blockCount > ptr_repetitionResults[i].tracks[j].blockCount)
+			{
+				minResults.tracks[j].blockCount = ptr_repetitionResults[i].tracks[j].blockCount;
+			}
+			for (NB_TIMINGS_TYPE k = 0; k < ptr_repetitionResults[i].tracks[j].blockCount; ++k)
+			{
+				minResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
+				MinAssign(minResults.tracks[j].timings[k].elapsed, ptr_repetitionResults[i].tracks[j].timings[k].elapsed);
+				MinAssign(minResults.tracks[j].timings[k].hitCount, ptr_repetitionResults[i].tracks[j].timings[k].hitCount);
+				MinAssign(minResults.tracks[j].timings[k].processedByteCount, ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount);
+				MinAssign(minResults.tracks[j].timings[k].proportionInTrack, ptr_repetitionResults[i].tracks[j].timings[k].proportionInTrack);
+				MinAssign(minResults.tracks[j].timings[k].proportionInTotal, ptr_repetitionResults[i].tracks[j].timings[k].proportionInTotal);
+				MinAssign(minResults.tracks[j].timings[k].bandwidthInB, ptr_repetitionResults[i].tracks[j].timings[k].bandwidthInB);
+			}
+		}
+	}
+}
+
 void Profile::RepetitionProfiler::CumulateResults(u64 _repetitionCount) noexcept
 {
 	char* name = (char*)malloc(strlen(ptr_repetitionResults->name) + 100); //100 is enough for the string below (average of profiler "%s" over %llu
@@ -300,8 +410,51 @@ void Profile::RepetitionProfiler::CumulateResults(u64 _repetitionCount) noexcept
 	}
 }
 
-void Profile::RepetitionProfiler::Report() noexcept
+void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 {
-	//Report the average results
-	averageResults.Report();
+	if (stdResults.name == nullptr)
+	{
+		ComputeStdResults(_repetitionCount);
+	}
+
+	if (maxResults.name == nullptr)
+	{
+		FindMaxResults(_repetitionCount);
+	}
+
+	if (minResults.name == nullptr)
+	{
+		FindMinResults(_repetitionCount);
+	}
+
+	//go through all blocks and all tracks and print the average results with the
+	//standard deviation, the minimum and the maximum values
+	printf("\n---- ProfilerResults: %s ({%f, %f(+/-)%f, %f}ms) ----\n",
+		averageResults.name,
+		1000 * minResults.elapsedSec, 1000 * averageResults.elapsedSec, 1000 * sqrt(stdResults.elapsedSec), 1000 * maxResults.elapsedSec);
+	for (u64 i = 0; i < averageResults.trackCount; ++i)
+	{
+		printf("\n---- Profile Track Results: %s ({%f, %f(+/-)%f, %f}ms; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total) ----\n",
+			averageResults.tracks[i].name,
+			1000 * minResults.tracks[i].elapsedSec, 1000 * averageResults.tracks[i].elapsedSec,	1000 * sqrt(stdResults.tracks[i].elapsedSec), 1000 * maxResults.tracks[i].elapsedSec,
+			minResults.tracks[i].proportionInTotal, averageResults.tracks[i].proportionInTotal,	sqrt(stdResults.tracks[i].proportionInTotal), maxResults.tracks[i].proportionInTotal);
+
+		for (NB_TIMINGS_TYPE j = 0; j < averageResults.tracks[i].blockCount; ++j)
+		{
+			printf("%s[{%llu, %llu(+/-)%llu, %llu}]: {%llu, %llu(+/-)%llu, %llu} ({%.2f, %.2f(+/-)%.2f, %.2f}%% of track; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total",
+				averageResults.tracks[i].timings[j].blockName,
+				minResults.tracks[i].timings[j].hitCount, averageResults.tracks[i].timings[j].hitCount, sqrt(stdResults.tracks[i].timings[j].hitCount), maxResults.tracks[i].timings[j].hitCount,
+				minResults.tracks[i].timings[j].elapsed, averageResults.tracks[i].timings[j].elapsed, sqrt(stdResults.tracks[i].timings[j].elapsed), maxResults.tracks[i].timings[j].elapsed,
+				minResults.tracks[i].timings[j].proportionInTrack, averageResults.tracks[i].timings[j].proportionInTrack, sqrt(stdResults.tracks[i].timings[j].proportionInTrack), maxResults.tracks[i].timings[j].proportionInTrack,
+				minResults.tracks[i].timings[j].proportionInTotal, averageResults.tracks[i].timings[j].proportionInTotal, sqrt(stdResults.tracks[i].timings[j].proportionInTotal), maxResults.tracks[i].timings[j].proportionInTotal);
+			if (averageResults.tracks[i].timings[j].processedByteCount > 0)
+			{
+				printf("; {%llu, %llu(+/-)%llu, %llu}MB at {%f, %f(+/-)%f, %f}MB/s | {%f, %f(+/-)%f, %f}GB/s",
+					minResults.tracks[i].timings[j].processedByteCount / (1 << 20), averageResults.tracks[i].timings[j].processedByteCount / (1 << 20),	sqrt(stdResults.tracks[i].timings[j].processedByteCount) / (1 << 20), maxResults.tracks[i].timings[j].processedByteCount / (1 << 20),
+					minResults.tracks[i].timings[j].bandwidthInB / (1 << 20), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 20),	sqrt(stdResults.tracks[i].timings[j].bandwidthInB) / (1 << 20), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 20),
+					minResults.tracks[i].timings[j].bandwidthInB / (1 << 30), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 30),	sqrt(stdResults.tracks[i].timings[j].bandwidthInB) / (1 << 30), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 30));
+			}
+			printf(")\n");
+		}
+	}
 }
