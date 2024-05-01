@@ -651,26 +651,37 @@ struct RepetitionProfiler
 {
 	RepetitionProfiler() = default;
 
+	ProfilerResults* ptr_repetitionResults = nullptr;
 	
 	ProfilerResults averageResults;
+	ProfilerResults cumulatedResults;
+
+	inline void SetRepetitionResults(ProfilerResults* _repetitionResults) noexcept
+	{
+		ptr_repetitionResults = _repetitionResults;
+	}
+
+	void ComputeAverageResults(u64 _repetitionCount) noexcept;
+
+	void CumulateResults(u64 _repetitionCount) noexcept;
 
 	template<typename... Args>
-	void FixedCountRepetitionTesting(ProfilerResults* _out_results, u64 _repetitionCount, void* _function, Args... _functionArgs)
+	void FixedCountRepetitionTesting(u64 _repetitionCount, void* _function, Args... _functionArgs)
 	{
-		Profiler* profilerPtr = GetProfiler();
+		Profiler* ptr_profiler = GetProfiler();
 
-		profilerPtr->Reset();
+		ptr_profiler->Reset();
 
 		for (u64 i = 0; i < _repetitionCount; ++i)
 		{
-			profilerPtr->Initialize();
+			ptr_profiler->Initialize();
 			((void(*)(Args...))_function)(_functionArgs...);
-			profilerPtr->End();
-			_out_results[i].Capture(profilerPtr);
-			profilerPtr->ResetExistingTracks();
+			ptr_profiler->End();
+			ptr_repetitionResults[i].Capture(ptr_profiler);
+			ptr_profiler->ResetExistingTracks();
 		}
 	}
 
-	void Report(ProfilerResults* _results, u64 _repetitionCount) noexcept;
+	void Report() noexcept;
 };
 } // namespace Profile

@@ -48,6 +48,10 @@ void TestFunction_Track2(Profile::u64 _arr[], Profile::u64 _count)
 	}
 }
 
+/*!
+@brief Tests the FixedCountRepetitionTesting function of the RepetitionProfiler.
+@details Repeatedly tests the function a hundred times and reports the results.
+*/
 void TestFunction_FixedRepetitionTesting()
 {
 	Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * 8192);
@@ -56,8 +60,10 @@ void TestFunction_FixedRepetitionTesting()
 	Profile::RepetitionProfiler* repetitionProfiler = (Profile::RepetitionProfiler*)calloc(1, sizeof(Profile::RepetitionProfiler));
 	Profile::ProfilerResults* results = (Profile::ProfilerResults*)calloc(repetitionCount, sizeof(Profile::ProfilerResults));
 
-	repetitionProfiler->FixedCountRepetitionTesting(results, repetitionCount, TestFunction, arr, 8192);
-	repetitionProfiler->Report(results, repetitionCount);
+	repetitionProfiler->SetRepetitionResults(results);
+	repetitionProfiler->FixedCountRepetitionTesting(repetitionCount, TestFunction, arr, 8192);
+	repetitionProfiler->ComputeAverageResults(repetitionCount);
+	repetitionProfiler->Report();
 
 	free(results);
 	free(repetitionProfiler);

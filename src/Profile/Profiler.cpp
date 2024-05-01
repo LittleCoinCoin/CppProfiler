@@ -232,59 +232,76 @@ void Profile::ProfilerResults::Report() noexcept
 	}
 }
 
-void Profile::RepetitionProfiler::Report(ProfilerResults* _results, u64 _repetitionCount) noexcept
+void Profile::RepetitionProfiler::ComputeAverageResults(u64 _repetitionCount) noexcept
 {
-	char* name = (char*)malloc(strlen(_results->name) + 100); //100 is enough for the string below (average of profiler "%s" over %llu
-	sprintf(name, "Reporting average of profiler \"%s\" over %llu repetitions", _results->name, _repetitionCount);
-	averageResults.name = name;
+	if (cumulatedResults.name == nullptr)
+	{
+		CumulateResults(_repetitionCount);
+	}
+
+	averageResults.name = cumulatedResults.name;
+	averageResults.elapsed = cumulatedResults.elapsed / _repetitionCount;
+	averageResults.elapsedSec = cumulatedResults.elapsedSec / _repetitionCount;
+	averageResults.trackCount = cumulatedResults.trackCount;
+	for (NB_TRACKS_TYPE i = 0; i < cumulatedResults.trackCount; ++i)
+	{
+		averageResults.tracks[i].name = cumulatedResults.tracks[i].name;
+		averageResults.tracks[i].elapsed = cumulatedResults.tracks[i].elapsed / _repetitionCount;
+		averageResults.tracks[i].elapsedSec = cumulatedResults.tracks[i].elapsedSec / _repetitionCount;
+		averageResults.tracks[i].proportionInTotal = cumulatedResults.tracks[i].proportionInTotal / _repetitionCount;
+		averageResults.tracks[i].blockCount = cumulatedResults.tracks[i].blockCount;
+		for (NB_TIMINGS_TYPE j = 0; j < cumulatedResults.tracks[i].blockCount; ++j)
+		{
+			averageResults.tracks[i].timings[j].blockName = cumulatedResults.tracks[i].timings[j].blockName;
+			averageResults.tracks[i].timings[j].elapsed = cumulatedResults.tracks[i].timings[j].elapsed / _repetitionCount;
+			averageResults.tracks[i].timings[j].hitCount = cumulatedResults.tracks[i].timings[j].hitCount / _repetitionCount;
+			averageResults.tracks[i].timings[j].processedByteCount = cumulatedResults.tracks[i].timings[j].processedByteCount / _repetitionCount;
+			averageResults.tracks[i].timings[j].proportionInTrack = cumulatedResults.tracks[i].timings[j].proportionInTrack / _repetitionCount;
+			averageResults.tracks[i].timings[j].proportionInTotal = cumulatedResults.tracks[i].timings[j].proportionInTotal / _repetitionCount;
+			averageResults.tracks[i].timings[j].bandwidthInB = cumulatedResults.tracks[i].timings[j].bandwidthInB / _repetitionCount;
+		}
+	}
+}
+
+void Profile::RepetitionProfiler::CumulateResults(u64 _repetitionCount) noexcept
+{
+	char* name = (char*)malloc(strlen(ptr_repetitionResults->name) + 100); //100 is enough for the string below (average of profiler "%s" over %llu
+	sprintf(name, "Profiler \"%s\" over %llu repetitions", ptr_repetitionResults->name, _repetitionCount);
+	cumulatedResults.name = name;
 	for (u64 i = 0; i < _repetitionCount; ++i)
 	{
-		averageResults.elapsed += _results[i].elapsed;
-		averageResults.elapsedSec += _results[i].elapsedSec;
-		if (averageResults.trackCount < _results[i].trackCount)
+		cumulatedResults.elapsed += ptr_repetitionResults[i].elapsed;
+		cumulatedResults.elapsedSec += ptr_repetitionResults[i].elapsedSec;
+		if (cumulatedResults.trackCount < ptr_repetitionResults[i].trackCount)
 		{
-			averageResults.trackCount = _results[i].trackCount;
+			cumulatedResults.trackCount = ptr_repetitionResults[i].trackCount;
 		}
-		for (NB_TRACKS_TYPE j = 0; j < _results[i].trackCount; ++j)
+		for (NB_TRACKS_TYPE j = 0; j < ptr_repetitionResults[i].trackCount; ++j)
 		{
-			averageResults.tracks[j].name = _results[i].tracks[j].name;
-			averageResults.tracks[j].elapsed += _results[i].tracks[j].elapsed;
-			averageResults.tracks[j].elapsedSec += _results[i].tracks[j].elapsedSec;
-			if (averageResults.tracks[j].blockCount < _results[i].tracks[j].blockCount)
+			cumulatedResults.tracks[j].name = ptr_repetitionResults[i].tracks[j].name;
+			cumulatedResults.tracks[j].elapsed += ptr_repetitionResults[i].tracks[j].elapsed;
+			cumulatedResults.tracks[j].elapsedSec += ptr_repetitionResults[i].tracks[j].elapsedSec;
+			cumulatedResults.tracks[j].proportionInTotal += ptr_repetitionResults[i].tracks[j].proportionInTotal;
+			if (cumulatedResults.tracks[j].blockCount < ptr_repetitionResults[i].tracks[j].blockCount)
 			{
-				averageResults.tracks[j].blockCount = _results[i].tracks[j].blockCount;
+				cumulatedResults.tracks[j].blockCount = ptr_repetitionResults[i].tracks[j].blockCount;
 			}
-			for (NB_TIMINGS_TYPE k = 0; k < _results[i].tracks[j].blockCount; ++k)
+			for (NB_TIMINGS_TYPE k = 0; k < ptr_repetitionResults[i].tracks[j].blockCount; ++k)
 			{
-				averageResults.tracks[j].timings[k].blockName = _results[i].tracks[j].timings[k].blockName;
-				averageResults.tracks[j].timings[k].elapsed += _results[i].tracks[j].timings[k].elapsed;
-				averageResults.tracks[j].timings[k].hitCount += _results[i].tracks[j].timings[k].hitCount;
-				averageResults.tracks[j].timings[k].processedByteCount += _results[i].tracks[j].timings[k].processedByteCount;
-				averageResults.tracks[j].timings[k].proportionInTrack += _results[i].tracks[j].timings[k].proportionInTrack;
-				averageResults.tracks[j].timings[k].proportionInTotal += _results[i].tracks[j].timings[k].proportionInTotal;
-				averageResults.tracks[j].timings[k].bandwidthInB += _results[i].tracks[j].timings[k].bandwidthInB;
+				cumulatedResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
+				cumulatedResults.tracks[j].timings[k].elapsed += ptr_repetitionResults[i].tracks[j].timings[k].elapsed;
+				cumulatedResults.tracks[j].timings[k].hitCount += ptr_repetitionResults[i].tracks[j].timings[k].hitCount;
+				cumulatedResults.tracks[j].timings[k].processedByteCount += ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount;
+				cumulatedResults.tracks[j].timings[k].proportionInTrack += ptr_repetitionResults[i].tracks[j].timings[k].proportionInTrack;
+				cumulatedResults.tracks[j].timings[k].proportionInTotal += ptr_repetitionResults[i].tracks[j].timings[k].proportionInTotal;
+				cumulatedResults.tracks[j].timings[k].bandwidthInB += ptr_repetitionResults[i].tracks[j].timings[k].bandwidthInB;
 			}
-
 		}
 	}
+}
 
-	averageResults.elapsed /= _repetitionCount;
-	averageResults.elapsedSec /= _repetitionCount;
-	for (NB_TRACKS_TYPE j = 0; j < averageResults.trackCount; ++j)
-	{
-		averageResults.tracks[j].elapsed /= _repetitionCount;
-		averageResults.tracks[j].elapsedSec /= _repetitionCount;
-		for (NB_TIMINGS_TYPE k = 0; k < averageResults.tracks[j].blockCount; ++k)
-		{
-			averageResults.tracks[j].timings[k].elapsed /= _repetitionCount;
-			averageResults.tracks[j].timings[k].hitCount /= _repetitionCount;
-			averageResults.tracks[j].timings[k].processedByteCount /= _repetitionCount;
-			averageResults.tracks[j].timings[k].proportionInTrack /= _repetitionCount;
-			averageResults.tracks[j].timings[k].proportionInTotal /= _repetitionCount;
-			averageResults.tracks[j].timings[k].bandwidthInB /= _repetitionCount;
-		}
-	}
-
+void Profile::RepetitionProfiler::Report() noexcept
+{
 	//Report the average results
 	averageResults.Report();
 }
