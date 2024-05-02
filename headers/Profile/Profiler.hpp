@@ -651,14 +651,42 @@ struct RepetitionProfiler
 {
 	RepetitionProfiler() = default;
 
+	/*!
+	@brief The pointer to the ProfilerResults storing the results of the
+			repeated profiling.
+	*/
 	ProfilerResults* ptr_repetitionResults = nullptr;
 	
+	/*!
+	@brief A result structure to store the average of the repeated profiling.
+	*/
 	ProfilerResults averageResults;
+
+	/*!
+	@brief A result structure to store the cumulated results of the repeated profiling.
+	*/
 	ProfilerResults cumulatedResults;
+
+	/*!
+	@brief A result structure to store the maximum of the repeated profiling.
+	*/
 	ProfilerResults maxResults;
+
+	/*!
+	@brief A result structure to store the minimum of the repeated profiling.
+	*/
 	ProfilerResults minResults;
+
+	/*!
+	@brief A result structure to store the standard deviation of the repeated profiling.
+	*/
 	ProfilerResults stdResults;
 
+	/*!
+	@brief Sets the pointer for ::ptr_repetitionResults.
+	@param _repetitionResults The pointer to the ProfilerResults storing the 
+			results of the repeated profiling.
+	*/
 	inline void SetRepetitionResults(ProfilerResults* _repetitionResults) noexcept
 	{
 		ptr_repetitionResults = _repetitionResults;
@@ -666,6 +694,13 @@ struct RepetitionProfiler
 
 private:
 
+	/*!
+	@brief A function to assign the maximum of two values to the first one.
+	@details The function is overloaded for u64, f32, and f64. It's used to
+			 lighten the code in ::FindMaxResults.
+	@param _a The first value.
+	@param _b The second value.
+	*/
 	inline void MaxAssign(u64& _a, u64& _b) noexcept
 	{
 		if (_a < _b)
@@ -674,6 +709,11 @@ private:
 		}
 	}
 
+	/*!
+	@brief An overloaded function to assign the maximum of two values to the first one.
+	@param _a The first value.
+	@param _b The second value.
+	*/
 	inline void MaxAssign(f32& _a, f32& _b) noexcept
 	{
 		if (_a < _b)
@@ -682,6 +722,11 @@ private:
 		}
 	}
 
+	/*!
+	@brief An overloaded function to assign the maximum of two values to the first one.
+	@param _a The first value.
+	@param _b The second value.
+	*/
 	inline void MaxAssign(f64& _a, f64& _b) noexcept
 	{
 		if (_a < _b)
@@ -690,6 +735,13 @@ private:
 		}
 	}
 
+	/*!
+	@brief A function to assign the minimum of two values to the first one.
+	@details The function is overloaded for u64, f32, and f64. It's used to
+			 lighten the code in ::FindMinResults.
+	@param _a The first value.
+	@param _b The second value.
+	*/
 	inline void MinAssign(u64& _a, u64& _b) noexcept
 	{
 		if (_a == 0)
@@ -703,6 +755,11 @@ private:
 		}
 	}
 
+	/*!
+	@brief An overloaded function to assign the minimum of two values to the first one.
+	@param _a The first value.
+	@param _b The second value.
+	*/
 	inline void MinAssign(f32& _a, f32& _b) noexcept
 	{
 		if (_a == 0.0f)
@@ -716,6 +773,11 @@ private:
 		}
 	}
 
+	/*!
+	@brief An overloaded function to assign the minimum of two values to the first one.
+	@param _a The first value.
+	@param _b The second value.
+	*/
 	inline void MinAssign(f64& _a, f64& _b) noexcept
 	{
 		if (_a == 0.0)
@@ -730,16 +792,61 @@ private:
 	}
 
 public:
+	/*!
+	@brief Computes the average of the repeated profiling.
+	@param _repetitionCount The number of repetitions.
+	@see ::averageResults
+	*/
 	void ComputeAverageResults(u64 _repetitionCount) noexcept;
 
+	/*!
+	@brief Computes the standard deviation of the repeated profiling.
+	@param _repetitionCount The number of repetitions.
+	@see ::stdResults
+	*/
 	void ComputeStdResults(u64 _repetitionCount) noexcept;
 
+	/*!
+	@brief Cumulates the results of the repeated profiling.
+	@param _repetitionCount The number of repetitions.
+	@see ::cumulatedResults
+	*/
 	void CumulateResults(u64 _repetitionCount) noexcept;
 
+	/*!
+	@brief Goes through the repeated profiling to find the maximum results.
+	@details In the current implementation, there is no guarentee that the 
+			 maximum results all come from the same repetition. For example,
+			 for some reason, It's possible a block was hit more times in a
+			 repetition r1 than r2, but the maximum time was recorded in r2.
+	@param _repetitionCount The number of repetitions.
+	@see ::maxResults
+	*/
 	void FindMaxResults(u64 _repetitionCount) noexcept;
 
+	/*!
+	@details Goes through the repeated profiling to find the minimum results.
+	@details In the current implementation, there is no guarentee that the
+			 minimum results all come from the same repetition. For example,
+			 for some reason, It's possible a block was hit more times in a
+			 repetition r1 than r2, but the minimum time was recorded in r2.
+	@param _repetitionCount The number of repetitions.
+	@see ::minResults
+	*/
 	void FindMinResults(u64 _repetitionCount) noexcept;
 
+	/*!
+	@brief Repeatedly tests a function and stores the profiling statistics.
+	@details The function will be called @p _repetitionCount times. The profiling
+			 statistics of each repetition will be stored in the ProfilerResults
+			 pointed by ::ptr_repetitionResults. In this case, ::ptr_repetitionResults
+			 must be set before calling this function and must be an array of at least
+			 of size @p _repetitionCount.
+	@param _repetitionCount The number of repetitions.
+	@param _function The function to test.
+	@param _functionArgs The arguments of the function.
+	@paramt Args The types of the arguments of the function.
+	*/
 	template<typename... Args>
 	void FixedCountRepetitionTesting(u64 _repetitionCount, void* _function, Args... _functionArgs)
 	{
@@ -757,6 +864,10 @@ public:
 		}
 	}
 
+	/*!
+	@brief Prints the results of the repeated profiling.
+	@param _repetitionCount The number of repetitions.
+	*/
 	void Report(u64 _repetitionCount) noexcept;
 };
 } // namespace Profile
