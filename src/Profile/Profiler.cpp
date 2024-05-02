@@ -441,7 +441,7 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 
 		for (NB_TIMINGS_TYPE j = 0; j < averageResults.tracks[i].blockCount; ++j)
 		{
-			printf("%s[{%llu, %llu(+/-)%llu, %llu}]: {%llu, %llu(+/-)%llu, %llu} ({%.2f, %.2f(+/-)%.2f, %.2f}%% of track; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total",
+			printf("%s[{%llu, %llu(+/-)%f, %llu}]: {%llu, %llu(+/-)%f, %llu} ({%.2f, %.2f(+/-)%.2f, %.2f}%% of track; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total",
 				averageResults.tracks[i].timings[j].blockName,
 				minResults.tracks[i].timings[j].hitCount, averageResults.tracks[i].timings[j].hitCount, sqrt(stdResults.tracks[i].timings[j].hitCount), maxResults.tracks[i].timings[j].hitCount,
 				minResults.tracks[i].timings[j].elapsed, averageResults.tracks[i].timings[j].elapsed, sqrt(stdResults.tracks[i].timings[j].elapsed), maxResults.tracks[i].timings[j].elapsed,
@@ -449,8 +449,8 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 				minResults.tracks[i].timings[j].proportionInTotal, averageResults.tracks[i].timings[j].proportionInTotal, sqrt(stdResults.tracks[i].timings[j].proportionInTotal), maxResults.tracks[i].timings[j].proportionInTotal);
 			if (averageResults.tracks[i].timings[j].processedByteCount > 0)
 			{
-				printf("; {%llu, %llu(+/-)%llu, %llu}MB at {%f, %f(+/-)%f, %f}MB/s | {%f, %f(+/-)%f, %f}GB/s",
-					minResults.tracks[i].timings[j].processedByteCount / (1 << 20), averageResults.tracks[i].timings[j].processedByteCount / (1 << 20),	sqrt(stdResults.tracks[i].timings[j].processedByteCount) / (1 << 20), maxResults.tracks[i].timings[j].processedByteCount / (1 << 20),
+				printf("; {%.3f, %.3f(+/-)%.3f, %.3f}MB at {%.3f, %.3f(+/-)%.3f, %.3f}MB/s | {%.3f, %.3f(+/-)%.3f, %.3f}GB/s",
+					(f32)minResults.tracks[i].timings[j].processedByteCount / (1 << 20), (f32)averageResults.tracks[i].timings[j].processedByteCount / (1 << 20), sqrt(stdResults.tracks[i].timings[j].processedByteCount) / (1 << 20), (f32)maxResults.tracks[i].timings[j].processedByteCount / (1 << 20),
 					minResults.tracks[i].timings[j].bandwidthInB / (1 << 20), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 20),	sqrt(stdResults.tracks[i].timings[j].bandwidthInB) / (1 << 20), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 20),
 					minResults.tracks[i].timings[j].bandwidthInB / (1 << 30), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 30),	sqrt(stdResults.tracks[i].timings[j].bandwidthInB) / (1 << 30), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 30));
 			}
