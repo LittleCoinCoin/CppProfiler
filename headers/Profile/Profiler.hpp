@@ -866,6 +866,10 @@ public:
 
 	/*!
 	@brief Prints the results of the repeated profiling.
+	@details If none have been computed yet (i.e., the corresponding Profile::ProfilingResults
+			 have their names set to nullptr), the function will compute the
+			 average, the standard deviation, the maximum, and the minimum of
+			 the repeated profiling before outputting the results.
 	@param _repetitionCount The number of repetitions.
 	*/
 	void Report(u64 _repetitionCount) noexcept;
