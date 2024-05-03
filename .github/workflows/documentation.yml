@@ -15,12 +15,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # - name: Clone Doxygen Awesome CSS
-      #   uses: actions/checkout@v3
-      #   with:
-      #     repository: jothepro/doxygen-awesome-css
-      #     ref: v1.6.0
-      #     path: "doxygen-awesome-css"
+      - name: Clone Doxygen Awesome CSS
+        uses: actions/checkout@v3
+        with:
+          repository: jothepro/doxygen-awesome-css
+          ref: v2.3.2
+          path: "doxygen-awesome-css"
 
       - name: Compute version
         id: version
@@ -35,8 +35,11 @@ jobs:
           include: "doc/Doxyfile"
           regex: true
 
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+
       - name: Run Doxygen
-        uses: mattnotmitt/doxygen-action@v1.9.5
+        uses: mattnotmitt/doxygen-action@v1.9.6
         with:
           doxyfile-path: "./doc/Doxyfile"
 

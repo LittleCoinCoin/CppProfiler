@@ -53,7 +53,7 @@ namespace Profile
 		static u64 GetOSTimerFreq(void);
 
 		/*!
-		@brief Sets the value of the estimated CPU frequency (::s_EstimatedCPUFreq).
+		@brief Sets the value of the estimated CPU frequency (::s_estimatedCPUFreq).
 		@param _msToWait The amount of time to wait in milliseconds. Default is 1000 (1 second).
 		*/
 		static void SetEstimatedCPUFreq(u64 _msToWait = 1000);
