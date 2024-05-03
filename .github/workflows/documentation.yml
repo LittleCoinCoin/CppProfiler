@@ -35,6 +35,9 @@ jobs:
           include: "doc/Doxyfile"
           regex: true
 
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+
       - name: Run Doxygen
         uses: mattnotmitt/doxygen-action@v1.9.6
         with:
