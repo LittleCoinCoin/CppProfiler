@@ -19,7 +19,7 @@ option(ENABLE_PROFILER "The profiler will record data if this option is ON.
 						Otherwise, it will just ignore the recording MACROS." ON)
 if (ENABLE_PROFILER)
 	message("Enabling profiler")
-	add_compile_definitions(_PROFILER_ENABLED)
+	add_compile_definitions(PROFILER_ENABLED=1)
 endif()
 
 # We want to build the profiler as a shared library

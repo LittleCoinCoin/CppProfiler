@@ -8,12 +8,6 @@
 #include "Timing.hpp"
 #include "Types.hpp"
 
-#ifdef _PROFILER_ENABLED // Possibly defined as compilation variable
-#define PROFILER_ENABLED 1 // Just an alias for _PROFILER_ENABLED to be used as `#if PROFILER_ENABLED` instead of `#ifdef _PROFILER_ENABLED`
-#else
-#define PROFILER_ENABLED 0
-#endif // _PROFILER_ENABLED
-
 namespace Profile
 {
 #ifndef NB_TIMINGS //Possibly defined as compilation variable
