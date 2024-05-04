@@ -12,8 +12,6 @@ PROFILE_API Profile::Profiler* Profile::GetProfiler()
 	return s_Profiler;
 }
 
-#if PROFILER_ENABLED
-
 Profile::ProfileBlock::ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount) :
 	trackIdx(_trackIdx), profileBlockRecorderIdx(_profileBlockRecorderIdx)
 {
@@ -32,7 +30,6 @@ void Profile::ProfileBlockRecorder::Reset() noexcept
 	hitCount = 0;
 	processedByteCount = 0;
 }
-#endif
 
 void Profile::ProfileBlockResult::Capture(ProfileBlockRecorder& _record, NB_TRACKS_TYPE _trackIdx,
 	NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _trackElapsedReference, u64 _totalElapsedReference) noexcept
