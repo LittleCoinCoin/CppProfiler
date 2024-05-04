@@ -1,0 +1,84 @@
+name: Linux
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+    inputs:
+      build_config:
+        description: 'Comma-separated "Release" and/or "Debug"'
+        default: '"Release", "Debug"'
+        required: true
+
+jobs:
+  ubuntu_clang:
+    name: Ubuntu | Clang
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build_config: [Release, Debug]
+        clang_version: [17, 18, 19]
+
+    env:
+      clang_compiler_version: -${{ matrix.clang_version }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Install suitable compiler
+        run: sudo apt-get install clang++-${{ matrix.clang_version }}
+
+      - name: Install CMake and ninja
+        uses: lukka/get-cmake@latest
+
+      - name: Build CppProfiler
+        uses: lukka/run-cmake@v10
+        with:
+          # This is the name of the CMakePresets.json's configuration to use to generate
+          # the project files.
+          configurePreset: "Clang"
+          
+          # This is the name of the CMakePresets.json's configuration to build the project.
+          buildPreset: "Clang ${{ matrix.build_config }}"
+
+
+  ubuntu_gcc:
+    name: Ubuntu | GCC
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build_config: [Release, Debug]
+        gcc_version: [11, 12, 13]
+
+    env:
+      gcc_compiler_version: -${{ matrix.gcc_version }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Install suitable compiler
+        run: sudo apt-get install g++-${{ matrix.gcc_version }}
+
+      - name: Install CMake and ninja
+        uses: lukka/get-cmake@latest
+
+      - name: Build CppProfiler
+        uses: lukka/run-cmake@v10
+        with:
+          # This is the name of the CMakePresets.json's configuration to use to generate
+          # the project files.
+          configurePreset: "GCC"
+          
+          # This is the name of the CMakePresets.json's configuration to build the project.
+          buildPreset: "GCC ${{ matrix.build_config }}"

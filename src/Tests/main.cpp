@@ -61,7 +61,7 @@ void TestFunction_FixedRepetitionTesting()
 	Profile::ProfilerResults* results = (Profile::ProfilerResults*)calloc(repetitionCount, sizeof(Profile::ProfilerResults));
 
 	repetitionProfiler->SetRepetitionResults(results);
-	repetitionProfiler->FixedCountRepetitionTesting(repetitionCount, TestFunction, arr, 8192);
+	repetitionProfiler->FixedCountRepetitionTesting(repetitionCount, (void*)TestFunction, arr, 8192);
 	repetitionProfiler->ComputeAverageResults(repetitionCount);
 	repetitionProfiler->Report(repetitionCount);
 
