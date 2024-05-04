@@ -1,3 +1,4 @@
+#include <cmath> //for std::sqrt
 #include "Profile/Profiler.hpp"
 
 static Profile::Profiler* s_Profiler = nullptr;
@@ -433,28 +434,28 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 	//standard deviation, the minimum and the maximum values
 	printf("\n---- ProfilerResults: %s ({%f, %f(+/-)%f, %f}ms) ----\n",
 		averageResults.name,
-		1000 * minResults.elapsedSec, 1000 * averageResults.elapsedSec, 1000 * sqrt(stdResults.elapsedSec), 1000 * maxResults.elapsedSec);
+		1000 * minResults.elapsedSec, 1000 * averageResults.elapsedSec, 1000 * std::sqrt(stdResults.elapsedSec), 1000 * maxResults.elapsedSec);
 	for (u64 i = 0; i < averageResults.trackCount; ++i)
 	{
 		printf("\n---- Profile Track Results: %s ({%f, %f(+/-)%f, %f}ms; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total) ----\n",
 			averageResults.tracks[i].name,
-			1000 * minResults.tracks[i].elapsedSec, 1000 * averageResults.tracks[i].elapsedSec,	1000 * sqrt(stdResults.tracks[i].elapsedSec), 1000 * maxResults.tracks[i].elapsedSec,
-			minResults.tracks[i].proportionInTotal, averageResults.tracks[i].proportionInTotal,	sqrt(stdResults.tracks[i].proportionInTotal), maxResults.tracks[i].proportionInTotal);
+			1000 * minResults.tracks[i].elapsedSec, 1000 * averageResults.tracks[i].elapsedSec,	1000 * std::sqrt(stdResults.tracks[i].elapsedSec), 1000 * maxResults.tracks[i].elapsedSec,
+			minResults.tracks[i].proportionInTotal, averageResults.tracks[i].proportionInTotal,	std::sqrt(stdResults.tracks[i].proportionInTotal), maxResults.tracks[i].proportionInTotal);
 
 		for (NB_TIMINGS_TYPE j = 0; j < averageResults.tracks[i].blockCount; ++j)
 		{
 			printf("%s[{%llu, %llu(+/-)%f, %llu}]: {%llu, %llu(+/-)%f, %llu} ({%.2f, %.2f(+/-)%.2f, %.2f}%% of track; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total",
 				averageResults.tracks[i].timings[j].blockName,
-				minResults.tracks[i].timings[j].hitCount, averageResults.tracks[i].timings[j].hitCount, sqrt(stdResults.tracks[i].timings[j].hitCount), maxResults.tracks[i].timings[j].hitCount,
-				minResults.tracks[i].timings[j].elapsed, averageResults.tracks[i].timings[j].elapsed, sqrt(stdResults.tracks[i].timings[j].elapsed), maxResults.tracks[i].timings[j].elapsed,
-				minResults.tracks[i].timings[j].proportionInTrack, averageResults.tracks[i].timings[j].proportionInTrack, sqrt(stdResults.tracks[i].timings[j].proportionInTrack), maxResults.tracks[i].timings[j].proportionInTrack,
-				minResults.tracks[i].timings[j].proportionInTotal, averageResults.tracks[i].timings[j].proportionInTotal, sqrt(stdResults.tracks[i].timings[j].proportionInTotal), maxResults.tracks[i].timings[j].proportionInTotal);
+				minResults.tracks[i].timings[j].hitCount, averageResults.tracks[i].timings[j].hitCount, std::sqrt(stdResults.tracks[i].timings[j].hitCount), maxResults.tracks[i].timings[j].hitCount,
+				minResults.tracks[i].timings[j].elapsed, averageResults.tracks[i].timings[j].elapsed, std::sqrt(stdResults.tracks[i].timings[j].elapsed), maxResults.tracks[i].timings[j].elapsed,
+				minResults.tracks[i].timings[j].proportionInTrack, averageResults.tracks[i].timings[j].proportionInTrack, std::sqrt(stdResults.tracks[i].timings[j].proportionInTrack), maxResults.tracks[i].timings[j].proportionInTrack,
+				minResults.tracks[i].timings[j].proportionInTotal, averageResults.tracks[i].timings[j].proportionInTotal, std::sqrt(stdResults.tracks[i].timings[j].proportionInTotal), maxResults.tracks[i].timings[j].proportionInTotal);
 			if (averageResults.tracks[i].timings[j].processedByteCount > 0)
 			{
 				printf("; {%.3f, %.3f(+/-)%.3f, %.3f}MB at {%.3f, %.3f(+/-)%.3f, %.3f}MB/s | {%.3f, %.3f(+/-)%.3f, %.3f}GB/s",
-					(f32)minResults.tracks[i].timings[j].processedByteCount / (1 << 20), (f32)averageResults.tracks[i].timings[j].processedByteCount / (1 << 20), sqrt(stdResults.tracks[i].timings[j].processedByteCount) / (1 << 20), (f32)maxResults.tracks[i].timings[j].processedByteCount / (1 << 20),
-					minResults.tracks[i].timings[j].bandwidthInB / (1 << 20), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 20),	sqrt(stdResults.tracks[i].timings[j].bandwidthInB) / (1 << 20), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 20),
-					minResults.tracks[i].timings[j].bandwidthInB / (1 << 30), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 30),	sqrt(stdResults.tracks[i].timings[j].bandwidthInB) / (1 << 30), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 30));
+					(f32)minResults.tracks[i].timings[j].processedByteCount / (1 << 20), (f32)averageResults.tracks[i].timings[j].processedByteCount / (1 << 20), std::sqrt(stdResults.tracks[i].timings[j].processedByteCount) / (1 << 20), (f32)maxResults.tracks[i].timings[j].processedByteCount / (1 << 20),
+					minResults.tracks[i].timings[j].bandwidthInB / (1 << 20), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 20),	std::sqrt(stdResults.tracks[i].timings[j].bandwidthInB) / (1 << 20), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 20),
+					minResults.tracks[i].timings[j].bandwidthInB / (1 << 30), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 30),	std::sqrt(stdResults.tracks[i].timings[j].bandwidthInB) / (1 << 30), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 30));
 			}
 			printf(")\n");
 		}
