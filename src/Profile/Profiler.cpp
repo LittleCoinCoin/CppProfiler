@@ -1,4 +1,5 @@
 #include <cmath> //for std::sqrt
+#include <cstring> //for strlen
 #include "Profile/Profiler.hpp"
 
 static Profile::Profiler* s_Profiler = nullptr;
@@ -377,7 +378,7 @@ void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
 
 void Profile::RepetitionProfiler::CumulateResults(u64 _repetitionCount) noexcept
 {
-	char* name = (char*)malloc(strlen(ptr_repetitionResults->name) + 100); //100 is enough for the string below (average of profiler "%s" over %llu
+	char* name = (char*)malloc(std::strlen(ptr_repetitionResults->name) + 100); //100 is enough for the string below (average of profiler "%s" over %llu
 	sprintf(name, "Profiler \"%s\" over %llu repetitions", ptr_repetitionResults->name, _repetitionCount);
 	cumulatedResults.name = name;
 	for (u64 i = 0; i < _repetitionCount; ++i)

@@ -32,7 +32,7 @@ jobs:
           submodules: 'recursive'
 
       - name: Install suitable compiler
-        run: sudo apt-get install clang++-${{ matrix.clang_version }}
+        run: sudo apt-get install clang-${{ matrix.clang_version }}
 
       - name: Install CMake and ninja
         uses: lukka/get-cmake@latest
