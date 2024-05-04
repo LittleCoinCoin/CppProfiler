@@ -8,12 +8,6 @@
 #include "Timing.hpp"
 #include "Types.hpp"
 
-#ifdef _PROFILER_ENABLED // Possibly defined as compilation variable
-#define PROFILER_ENABLED 1 // Just an alias for _PROFILER_ENABLED to be used as `#if PROFILER_ENABLED` instead of `#ifdef _PROFILER_ENABLED`
-#else
-#define PROFILER_ENABLED 0
-#endif // _PROFILER_ENABLED
-
 namespace Profile
 {
 #ifndef NB_TIMINGS //Possibly defined as compilation variable
@@ -225,7 +219,7 @@ struct ProfileBlockRecorder
 	@brief Resets the values of the block.
 	@details Resetting do not change the ::blockName, the ::fileName, or the ::lineNumber.
 	*/
-	void Reset() noexcept;
+	PROFILE_API void Reset() noexcept;
 };
 
 /*!
@@ -313,8 +307,8 @@ struct ProfileBlockResult
 	@details It will effectively assign or compute the values of all the
 				member variables of this struct.
 	*/
-	void Capture(ProfileBlockRecorder& _record, NB_TRACKS_TYPE _trackIdx,
-		NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _trackElapsedReference, u64 _totalElapsedReference) noexcept;
+	PROFILE_API void Capture(ProfileBlockRecorder& _record, NB_TRACKS_TYPE _trackIdx,
+				NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _trackElapsedReference, u64 _totalElapsedReference) noexcept;
 
 	/*!
 	@brief Outputs the profiling statistics of the block.
@@ -448,7 +442,7 @@ struct ProfileTrackResult
 			 ::timings array with the statistics of the Profile::ProfileBlockRecorders
 			 of the track that have been used.
 	*/
-	void Capture(ProfileTrack& _track, u64 _trackIdx, u64 _totalElapsedReference) noexcept;
+	PROFILE_API void Capture(ProfileTrack& _track, u64 _trackIdx, u64 _totalElapsedReference) noexcept;
 
 	/*!
 	@brief Outputs the profiling statistics of the track.
@@ -497,7 +491,7 @@ struct Profiler
 	@param _blockName The name of the block.
 	@return The index of the profile result.
 	*/
-	static NB_TIMINGS_TYPE GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _trackIdx, const char* _fileName, u32 _lineNumber, const char* _blockName);
+	PROFILE_API static NB_TIMINGS_TYPE GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _trackIdx, const char* _fileName, u32 _lineNumber, const char* _blockName);
 
 	/*!
 	@brief Sets the name of the profiler.
@@ -638,12 +632,12 @@ struct ProfilerResults
 			 ::tracks array with the statistics of the Profile::ProfileTracks
 			 of the profiler that have been used.
 	*/
-	void Capture(Profiler* _profiler) noexcept;
+	PROFILE_API void Capture(Profiler* _profiler) noexcept;
 
 	/*!
 	@brief Outputs the profiling statistics of the profiler.
 	*/
-	void Report() noexcept;
+	PROFILE_API void Report() noexcept;
 };
 
 
@@ -800,32 +794,32 @@ public:
 	@param _repetitionCount The number of repetitions.
 	@see ::averageResults
 	*/
-	void ComputeAverageResults(u64 _repetitionCount) noexcept;
+	PROFILE_API void ComputeAverageResults(u64 _repetitionCount) noexcept;
 
 	/*!
 	@brief Computes the standard deviation of the repeated profiling.
 	@param _repetitionCount The number of repetitions.
 	@see ::stdResults
 	*/
-	void ComputeStdResults(u64 _repetitionCount) noexcept;
+	PROFILE_API void ComputeStdResults(u64 _repetitionCount) noexcept;
 
 	/*!
 	@brief Cumulates the results of the repeated profiling.
 	@param _repetitionCount The number of repetitions.
 	@see ::cumulatedResults
 	*/
-	void CumulateResults(u64 _repetitionCount) noexcept;
+	PROFILE_API void CumulateResults(u64 _repetitionCount) noexcept;
 
 	/*!
 	@brief Goes through the repeated profiling to find the maximum results.
-	@details In the current implementation, there is no guarentee that the 
+	@details In the current implementation, there is no guarentee that the
 			 maximum results all come from the same repetition. For example,
 			 for some reason, It's possible a block was hit more times in a
 			 repetition r1 than r2, but the maximum time was recorded in r2.
 	@param _repetitionCount The number of repetitions.
 	@see ::maxResults
 	*/
-	void FindMaxResults(u64 _repetitionCount) noexcept;
+	PROFILE_API void FindMaxResults(u64 _repetitionCount) noexcept;
 
 	/*!
 	@details Goes through the repeated profiling to find the minimum results.
@@ -836,7 +830,7 @@ public:
 	@param _repetitionCount The number of repetitions.
 	@see ::minResults
 	*/
-	void FindMinResults(u64 _repetitionCount) noexcept;
+	PROFILE_API void FindMinResults(u64 _repetitionCount) noexcept;
 
 	/*!
 	@brief Repeatedly tests a function and stores the profiling statistics.
@@ -851,7 +845,7 @@ public:
 	@paramt Args The types of the arguments of the function.
 	*/
 	template<typename... Args>
-	void FixedCountRepetitionTesting(u64 _repetitionCount, void* _function, Args... _functionArgs)
+	PROFILE_API void FixedCountRepetitionTesting(u64 _repetitionCount, void* _function, Args... _functionArgs)
 	{
 		Profiler* ptr_profiler = GetProfiler();
 
@@ -875,6 +869,6 @@ public:
 			 the repeated profiling before outputting the results.
 	@param _repetitionCount The number of repetitions.
 	*/
-	void Report(u64 _repetitionCount) noexcept;
+	PROFILE_API void Report(u64 _repetitionCount) noexcept;
 };
 } // namespace Profile
