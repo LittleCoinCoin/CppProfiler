@@ -173,6 +173,7 @@ void Profile::Profiler::Initialize() noexcept
 
 void Profile::Profiler::Report() noexcept
 {
+#if PROFILER_ENABLED
 	printf("Estimated CPU Frequency: %llu\n", Timer::GetEstimatedCPUFreq());
 	printf("\n---- Profiler: %s (%fms) ----\n", name, 1000 * (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
 	for (ProfileTrack& track : tracks)
@@ -182,6 +183,9 @@ void Profile::Profiler::Report() noexcept
 			track.Report(elapsed);
 		}
 	}
+#else
+	printf("Profiler report was called but it is disabled. Report is therefore empty and will be skipped.\nThe profiler can be enabled by defining _PROFILER_ENABLED in the compiler options.\n");
+#endif
 }
 
 void Profile::Profiler::Reset() noexcept
@@ -409,6 +413,7 @@ void Profile::RepetitionProfiler::CumulateResults(u64 _repetitionCount) noexcept
 
 void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 {
+#if PROFILER_ENABLED
 	if (stdResults.name == nullptr)
 	{
 		ComputeStdResults(_repetitionCount);
@@ -454,4 +459,7 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 			printf(")\n");
 		}
 	}
+#else
+	printf("RepetitionProfiler report was called but profiling is disabled. Report is therefore empty and will be skipped.\nThe profiler can be enabled by defining _PROFILER_ENABLED in the compiler options.\n");
+#endif
 }
