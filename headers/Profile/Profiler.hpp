@@ -27,7 +27,7 @@ namespace Profile
 #define U_SIZE_ADAPTER(x) \
 	std::conditional_t<(x < (1<<8)), Profile::u8, \
 	std::conditional_t<(x < (1<<16)), Profile::u16, \
-	std::conditional_t<(x < (1<<32)), Profile::u32, Profile::u64>>>
+	std::conditional_t<(x < (1ULL<<32)), Profile::u32, Profile::u64>>>
 
 /*!
 @brief The macro used to adapt the type of the different variables used to
