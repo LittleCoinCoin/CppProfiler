@@ -4,12 +4,12 @@
 
 static Profile::Profiler* s_Profiler = nullptr;
 
-PROFILE_API void Profile::SetProfiler(Profiler* _profiler)
+void Profile::SetProfiler(Profiler* _profiler)
 {
 	s_Profiler = _profiler;
 }
 
-PROFILE_API Profile::Profiler* Profile::GetProfiler()
+Profile::Profiler* Profile::GetProfiler()
 {
 	return s_Profiler;
 }
