@@ -17,6 +17,21 @@ void TestFunction(Profile::u64 _arr[], Profile::u64 _count)
 }
 
 /*!
+@brief A wrapper around the TestFunction when it will be used TestFunction_FixedRepetitionTesting.
+*/
+struct RepetitionTest_TestFunction : public Profile::RepetitionTest
+{
+	Profile::u64* arr = nullptr;
+	Profile::u64 count = 0;
+	RepetitionTest_TestFunction(Profile::u64* _arr, Profile::u64 _count) : arr(_arr), count(_count) {}
+
+	inline void operator()() override
+	{
+		TestFunction(arr, count);
+	}
+};
+
+/*!
 @brief Tests the macro time and bandwidth profiling macro on track 0: PROFILE_FUNCTION_TIME_BANDWIDTH(0, sizeof(Profile::u64) * _count).
 @details Fills an array with the index of the element.
 @param _arr The array to fill.
@@ -55,13 +70,14 @@ void TestFunction_Track2(Profile::u64 _arr[], Profile::u64 _count)
 void TestFunction_FixedRepetitionTesting()
 {
 	Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * 8192);
+	RepetitionTest_TestFunction repetitionTest(arr, 8192);
 
 	Profile::u8 repetitionCount = 100;
 	Profile::RepetitionProfiler* repetitionProfiler = (Profile::RepetitionProfiler*)calloc(1, sizeof(Profile::RepetitionProfiler));
 	Profile::ProfilerResults* results = (Profile::ProfilerResults*)calloc(repetitionCount, sizeof(Profile::ProfilerResults));
 
 	repetitionProfiler->SetRepetitionResults(results);
-	repetitionProfiler->FixedCountRepetitionTesting(repetitionCount, (void*)TestFunction, arr, 8192);
+	repetitionProfiler->FixedCountRepetitionTesting(repetitionCount, repetitionTest);
 	repetitionProfiler->ComputeAverageResults(repetitionCount);
 	repetitionProfiler->Report(repetitionCount);
 

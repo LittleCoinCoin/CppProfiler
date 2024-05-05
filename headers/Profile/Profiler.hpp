@@ -640,6 +640,22 @@ struct ProfilerResults
 	PROFILE_API void Report() noexcept;
 };
 
+/*!
+@brief A functor to wrap around code that will be profiled multiple times
+		via the ::RepetitionProfiler.
+@see ::RepetitionProfiler::FixedCountRepetitionTesting
+*/
+struct RepetitionTest
+{	
+	RepetitionTest() = default;
+	~RepetitionTest() = default;
+
+	/*!
+	@brief The operator to override to wrap around the code to profile.
+	*/
+	PROFILE_API virtual void operator()() = 0;
+};
+
 
 /*!
 @brief A wrapper to test the performance of a function by running it a number of times.
@@ -840,26 +856,9 @@ public:
 			 must be set before calling this function and must be an array of at least
 			 of size @p _repetitionCount.
 	@param _repetitionCount The number of repetitions.
-	@param _function The function to test.
-	@param _functionArgs The arguments of the function.
-	@paramt Args The types of the arguments of the function.
+	@param _repetitionTest The wrapper to the function to test.
 	*/
-	template<typename... Args>
-	PROFILE_API void FixedCountRepetitionTesting(u64 _repetitionCount, void* _function, Args... _functionArgs)
-	{
-		Profiler* ptr_profiler = GetProfiler();
-
-		ptr_profiler->Reset();
-
-		for (u64 i = 0; i < _repetitionCount; ++i)
-		{
-			ptr_profiler->Initialize();
-			((void(*)(Args...))_function)(_functionArgs...);
-			ptr_profiler->End();
-			ptr_repetitionResults[i].Capture(ptr_profiler);
-			ptr_profiler->ResetExistingTracks();
-		}
-	}
+	PROFILE_API void FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest);
 
 	/*!
 	@brief Prints the results of the repeated profiling.

@@ -376,6 +376,22 @@ void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
 	}
 }
 
+void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest)
+{
+	Profiler* ptr_profiler = GetProfiler();
+
+	ptr_profiler->Reset();
+
+	for (u64 i = 0; i < _repetitionCount; ++i)
+	{
+		ptr_profiler->Initialize();
+		_repetitionTest();
+		ptr_profiler->End();
+		ptr_repetitionResults[i].Capture(ptr_profiler);
+		ptr_profiler->ResetExistingTracks();
+	}
+}
+
 void Profile::RepetitionProfiler::CumulateResults(u64 _repetitionCount) noexcept
 {
 	char* name = (char*)malloc(std::strlen(ptr_repetitionResults->name) + 100); //100 is enough for the string below (average of profiler "%s" over %llu
