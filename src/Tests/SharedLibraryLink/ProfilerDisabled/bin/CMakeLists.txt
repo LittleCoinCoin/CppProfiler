@@ -21,6 +21,9 @@ target_link_libraries(${TargetName} PRIVATE
 	ProfilerDisabled
 )
 
-add_custom_command(TARGET ${TargetName} POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $ENV{TEST_SHAREDLIB_PROFILERDISABLED_DIRECTORY}/ProfilerDisabled.dll ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>
-)
+# 4) Copy the profiler library to the output directory if on Windows
+if (WIN32)
+	add_custom_command(TARGET ${TargetName} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $ENV{TEST_SHAREDLIB_PROFILERDISABLED_DIRECTORY}/ProfilerDisabled.dll ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>
+	)
+endif()
