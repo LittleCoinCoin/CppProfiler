@@ -4,12 +4,12 @@
 
 static Profile::Profiler* s_Profiler = nullptr;
 
-PROFILE_API void Profile::SetProfiler(Profiler* _profiler)
+void Profile::SetProfiler(Profiler* _profiler)
 {
 	s_Profiler = _profiler;
 }
 
-PROFILE_API Profile::Profiler* Profile::GetProfiler()
+Profile::Profiler* Profile::GetProfiler()
 {
 	return s_Profiler;
 }
@@ -373,6 +373,22 @@ void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
 				MinAssign(minResults.tracks[j].timings[k].bandwidthInB, ptr_repetitionResults[i].tracks[j].timings[k].bandwidthInB);
 			}
 		}
+	}
+}
+
+void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest)
+{
+	Profiler* ptr_profiler = GetProfiler();
+
+	ptr_profiler->Reset();
+
+	for (u64 i = 0; i < _repetitionCount; ++i)
+	{
+		ptr_profiler->Initialize();
+		_repetitionTest();
+		ptr_profiler->End();
+		ptr_repetitionResults[i].Capture(ptr_profiler);
+		ptr_profiler->ResetExistingTracks();
 	}
 }
 

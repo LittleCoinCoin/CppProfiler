@@ -26,7 +26,7 @@ namespace Profile
 				 recompute it at runtime by calling ::SetEstimatedCPUFreq.
 		@see ::EstimateCPUFreq, ::SetEstimatedCPUFreq, ::GetEstimatedCPUFreq
 		*/
-		PROFILE_API static u64 s_estimatedCPUFreq;
+		static u64 s_estimatedCPUFreq;
 
 		/*!
 		@brief A wrapper to __rdtsc() to get the CPU timer.
