@@ -14,7 +14,7 @@ add_library (${LibraryName} SHARED
 "../../../Profile/Profiler.cpp"
 "../../../Profile/Timing.cpp"
 )
-target_include_directories(${LibraryName} PRIVATE
+target_include_directories(${LibraryName} PUBLIC
 	"../../../../headers"
 )
 
@@ -25,9 +25,6 @@ add_executable(${TargetName}
 )
 
 set_property(TARGET ${TargetName} PROPERTY CXX_STANDARD 20)
-target_include_directories(${TargetName} PRIVATE
-	"../../../../headers"
-)
 
 # 3) Link the test executable with the profiler library
 target_link_libraries(${TargetName} PRIVATE
