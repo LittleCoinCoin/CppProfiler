@@ -27,9 +27,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build_config: ${{ fromJSON(format('[{0}]', inputs.build_config || '"Release"')) }}
+        build_config: ${{ fromJSON(format('[{0}]', inputs.build_config || '"Release", "Debug"')) }}
         msvc_toolset: ${{ fromJSON(format('[{0}]', inputs.msvc_toolset || '"v143"')) }}
-        target_architecture: ${{ fromJSON(format('[{0}]', inputs.target_architecture || '"x64"')) }}
+        target_architecture: ${{ fromJSON(format('[{0}]', inputs.target_architecture || '"x64", "x86"')) }}
 
     steps:
       - name: Checkout repository
