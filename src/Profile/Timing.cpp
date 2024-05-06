@@ -17,18 +17,15 @@ Profile::u64 Profile::Timer::GetOSTimer(void)
 	LARGE_INTEGER value;
 	QueryPerformanceCounter(&value);
 	return value.QuadPart;
-#else
-
-#if __ARM_ARCH
+#elif __ARM_ARCH
 	struct timespec value;
 	clock_gettime(CLOCK_MONOTONIC, &value);
+	return GetOSTimerFreq() * (u64)value.tv_sec * + (u64)value.tv_nsec;
 #else
 	struct timeval value;
 	gettimeofday(&value, 0);
+	return GetOSTimerFreq() * (u64)value.tv_sec * + (u64)value.tv_usec;
 #endif
-	return GetOSTimerFreq() * (u64)value.tv_sec * + (u64)value.tv_nsec;
-#endif
-
 }
 
 Profile::u64 Profile::Timer::GetCPUTimer(void)
