@@ -1,11 +1,13 @@
 #pragma once
 
 #if _WIN32
-#include <intrin.h>
-#include <windows.h>
-#else
-#include <x86intrin.h>
-#include <sys/time.h>
+#include <intrin.h> //for __rdtsc
+#include <windows.h> //for QueryPerformanceCounter
+#elif __ARM_ARCH // aimed at arm MacOs, but should work on any arm linux
+#include <time.h> //for clock_gettime
+#else // non-arm linux
+#include <x86intrin.h> //for __rdtsc
+#include <sys/time.h> //for gettimeofday
 #endif
 
 #include "Export.hpp"
