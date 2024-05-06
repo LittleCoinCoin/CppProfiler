@@ -14,6 +14,9 @@ add_library (${LibraryName} SHARED
 "../../../../Profile/Profiler.cpp"
 "../../../../Profile/Timing.cpp"
 )
+
+set_property(TARGET ${LibraryName} PROPERTY CXX_STANDARD 20)
+
 target_include_directories(${LibraryName} PUBLIC
 	"../../../../../headers"
 )
