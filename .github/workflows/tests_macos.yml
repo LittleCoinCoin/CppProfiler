@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build_config: [Release, Debug]
+        build_config: ${{ fromJSON(format('[{0}]', inputs.build_config || '"Release", "Debug"')) }}
         
     steps:
       - name: Checkout repository

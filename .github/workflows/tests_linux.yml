@@ -10,6 +10,10 @@ on:
         description: 'Comma-separated "Release" and/or "Debug"'
         default: '"Release", "Debug"'
         required: true
+      clang_version: 
+        description: 'Comma-separated "17" and/or "18" and/or "19"'
+        default: '"17", "18", "19"'
+        required: true
 
 jobs:
   ubuntu_clang:
@@ -19,8 +23,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build_config: [Release, Debug]
-        clang_version: [17, 18, 19]
+        build_config: ${{ fromJSON(format('[{0}]', inputs.build_config || '"Release", "Debug"')) }}
+        clang_version: ${{ fromJSON(format('[{0}]', inputs.clang_version || '"17", "18", "19"')) }}
 
     env:
       clang_compiler_version: -${{ matrix.clang_version }}
