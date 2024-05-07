@@ -54,7 +54,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.0.11.38</span>
+   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.0.15.66</span>
    </div>
    <div id="projectbrief">A custom c++ profiler.</div>
   </td>
@@ -152,6 +152,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html">RepetitionProfiler</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A wrapper to test the performance of a function by running it a number of times.  <a href="../../de/d05/structProfile_1_1RepetitionProfiler.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d06/structProfile_1_1RepetitionTest.html">RepetitionTest</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A functor to wrap around code that will be profiled multiple times via the ::RepetitionProfiler.  <a href="../../d5/d06/structProfile_1_1RepetitionTest.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d04/structProfile_1_1Timer.html">Timer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A struct to give access to the OS and CPU timers and frequencies.  <a href="../../d1/d04/structProfile_1_1Timer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -184,12 +187,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a0801774ecfbf4fa3cc5fd11797b985c2"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d02/namespaceProfile.html#a0801774ecfbf4fa3cc5fd11797b985c2">Hash</a> (const char *_fileName, <a class="el" href="../../d8/d02/namespaceProfile.html#a5d5d8ad7813ee80730b4a9db25b34b4d">u32</a> _lineNumber)</td></tr>
 <tr class="memdesc:a0801774ecfbf4fa3cc5fd11797b985c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">A hash function to generate a unique index for a profile result.  <br /></td></tr>
 <tr class="separator:a0801774ecfbf4fa3cc5fd11797b985c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a910cf9bf6f1bc5f08ff6b3aab1395827"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d02/namespaceProfile.html#a910cf9bf6f1bc5f08ff6b3aab1395827">SetProfiler</a> (<a class="el" href="../../d4/d00/structProfile_1_1Profiler.html">Profiler</a> *_profiler)</td></tr>
-<tr class="memdesc:a910cf9bf6f1bc5f08ff6b3aab1395827"><td class="mdescLeft">&#160;</td><td class="mdescRight">A global function to set the pointer to the global profiler.  <br /></td></tr>
-<tr class="separator:a910cf9bf6f1bc5f08ff6b3aab1395827"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf8fc8ee519a921f88299368af00d487"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html">Profiler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d02/namespaceProfile.html#aaf8fc8ee519a921f88299368af00d487">GetProfiler</a> ()</td></tr>
-<tr class="memdesc:aaf8fc8ee519a921f88299368af00d487"><td class="mdescLeft">&#160;</td><td class="mdescRight">A global function to get the pointer to the global profiler.  <br /></td></tr>
-<tr class="separator:aaf8fc8ee519a921f88299368af00d487"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49e732cf7ce8f2ad82b8e4d7124a708e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d02/namespaceProfile.html#a49e732cf7ce8f2ad82b8e4d7124a708e">SetProfiler</a> (<a class="el" href="../../d4/d00/structProfile_1_1Profiler.html">Profiler</a> *_profiler)</td></tr>
+<tr class="memdesc:a49e732cf7ce8f2ad82b8e4d7124a708e"><td class="mdescLeft">&#160;</td><td class="mdescRight">A global function to set the pointer to the global profiler.  <br /></td></tr>
+<tr class="separator:a49e732cf7ce8f2ad82b8e4d7124a708e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd0ae6661d46104da0fa0943656e363d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html">Profiler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d02/namespaceProfile.html#abd0ae6661d46104da0fa0943656e363d">GetProfiler</a> ()</td></tr>
+<tr class="memdesc:abd0ae6661d46104da0fa0943656e363d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A global function to get the pointer to the global profiler.  <br /></td></tr>
+<tr class="separator:abd0ae6661d46104da0fa0943656e363d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="a50dd7445c5373d86f1d3af54f1e743ae" name="a50dd7445c5373d86f1d3af54f1e743ae"></a>
@@ -333,14 +336,14 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="aaf8fc8ee519a921f88299368af00d487" name="aaf8fc8ee519a921f88299368af00d487"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaf8fc8ee519a921f88299368af00d487">&#9670;&#160;</a></span>GetProfiler()</h2>
+<a id="abd0ae6661d46104da0fa0943656e363d" name="abd0ae6661d46104da0fa0943656e363d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd0ae6661d46104da0fa0943656e363d">&#9670;&#160;</a></span>GetProfiler()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html">Profile::Profiler</a> * Profile::GetProfiler </td>
+          <td class="memname"><a class="el" href="../../d4/d00/structProfile_1_1Profiler.html">Profile::Profiler</a> * Profile::GetProfiler </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -349,7 +352,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A global function to get the pointer to the global profiler. </p>
-<p>The profiler must be set with <a class="el" href="../../d8/d02/namespaceProfile.html#a910cf9bf6f1bc5f08ff6b3aab1395827" title="A global function to set the pointer to the global profiler.">SetProfiler</a> before calling this function. </p><dl class="section remark"><dt>Remarks</dt><dd>Mainly useful to get the profiler in functions defined in the header, given that the profiler is defined in the source file. </dd></dl>
+<p>The profiler must be set with <a class="el" href="../../d8/d02/namespaceProfile.html#a49e732cf7ce8f2ad82b8e4d7124a708e" title="A global function to set the pointer to the global profiler.">SetProfiler</a> before calling this function. </p><dl class="section remark"><dt>Remarks</dt><dd>Mainly useful to get the profiler in functions defined in the header, given that the profiler is defined in the source file. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The pointer to the global profiler. </dd></dl>
 
 </div>
@@ -399,14 +402,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a910cf9bf6f1bc5f08ff6b3aab1395827" name="a910cf9bf6f1bc5f08ff6b3aab1395827"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a910cf9bf6f1bc5f08ff6b3aab1395827">&#9670;&#160;</a></span>SetProfiler()</h2>
+<a id="a49e732cf7ce8f2ad82b8e4d7124a708e" name="a49e732cf7ce8f2ad82b8e4d7124a708e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49e732cf7ce8f2ad82b8e4d7124a708e">&#9670;&#160;</a></span>SetProfiler()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void Profile::SetProfiler </td>
+          <td class="memname">void Profile::SetProfiler </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="../../d4/d00/structProfile_1_1Profiler.html">Profiler</a> *&#160;</td>
           <td class="paramname"><em>_profiler</em></td><td>)</td>

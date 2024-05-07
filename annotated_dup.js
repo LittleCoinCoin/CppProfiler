@@ -9,6 +9,8 @@ var annotated_dup =
       [ "ProfileTrack", "dd/d06/structProfile_1_1ProfileTrack.html", "dd/d06/structProfile_1_1ProfileTrack" ],
       [ "ProfileTrackResult", "d0/d07/structProfile_1_1ProfileTrackResult.html", "d0/d07/structProfile_1_1ProfileTrackResult" ],
       [ "RepetitionProfiler", "de/d05/structProfile_1_1RepetitionProfiler.html", "de/d05/structProfile_1_1RepetitionProfiler" ],
+      [ "RepetitionTest", "d5/d06/structProfile_1_1RepetitionTest.html", "d5/d06/structProfile_1_1RepetitionTest" ],
       [ "Timer", "d1/d04/structProfile_1_1Timer.html", "d1/d04/structProfile_1_1Timer" ]
-    ] ]
+    ] ],
+    [ "RepetitionTest_TestFunction", "d2/d05/structRepetitionTest__TestFunction.html", "d2/d05/structRepetitionTest__TestFunction" ]
 ];

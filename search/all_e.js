@@ -7,7 +7,7 @@ var searchData=
   ['s_5festimatedcpufreq_4',['s_estimatedCPUFreq',['../d1/d04/structProfile_1_1Timer.html#aa2992d8ddfde37d60af0574a9abb0eba',1,'Profile::Timer']]],
   ['s_5fprofiler_5',['s_Profiler',['../d3/d02/Profiler_8cpp.html#a2b06ca080f6b9ef1f3f4dd783053ac38',1,'Profiler.cpp']]],
   ['setestimatedcpufreq_6',['SetEstimatedCPUFreq',['../d1/d04/structProfile_1_1Timer.html#a527e0d901b4f826195a9d89afcacc4de',1,'Profile::Timer']]],
-  ['setprofiler_7',['SetProfiler',['../d8/d02/namespaceProfile.html#a910cf9bf6f1bc5f08ff6b3aab1395827',1,'Profile']]],
+  ['setprofiler_7',['SetProfiler',['../d8/d02/namespaceProfile.html#a49e732cf7ce8f2ad82b8e4d7124a708e',1,'Profile']]],
   ['setprofilername_8',['SetProfilerName',['../d4/d00/structProfile_1_1Profiler.html#a40547e225622d59ae6d11e65902c0b4b',1,'Profile::Profiler']]],
   ['setrepetitionresults_9',['SetRepetitionResults',['../de/d05/structProfile_1_1RepetitionProfiler.html#a1b0b5bd2ebd13b23cd131153907388b9',1,'Profile::RepetitionProfiler']]],
   ['settrackname_10',['SetTrackName',['../d4/d00/structProfile_1_1Profiler.html#a3749dde85d6f868fb92b0db10cea62d3',1,'Profile::Profiler']]],

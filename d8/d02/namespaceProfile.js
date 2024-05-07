@@ -8,6 +8,7 @@ var namespaceProfile =
     [ "ProfileTrack", "dd/d06/structProfile_1_1ProfileTrack.html", "dd/d06/structProfile_1_1ProfileTrack" ],
     [ "ProfileTrackResult", "d0/d07/structProfile_1_1ProfileTrackResult.html", "d0/d07/structProfile_1_1ProfileTrackResult" ],
     [ "RepetitionProfiler", "de/d05/structProfile_1_1RepetitionProfiler.html", "de/d05/structProfile_1_1RepetitionProfiler" ],
+    [ "RepetitionTest", "d5/d06/structProfile_1_1RepetitionTest.html", "d5/d06/structProfile_1_1RepetitionTest" ],
     [ "Timer", "d1/d04/structProfile_1_1Timer.html", "d1/d04/structProfile_1_1Timer" ],
     [ "f32", "d8/d02/namespaceProfile.html#a50dd7445c5373d86f1d3af54f1e743ae", null ],
     [ "f64", "d8/d02/namespaceProfile.html#a8378a56ce15d4d016e83cc4fe43a7e17", null ],
@@ -19,7 +20,7 @@ var namespaceProfile =
     [ "u32", "d8/d02/namespaceProfile.html#a5d5d8ad7813ee80730b4a9db25b34b4d", null ],
     [ "u64", "d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a", null ],
     [ "u8", "d8/d02/namespaceProfile.html#afc1ac4271cf22eb275facb710a371a42", null ],
-    [ "GetProfiler", "d8/d02/namespaceProfile.html#aaf8fc8ee519a921f88299368af00d487", null ],
+    [ "GetProfiler", "d8/d02/namespaceProfile.html#abd0ae6661d46104da0fa0943656e363d", null ],
     [ "Hash", "d8/d02/namespaceProfile.html#a0801774ecfbf4fa3cc5fd11797b985c2", null ],
-    [ "SetProfiler", "d8/d02/namespaceProfile.html#a910cf9bf6f1bc5f08ff6b3aab1395827", null ]
+    [ "SetProfiler", "d8/d02/namespaceProfile.html#a49e732cf7ce8f2ad82b8e4d7124a708e", null ]
 ];

@@ -6,7 +6,7 @@ var structProfile_1_1RepetitionProfiler =
     [ "CumulateResults", "de/d05/structProfile_1_1RepetitionProfiler.html#ab8d4f9e8038674ffcad236d5b780ee14", null ],
     [ "FindMaxResults", "de/d05/structProfile_1_1RepetitionProfiler.html#a63fbf25ffd8f0228f513309b73e0c4e6", null ],
     [ "FindMinResults", "de/d05/structProfile_1_1RepetitionProfiler.html#a2fcec0e002e5366caf63da408ec8217a", null ],
-    [ "FixedCountRepetitionTesting", "de/d05/structProfile_1_1RepetitionProfiler.html#ad670e3e06e635d4211311238d6d78c12", null ],
+    [ "FixedCountRepetitionTesting", "de/d05/structProfile_1_1RepetitionProfiler.html#a4aa8849f12d7cad28bd14eba34d04323", null ],
     [ "MaxAssign", "de/d05/structProfile_1_1RepetitionProfiler.html#a00a8008611cc3d5230865566ecaa14d0", null ],
     [ "MaxAssign", "de/d05/structProfile_1_1RepetitionProfiler.html#acd8863eb3abce341f5641fe4b89e818f", null ],
     [ "MaxAssign", "de/d05/structProfile_1_1RepetitionProfiler.html#ac4036c23a261d9233ab4cbd6224df18f", null ],
