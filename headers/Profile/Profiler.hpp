@@ -4,15 +4,9 @@
 #include <cstdio> // for printf
 #include <type_traits> // for std::conditional_t in U_SIZE_ADAPTER
 
-#include "Export.hpp"
-#include "Timing.hpp"
-#include "Types.hpp"
-
-#ifdef _PROFILER_ENABLED // Possibly defined as compilation variable
-#define PROFILER_ENABLED 1 // Just an alias for _PROFILER_ENABLED to be used as `#if PROFILER_ENABLED` instead of `#ifdef _PROFILER_ENABLED`
-#else
-#define PROFILER_ENABLED 0
-#endif // _PROFILER_ENABLED
+//#include "Export.hpp"
+#include "Timing.hpp" // also includes Types.hpp and Export.hpp
+//#include "Types.hpp"
 
 namespace Profile
 {
@@ -24,9 +18,6 @@ namespace Profile
 	#define NB_TRACKS 2
 #endif // !NB_TRACKS
 
-
-#if PROFILER_ENABLED
-
 /*!
 @brief Expands to adapt the type of the unsigned integer to be
 		u8, u16, u32, or u64 depending on the value of @p x.
@@ -36,7 +27,7 @@ namespace Profile
 #define U_SIZE_ADAPTER(x) \
 	std::conditional_t<(x < (1<<8)), Profile::u8, \
 	std::conditional_t<(x < (1<<16)), Profile::u16, \
-	std::conditional_t<(x < (1<<32)), Profile::u32, Profile::u64>>>
+	std::conditional_t<(x < (1ULL<<32)), Profile::u32, Profile::u64>>>
 
 /*!
 @brief The macro used to adapt the type of the different variables used to
@@ -54,6 +45,8 @@ namespace Profile
 */
 #define NB_TRACKS_TYPE U_SIZE_ADAPTER(NB_TRACKS-1)
 
+
+#if PROFILER_ENABLED
 /*!
 @brief DO NOT USE in code. Prefer using PROFILE_BLOCK_TIME_BANDWIDTH, PROFILE_FUNCTION_TIME_BANDWIDTH,
 		PROFILE_BLOCK_TIME, or PROFILE_FUNCTION_TIME depending on your situation.
@@ -101,223 +94,227 @@ namespace Profile
 */
 #define PROFILE_FUNCTION_TIME(trackIdx,...) PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, 0, ## __VA_ARGS__)
 
-	/*!
+#else // PROFILER_ENABLED
+
+//In case the profiler is disabled, the macros are defined as empty.
+//Some of the macros are not supposed to be used, but we define them anyway in case users do.
+
+#define PROFILE_BLOCK_TIME_BANDWIDTH__(...)
+#define PROFILE_BLOCK_TIME_BANDWIDTH_(...)
+#define PROFILE_BLOCK_TIME_BANDWIDTH(...)
+#define PROFILE_BLOCK_TIME(...)
+#define PROFILE_FUNCTION_TIME_BANDWIDTH(...)
+#define PROFILE_FUNCTION_TIME(...)
+
+#endif // PROFILER_ENABLED
+
+/*!
 	@brief A hash function to generate a unique index for a profile result.
 	@details The index is determined by the hash of the file name and line number.
 	@param _fileName The name of the file where the block is located.
 	@param _lineNumber The line number in the file where the block is located.
 	*/
-	static u64 Hash(const char* _fileName, u32 _lineNumber)
+static u64 Hash(const char* _fileName, u32 _lineNumber)
+{
+	u64 res = _lineNumber;
+	for (const char* At = _fileName; *At; ++At)
 	{
-		u64 res = _lineNumber;
-		for (const char* At = _fileName; *At; ++At)
-		{
-			res = res * 65599 + *At;
-		}
-		res = ((res << 16) ^ (res >> 16)) * 73244475;
-		res = ((res << 16) ^ (res >> 16)) * 73244475;
-		res = ((res << 16) ^ (res >> 16));
-		return res ;
+		res = res * 65599 + *At;
+	}
+	res = ((res << 16) ^ (res >> 16)) * 73244475;
+	res = ((res << 16) ^ (res >> 16)) * 73244475;
+	res = ((res << 16) ^ (res >> 16));
+	return res;
+}
+
+/*!
+@brief An object that will live and die within the scope of a target block
+		of code to profile.
+@details The object will open the block upon construction and close it upon
+		destruction. The result of the profiling will be forwarded to the
+		profile track with the index ::trackIdx in the profiler. The index
+		in the track that will actually store the profiling statistics is
+		::profileBlockRecorderIdx.
+*/
+struct PROFILE_API ProfileBlock
+{
+	/*!
+	@brief The index of the profiling track this block belongs to.
+	*/
+	NB_TIMINGS_TYPE trackIdx = 0;
+
+	/*!
+	@brief The index of this block in the profiling track.
+	*/
+	NB_TIMINGS_TYPE profileBlockRecorderIdx = 0;
+
+	ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount);
+
+	~ProfileBlock();
+};
+
+/*!
+@brief A struct to store the profiling statistics of a profiled block.
+*/
+struct ProfileBlockRecorder
+{
+	/*!
+	@brief The line number in the file where the block is located.
+	*/
+	u32 lineNumber = 0;
+
+	/*!
+	@brief The name of the file where the block is located.
+	*/
+	const char* fileName = nullptr;
+
+	/*!
+	@brief The name of the block.
+	*/
+	const char* blockName = nullptr;
+
+	/*!
+	@brief The start time of the block.
+	*/
+	u64 start = 0;
+
+	/*!
+	@brief The accumulated time the block was executed.
+	*/
+	u64 elapsed = 0;
+
+	/*!
+	@brief The number of times the block was executed.
+	*/
+	u64 hitCount = 0;
+
+	/*!
+	@brief The number of bytes processed by the block.
+	*/
+	u64 processedByteCount = 0;
+
+	/*!
+	@brief Update the profiling statistics of the block upon completion.
+	@return The time increment since the block was opened.
+	*/
+	inline u64 Close()
+	{
+		u64 increment = Timer::GetCPUTimer() - start;
+		elapsed += increment;
+		return increment;
 	}
 
 	/*!
-	@brief An object that will live and die within the scope of a target block
-			of code to profile.
-	@details The object will open the block upon construction and close it upon
-			destruction. The result of the profiling will be forwarded to the
-			profile track with the index ::trackIdx in the profiler. The index
-			in the track that will actually store the profiling statistics is
-			::profileBlockRecorderIdx.
+	@brief Update the profiling statistics of the block upon execution.
+	@param _byteCount The number of bytes processed by the block.
 	*/
-	struct PROFILE_API ProfileBlock
+	inline void Open(u64 _byteCount)
 	{
-		/*!
-		@brief The index of the profiling track this block belongs to.
-		*/
-		NB_TIMINGS_TYPE trackIdx = 0;
-
-		/*!
-		@brief The index of this block in the profiling track.
-		*/
-		NB_TIMINGS_TYPE profileBlockRecorderIdx = 0;
-
-		ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount);
-
-		~ProfileBlock();
-	};
+		start = Timer::GetCPUTimer();
+		hitCount++;
+		processedByteCount += _byteCount;
+	}
 
 	/*!
-	@brief A struct to store the profiling statistics of a profiled block.
+	@brief Resets the values of the block.
+	@details Resetting do not change the ::blockName, the ::fileName, or the ::lineNumber.
 	*/
-	struct ProfileBlockRecorder
-	{
-		/*!
-		@brief The line number in the file where the block is located.
-		*/
-		u32 lineNumber = 0;
+	PROFILE_API void Reset() noexcept;
+};
 
-		/*!
-		@brief The name of the file where the block is located.
-		*/
-		const char* fileName = nullptr;
-
-		/*!
-		@brief The name of the block.
-		*/
-		const char* blockName = nullptr;
-
-		/*!
-		@brief The start time of the block.
-		*/
-		u64 start = 0;
-
-		/*!
-		@brief The accumulated time the block was executed.
-		*/
-		u64 elapsed = 0;
-
-		/*!
-		@brief The number of times the block was executed.
-		*/
-		u64 hitCount = 0;
-
-		/*!
-		@brief The number of bytes processed by the block.
-		*/
-		u64 processedByteCount = 0;
-
-		/*!
-		@brief Update the profiling statistics of the block upon completion.
-		@return The time increment since the block was opened.
-		*/
-		inline u64 Close()
-		{
-			u64 increment = Timer::GetCPUTimer() - start;
-			elapsed += increment;
-			return increment;
-		}
-		
-		/*!
-		@brief Update the profiling statistics of the block upon execution.
-		@param _byteCount The number of bytes processed by the block.
-		*/
-		inline void Open(u64 _byteCount)
-		{
-			start = Timer::GetCPUTimer();
-			hitCount++;
-			processedByteCount += _byteCount;
-		}
-
-		/*!
-		@brief Resets the values of the block.
-		@details Resetting do not change the ::blockName, the ::fileName, or the ::lineNumber.
-		*/
-		void Reset() noexcept;
-	};
+/*!
+@brief A mirror of the ProfileBlockRecorder struct to store statistics
+		matching  a profiled block and a few more to help with the reporting.
+*/
+struct ProfileBlockResult
+{
+	/*!
+	@brief The line number in the file where the block is located.
+	@details Mirrors ProfileBlockRecorder::lineNumber.
+	*/
+	u32 lineNumber = 0;
 
 	/*!
-	@brief A mirror of the ProfileBlockRecorder struct to store statistics
-			matching  a profiled block and a few more to help with the reporting.
+	@brief The index of the profiling track this block belongs to.
+	@details No equivalent in ProfileBlockRecorder.
 	*/
-	struct ProfileBlockResult
-	{
-		/*!
-		@brief The line number in the file where the block is located.
-		@details Mirrors ProfileBlockRecorder::lineNumber.
-		*/
-		u32 lineNumber = 0;
+	NB_TRACKS_TYPE trackIdx = 0;
 
-		/*!
-		@brief The index of the profiling track this block belongs to.
-		@details No equivalent in ProfileBlockRecorder.
-		*/
-		NB_TRACKS_TYPE trackIdx = 0;
+	/*!
+	@brief The index of this block in the profiling track.
+	@details No equivalent in ProfileBlockRecorder.
+	*/
+	NB_TIMINGS_TYPE profileBlockRecorderIdx = 0;
 
-		/*!
-		@brief The index of this block in the profiling track.
-		@details No equivalent in ProfileBlockRecorder.
-		*/
-		NB_TIMINGS_TYPE profileBlockRecorderIdx = 0;
+	/*!
+	@brief The name of the file where the block is located.
+	@details Mirrors ProfileBlockRecorder::fileName.
+	*/
+	const char* fileName = nullptr;
 
-		/*!
-		@brief The name of the file where the block is located.
-		@details Mirrors ProfileBlockRecorder::fileName.
-		*/
-		const char* fileName = nullptr;
+	/*!
+	@brief The name of the block.
+	@details Mirrors ProfileBlockRecorder::blockName.
+	*/
+	const char* blockName = nullptr;
 
-		/*!
-		@brief The name of the block.
-		@details Mirrors ProfileBlockRecorder::blockName.
-		*/
-		const char* blockName = nullptr;
+	/*!
+	@brief The accumulated time the block was executed.
+	@details Mirrors ProfileBlockRecorder::elapsed.
+	*/
+	u64 elapsed = 0;
 
-		/*!
-		@brief The accumulated time the block was executed.
-		@details Mirrors ProfileBlockRecorder::elapsed.
-		*/
-		u64 elapsed = 0;
+	/*!
+	@brief The converted ::elapsed in seconds.
+	@details No equivalent in ProfileBlockRecorder.
+	*/
+	f64 elapsedSec = 0.0;
 
-		/*!
-		@brief The converted ::elapsed in seconds.
-		@details No equivalent in ProfileBlockRecorder.
-		*/
-		f64 elapsedSec = 0.0;
+	/*!
+	@brief The number of times the block was executed.
+	@details Mirrors ProfileBlockRecorder::hitCount.
+	*/
+	u64 hitCount = 0;
 
-		/*!
-		@brief The number of times the block was executed.
-		@details Mirrors ProfileBlockRecorder::hitCount.
-		*/
-		u64 hitCount = 0;
+	/*!
+	@brief The number of bytes processed by the block.
+	@details No equivalent in ProfileBlockRecorder.
+	*/
+	u64 processedByteCount = 0;
 
-		/*!
-		@brief The number of bytes processed by the block.
-		@details No equivalent in ProfileBlockRecorder.
-		*/
-		u64 processedByteCount = 0;
+	/*!
+	@brief The proportion of the block's time in its track's time.
+	@details No equivalent in ProfileBlockRecorder.
+	*/
+	f32 proportionInTrack = 0.0;
 
-		/*!
-		@brief The proportion of the block's time in its track's time.
-		@details No equivalent in ProfileBlockRecorder.
-		*/
-		f32 proportionInTrack = 0.0;
+	/*!
+	@brief The proportion of the block's time in the total time of the profiler.
+	@details No equivalent in ProfileBlockRecorder.
+	*/
+	f32 proportionInTotal = 0.0;
 
-		/*!
-		@brief The proportion of the block's time in the total time of the profiler.
-		@details No equivalent in ProfileBlockRecorder.
-		*/
-		f32 proportionInTotal = 0.0;
+	/*!
+	@brief The bandwidth in bytes per second.
+	@details No equivalent in ProfileBlockRecorder.
+	*/
+	f32 bandwidthInB = 0.0;
 
-		/*!
-		@brief The bandwidth in bytes per second.
-		@details No equivalent in ProfileBlockRecorder.
-		*/
-		f32 bandwidthInB = 0.0;
+	ProfileBlockResult() = default;
 
-		ProfileBlockResult() = default;
+	/*!
+	@brief Captures the statistics of a Profile::ProfileBlockRecorder.
+	@details It will effectively assign or compute the values of all the
+				member variables of this struct.
+	*/
+	PROFILE_API void Capture(ProfileBlockRecorder& _record, NB_TRACKS_TYPE _trackIdx,
+				NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _trackElapsedReference, u64 _totalElapsedReference) noexcept;
 
-		/*!
-		@brief Captures the statistics of a Profile::ProfileBlockRecorder.
-		@details It will effectively assign or compute the values of all the 
-				 member variables of this struct.
-		*/
-		void Capture(ProfileBlockRecorder& _record, NB_TRACKS_TYPE _trackIdx,
-			NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _trackElapsedReference, u64 _totalElapsedReference) noexcept;
-
-		/*!
-		@brief Outputs the profiling statistics of the block.
-		*/
-		PROFILE_API void Report() noexcept;
-	};
-
-#else // PROFILER_ENABLED
-
-#define PROFILE_BLOCK_TIME_BANDWIDTH(...)
-#define PROFILE_BLOCK_TIME(...)
-#define PROFILE_FUNCTION_TIME_BANDWIDTH(...)
-#define PROFILE_FUNCTION_TIME(...)
-#define PROFILER_END_CHECK
-
-#endif // PROFILER_ENABLED
+	/*!
+	@brief Outputs the profiling statistics of the block.
+	*/
+	PROFILE_API void Report() noexcept;
+};
 
 /*!
 @brief A container for several profiling blocks.
@@ -445,7 +442,7 @@ struct ProfileTrackResult
 			 ::timings array with the statistics of the Profile::ProfileBlockRecorders
 			 of the track that have been used.
 	*/
-	void Capture(ProfileTrack& _track, u64 _trackIdx, u64 _totalElapsedReference) noexcept;
+	PROFILE_API void Capture(ProfileTrack& _track, u64 _trackIdx, u64 _totalElapsedReference) noexcept;
 
 	/*!
 	@brief Outputs the profiling statistics of the track.
@@ -494,7 +491,7 @@ struct Profiler
 	@param _blockName The name of the block.
 	@return The index of the profile result.
 	*/
-	static NB_TIMINGS_TYPE GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _trackIdx, const char* _fileName, u32 _lineNumber, const char* _blockName);
+	PROFILE_API static NB_TIMINGS_TYPE GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _trackIdx, const char* _fileName, u32 _lineNumber, const char* _blockName);
 
 	/*!
 	@brief Sets the name of the profiler.
@@ -635,12 +632,28 @@ struct ProfilerResults
 			 ::tracks array with the statistics of the Profile::ProfileTracks
 			 of the profiler that have been used.
 	*/
-	void Capture(Profiler* _profiler) noexcept;
+	PROFILE_API void Capture(Profiler* _profiler) noexcept;
 
 	/*!
 	@brief Outputs the profiling statistics of the profiler.
 	*/
-	void Report() noexcept;
+	PROFILE_API void Report() noexcept;
+};
+
+/*!
+@brief A functor to wrap around code that will be profiled multiple times
+		via the ::RepetitionProfiler.
+@see ::RepetitionProfiler::FixedCountRepetitionTesting
+*/
+struct RepetitionTest
+{	
+	RepetitionTest() = default;
+	~RepetitionTest() = default;
+
+	/*!
+	@brief The operator to override to wrap around the code to profile.
+	*/
+	PROFILE_API virtual void operator()() = 0;
 };
 
 
@@ -797,32 +810,32 @@ public:
 	@param _repetitionCount The number of repetitions.
 	@see ::averageResults
 	*/
-	void ComputeAverageResults(u64 _repetitionCount) noexcept;
+	PROFILE_API void ComputeAverageResults(u64 _repetitionCount) noexcept;
 
 	/*!
 	@brief Computes the standard deviation of the repeated profiling.
 	@param _repetitionCount The number of repetitions.
 	@see ::stdResults
 	*/
-	void ComputeStdResults(u64 _repetitionCount) noexcept;
+	PROFILE_API void ComputeStdResults(u64 _repetitionCount) noexcept;
 
 	/*!
 	@brief Cumulates the results of the repeated profiling.
 	@param _repetitionCount The number of repetitions.
 	@see ::cumulatedResults
 	*/
-	void CumulateResults(u64 _repetitionCount) noexcept;
+	PROFILE_API void CumulateResults(u64 _repetitionCount) noexcept;
 
 	/*!
 	@brief Goes through the repeated profiling to find the maximum results.
-	@details In the current implementation, there is no guarentee that the 
+	@details In the current implementation, there is no guarentee that the
 			 maximum results all come from the same repetition. For example,
 			 for some reason, It's possible a block was hit more times in a
 			 repetition r1 than r2, but the maximum time was recorded in r2.
 	@param _repetitionCount The number of repetitions.
 	@see ::maxResults
 	*/
-	void FindMaxResults(u64 _repetitionCount) noexcept;
+	PROFILE_API void FindMaxResults(u64 _repetitionCount) noexcept;
 
 	/*!
 	@details Goes through the repeated profiling to find the minimum results.
@@ -833,7 +846,7 @@ public:
 	@param _repetitionCount The number of repetitions.
 	@see ::minResults
 	*/
-	void FindMinResults(u64 _repetitionCount) noexcept;
+	PROFILE_API void FindMinResults(u64 _repetitionCount) noexcept;
 
 	/*!
 	@brief Repeatedly tests a function and stores the profiling statistics.
@@ -843,26 +856,9 @@ public:
 			 must be set before calling this function and must be an array of at least
 			 of size @p _repetitionCount.
 	@param _repetitionCount The number of repetitions.
-	@param _function The function to test.
-	@param _functionArgs The arguments of the function.
-	@paramt Args The types of the arguments of the function.
+	@param _repetitionTest The wrapper to the function to test.
 	*/
-	template<typename... Args>
-	void FixedCountRepetitionTesting(u64 _repetitionCount, void* _function, Args... _functionArgs)
-	{
-		Profiler* ptr_profiler = GetProfiler();
-
-		ptr_profiler->Reset();
-
-		for (u64 i = 0; i < _repetitionCount; ++i)
-		{
-			ptr_profiler->Initialize();
-			((void(*)(Args...))_function)(_functionArgs...);
-			ptr_profiler->End();
-			ptr_repetitionResults[i].Capture(ptr_profiler);
-			ptr_profiler->ResetExistingTracks();
-		}
-	}
+	PROFILE_API void FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest);
 
 	/*!
 	@brief Prints the results of the repeated profiling.
@@ -872,6 +868,6 @@ public:
 			 the repeated profiling before outputting the results.
 	@param _repetitionCount The number of repetitions.
 	*/
-	void Report(u64 _repetitionCount) noexcept;
+	PROFILE_API void Report(u64 _repetitionCount) noexcept;
 };
 } // namespace Profile

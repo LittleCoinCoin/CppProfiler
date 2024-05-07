@@ -1,18 +1,18 @@
+#include <cmath> //for std::sqrt
+#include <cstring> //for strlen
 #include "Profile/Profiler.hpp"
 
 static Profile::Profiler* s_Profiler = nullptr;
 
-PROFILE_API void Profile::SetProfiler(Profiler* _profiler)
+void Profile::SetProfiler(Profiler* _profiler)
 {
 	s_Profiler = _profiler;
 }
 
-PROFILE_API Profile::Profiler* Profile::GetProfiler()
+Profile::Profiler* Profile::GetProfiler()
 {
 	return s_Profiler;
 }
-
-#if PROFILER_ENABLED
 
 Profile::ProfileBlock::ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount) :
 	trackIdx(_trackIdx), profileBlockRecorderIdx(_profileBlockRecorderIdx)
@@ -32,7 +32,6 @@ void Profile::ProfileBlockRecorder::Reset() noexcept
 	hitCount = 0;
 	processedByteCount = 0;
 }
-#endif
 
 void Profile::ProfileBlockResult::Capture(ProfileBlockRecorder& _record, NB_TRACKS_TYPE _trackIdx,
 	NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _trackElapsedReference, u64 _totalElapsedReference) noexcept
@@ -176,6 +175,7 @@ void Profile::Profiler::Initialize() noexcept
 
 void Profile::Profiler::Report() noexcept
 {
+#if PROFILER_ENABLED
 	printf("Estimated CPU Frequency: %llu\n", Timer::GetEstimatedCPUFreq());
 	printf("\n---- Profiler: %s (%fms) ----\n", name, 1000 * (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
 	for (ProfileTrack& track : tracks)
@@ -185,6 +185,9 @@ void Profile::Profiler::Report() noexcept
 			track.Report(elapsed);
 		}
 	}
+#else
+	printf("Profiler report was called but it is disabled. Report is therefore empty and will be skipped.\nThe profiler can be enabled by defining _PROFILER_ENABLED in the compiler options.\n");
+#endif
 }
 
 void Profile::Profiler::Reset() noexcept
@@ -373,9 +376,25 @@ void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
 	}
 }
 
+void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest)
+{
+	Profiler* ptr_profiler = GetProfiler();
+
+	ptr_profiler->Reset();
+
+	for (u64 i = 0; i < _repetitionCount; ++i)
+	{
+		ptr_profiler->Initialize();
+		_repetitionTest();
+		ptr_profiler->End();
+		ptr_repetitionResults[i].Capture(ptr_profiler);
+		ptr_profiler->ResetExistingTracks();
+	}
+}
+
 void Profile::RepetitionProfiler::CumulateResults(u64 _repetitionCount) noexcept
 {
-	char* name = (char*)malloc(strlen(ptr_repetitionResults->name) + 100); //100 is enough for the string below (average of profiler "%s" over %llu
+	char* name = (char*)malloc(std::strlen(ptr_repetitionResults->name) + 100); //100 is enough for the string below (average of profiler "%s" over %llu
 	sprintf(name, "Profiler \"%s\" over %llu repetitions", ptr_repetitionResults->name, _repetitionCount);
 	cumulatedResults.name = name;
 	for (u64 i = 0; i < _repetitionCount; ++i)
@@ -412,6 +431,7 @@ void Profile::RepetitionProfiler::CumulateResults(u64 _repetitionCount) noexcept
 
 void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 {
+#if PROFILER_ENABLED
 	if (stdResults.name == nullptr)
 	{
 		ComputeStdResults(_repetitionCount);
@@ -431,30 +451,33 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 	//standard deviation, the minimum and the maximum values
 	printf("\n---- ProfilerResults: %s ({%f, %f(+/-)%f, %f}ms) ----\n",
 		averageResults.name,
-		1000 * minResults.elapsedSec, 1000 * averageResults.elapsedSec, 1000 * sqrt(stdResults.elapsedSec), 1000 * maxResults.elapsedSec);
+		1000 * minResults.elapsedSec, 1000 * averageResults.elapsedSec, 1000 * std::sqrt(stdResults.elapsedSec), 1000 * maxResults.elapsedSec);
 	for (u64 i = 0; i < averageResults.trackCount; ++i)
 	{
 		printf("\n---- Profile Track Results: %s ({%f, %f(+/-)%f, %f}ms; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total) ----\n",
 			averageResults.tracks[i].name,
-			1000 * minResults.tracks[i].elapsedSec, 1000 * averageResults.tracks[i].elapsedSec,	1000 * sqrt(stdResults.tracks[i].elapsedSec), 1000 * maxResults.tracks[i].elapsedSec,
-			minResults.tracks[i].proportionInTotal, averageResults.tracks[i].proportionInTotal,	sqrt(stdResults.tracks[i].proportionInTotal), maxResults.tracks[i].proportionInTotal);
+			1000 * minResults.tracks[i].elapsedSec, 1000 * averageResults.tracks[i].elapsedSec,	1000 * std::sqrt(stdResults.tracks[i].elapsedSec), 1000 * maxResults.tracks[i].elapsedSec,
+			minResults.tracks[i].proportionInTotal, averageResults.tracks[i].proportionInTotal,	std::sqrt(stdResults.tracks[i].proportionInTotal), maxResults.tracks[i].proportionInTotal);
 
 		for (NB_TIMINGS_TYPE j = 0; j < averageResults.tracks[i].blockCount; ++j)
 		{
 			printf("%s[{%llu, %llu(+/-)%f, %llu}]: {%llu, %llu(+/-)%f, %llu} ({%.2f, %.2f(+/-)%.2f, %.2f}%% of track; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total",
 				averageResults.tracks[i].timings[j].blockName,
-				minResults.tracks[i].timings[j].hitCount, averageResults.tracks[i].timings[j].hitCount, sqrt(stdResults.tracks[i].timings[j].hitCount), maxResults.tracks[i].timings[j].hitCount,
-				minResults.tracks[i].timings[j].elapsed, averageResults.tracks[i].timings[j].elapsed, sqrt(stdResults.tracks[i].timings[j].elapsed), maxResults.tracks[i].timings[j].elapsed,
-				minResults.tracks[i].timings[j].proportionInTrack, averageResults.tracks[i].timings[j].proportionInTrack, sqrt(stdResults.tracks[i].timings[j].proportionInTrack), maxResults.tracks[i].timings[j].proportionInTrack,
-				minResults.tracks[i].timings[j].proportionInTotal, averageResults.tracks[i].timings[j].proportionInTotal, sqrt(stdResults.tracks[i].timings[j].proportionInTotal), maxResults.tracks[i].timings[j].proportionInTotal);
+				minResults.tracks[i].timings[j].hitCount, averageResults.tracks[i].timings[j].hitCount, std::sqrt(stdResults.tracks[i].timings[j].hitCount), maxResults.tracks[i].timings[j].hitCount,
+				minResults.tracks[i].timings[j].elapsed, averageResults.tracks[i].timings[j].elapsed, std::sqrt(stdResults.tracks[i].timings[j].elapsed), maxResults.tracks[i].timings[j].elapsed,
+				minResults.tracks[i].timings[j].proportionInTrack, averageResults.tracks[i].timings[j].proportionInTrack, std::sqrt(stdResults.tracks[i].timings[j].proportionInTrack), maxResults.tracks[i].timings[j].proportionInTrack,
+				minResults.tracks[i].timings[j].proportionInTotal, averageResults.tracks[i].timings[j].proportionInTotal, std::sqrt(stdResults.tracks[i].timings[j].proportionInTotal), maxResults.tracks[i].timings[j].proportionInTotal);
 			if (averageResults.tracks[i].timings[j].processedByteCount > 0)
 			{
 				printf("; {%.3f, %.3f(+/-)%.3f, %.3f}MB at {%.3f, %.3f(+/-)%.3f, %.3f}MB/s | {%.3f, %.3f(+/-)%.3f, %.3f}GB/s",
-					(f32)minResults.tracks[i].timings[j].processedByteCount / (1 << 20), (f32)averageResults.tracks[i].timings[j].processedByteCount / (1 << 20), sqrt(stdResults.tracks[i].timings[j].processedByteCount) / (1 << 20), (f32)maxResults.tracks[i].timings[j].processedByteCount / (1 << 20),
-					minResults.tracks[i].timings[j].bandwidthInB / (1 << 20), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 20),	sqrt(stdResults.tracks[i].timings[j].bandwidthInB) / (1 << 20), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 20),
-					minResults.tracks[i].timings[j].bandwidthInB / (1 << 30), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 30),	sqrt(stdResults.tracks[i].timings[j].bandwidthInB) / (1 << 30), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 30));
+					(f32)minResults.tracks[i].timings[j].processedByteCount / (1 << 20), (f32)averageResults.tracks[i].timings[j].processedByteCount / (1 << 20), std::sqrt(stdResults.tracks[i].timings[j].processedByteCount) / (1 << 20), (f32)maxResults.tracks[i].timings[j].processedByteCount / (1 << 20),
+					minResults.tracks[i].timings[j].bandwidthInB / (1 << 20), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 20),	std::sqrt(stdResults.tracks[i].timings[j].bandwidthInB) / (1 << 20), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 20),
+					minResults.tracks[i].timings[j].bandwidthInB / (1 << 30), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 30),	std::sqrt(stdResults.tracks[i].timings[j].bandwidthInB) / (1 << 30), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 30));
 			}
 			printf(")\n");
 		}
 	}
+#else
+	printf("RepetitionProfiler report was called but profiling is disabled. Report is therefore empty and will be skipped.\nThe profiler can be enabled by defining _PROFILER_ENABLED in the compiler options.\n");
+#endif
 }

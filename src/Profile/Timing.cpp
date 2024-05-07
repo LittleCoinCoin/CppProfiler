@@ -1,44 +1,43 @@
 #include "Profile/Timing.hpp"
 
-#if _WIN32
-
 Profile::u64 Profile::Timer::GetOSTimerFreq(void)
 {
+#if _WIN32
 	LARGE_INTEGER freq;
 	QueryPerformanceFrequency(&freq);
 	return freq.QuadPart;
+#else
+	return 1000000;
+#endif
 }
 
 Profile::u64 Profile::Timer::GetOSTimer(void)
 {
+#if _WIN32
 	LARGE_INTEGER value;
 	QueryPerformanceCounter(&value);
 	return value.QuadPart;
-}
-
+#elif __ARM_ARCH
+	struct timespec value;
+	clock_gettime(CLOCK_MONOTONIC, &value);
+	return GetOSTimerFreq() * (u64)value.tv_sec * + (u64)value.tv_nsec;
 #else
-
-Profile::u64 Profile::Timer::GetOSTimerFreq(void)
-{
-	return 1000000;
-}
-
-Profile::u64 Profile::Timer::GetOSTimer(void)
-{
 	struct timeval value;
 	gettimeofday(&value, 0);
-
-	Profile::u64 Result = Profile::Timer::GetOSTimerFreq() * (Profile::u64)value.tv_sec + (Profile::u64)value.tv_usec;
-	return Result;
-}
-
+	return GetOSTimerFreq() * (u64)value.tv_sec * + (u64)value.tv_usec;
 #endif
+}
 
 Profile::u64 Profile::Timer::GetCPUTimer(void)
 {
+#if __ARM_ARCH
+	struct timespec value;
+	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &value);
+	return (u64)value.tv_sec * 1000000000 + (u64)value.tv_nsec;
+#else
 	return __rdtsc();
+#endif
 }
-
 
 Profile::u64 Profile::Timer::EstimateCPUFreq(u64 _msToWait)
 {

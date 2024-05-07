@@ -1,0 +1,18 @@
+# ~/src/Tests/DirectInclude/ProfilerDisabled/CMakeLists.txt
+
+add_compile_definitions(PROFILER_ENABLED=0)
+set(TargetName CppProfiler_Tests_DirectBuild_ProfilerDisabled)
+add_executable(${TargetName}
+
+"../../main.cpp"
+
+"../../../Profile/Profiler.cpp"
+"../../../Profile/Timing.cpp"
+
+)
+
+set_property(TARGET ${TargetName} PROPERTY CXX_STANDARD 20)
+
+target_include_directories(${TargetName} PRIVATE
+	"../../../../headers"
+)
