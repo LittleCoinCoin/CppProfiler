@@ -16,3 +16,7 @@ set_property(TARGET ${TargetName} PROPERTY CXX_STANDARD 20)
 target_include_directories(${TargetName} PRIVATE
 	"../../../../headers"
 )
+
+if(RUNTIME_PROFILER_TESTS)
+	add_test(NAME ${TargetName} COMMAND ${TargetName})
+endif()
