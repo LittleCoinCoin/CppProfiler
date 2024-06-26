@@ -56,3 +56,27 @@ jobs:
 
           # This is the name of the CMakePresets.json's configuration to build the project.
           buildPreset: "MSVC ${{ matrix.build_config }} ${{ matrix.target_architecture }}"
+      
+      - name: Runtime test DirectBuild+ProfilerEnabled
+        uses: threeal/ctest-action@v1.0.0
+        with:
+          test-dir: src/Tests/DirectBuild/ProfilerEnabled
+          build-config: ${{ matrix.build_config }}
+      
+      - name: Runtime test DirectBuild+ProfilerDisabled
+        uses: threeal/ctest-action@v1.0.0
+        with:
+          test-dir: src/Tests/DirectBuild/ProfilerDisabled
+          build-config: ${{ matrix.build_config }}
+      
+      - name: Runtime test SharedLibraryLink+ProfilerEnabled
+        uses: threeal/ctest-action@v1.0.0
+        with:
+          test-dir: src/Tests/SharedLibraryLink/ProfilerEnabled
+          build-config: ${{ matrix.build_config }}
+      
+      - name: Runtime test SharedLibraryLink+ProfilerDisabled
+        uses: threeal/ctest-action@v1.0.0
+        with:
+          test-dir: src/Tests/SharedLibraryLink/ProfilerDisabled
+          build-config: ${{ matrix.build_config }}
