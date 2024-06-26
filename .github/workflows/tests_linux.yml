@@ -103,7 +103,10 @@ jobs:
           submodules: 'recursive'
 
       - name: Install suitable compiler
-        run: sudo apt-get install gcc-${{ matrix.gcc_version }} g++-${{ matrix.gcc_version }}
+        run: |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+          sudo apt-get update -y
+          sudo apt-get install gcc-${{ matrix.gcc_version }} g++-${{ matrix.gcc_version }}
 
       - name: Install CMake and ninja
         uses: lukka/get-cmake@latest
