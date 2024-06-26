@@ -14,6 +14,10 @@ on:
         description: 'Comma-separated "17" and/or "18" and/or "19"'
         default: '"17", "18", "19"'
         required: true
+      gcc_version: 
+        description: 'Comma-separated "11" and/or "12" and/or "13"'
+        default: '"11", "12", "13"'
+        required: true
 
 jobs:
   ubuntu_clang:
@@ -86,8 +90,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build_config: [Release, Debug]
-        gcc_version: [11, 12, 13]
+        build_config: ${{ fromJSON(format('[{0}]', inputs.build_config || '"Release", "Debug"')) }}
+        gcc_version: ${{ fromJSON(format('[{0}]', inputs.gcc_version || '"11", "12", "13"')) }}
 
     env:
       gcc_compiler_version: -${{ matrix.gcc_version }}
@@ -99,7 +103,7 @@ jobs:
           submodules: 'recursive'
 
       - name: Install suitable compiler
-        run: sudo apt-get install g++-${{ matrix.gcc_version }}
+        run: sudo apt-get install gcc-${{ matrix.gcc_version }} g++-${{ matrix.gcc_version }}
 
       - name: Install CMake and ninja
         uses: lukka/get-cmake@latest
