@@ -314,6 +314,12 @@ struct ProfileBlockResult
 	@brief Outputs the profiling statistics of the block.
 	*/
 	PROFILE_API void Report() noexcept;
+
+	/*!
+	@brief Resets the values of this struct.
+	@details Resetting do not change the ::blockName, the ::fileName, or the ::lineNumber.
+	*/
+	PROFILE_API void Reset() noexcept;
 };
 
 /*!
@@ -448,6 +454,13 @@ struct ProfileTrackResult
 	@brief Outputs the profiling statistics of the track.
 	*/
 	PROFILE_API void Report() noexcept;
+
+	/*!
+	@brief Resets the values of member variables of this struct and up to
+			::blockCount Profile::ProfileBlockResults in the ::timings array.
+	@details Resetting do not change the name.
+	*/
+	PROFILE_API void Reset() noexcept;
 };
 
 /*!
@@ -638,6 +651,13 @@ struct ProfilerResults
 	@brief Outputs the profiling statistics of the profiler.
 	*/
 	PROFILE_API void Report() noexcept;
+
+	/*!
+	@brief Resets the values of member variables of this struct and up to
+			::trackCount Profile::ProfileTrackResults in the ::tracks array.
+	@details Resetting do not change the name.
+	*/
+	PROFILE_API void Reset() noexcept;
 };
 
 /*!
@@ -869,5 +889,15 @@ public:
 	@param _repetitionCount The number of repetitions.
 	*/
 	PROFILE_API void Report(u64 _repetitionCount) noexcept;
+
+	/*!
+	@brief Resets all the stored and computed results of the repeated profiling. 
+	@details The function will reset the values of ::averageResults, ::stdResults,
+			 ::cumulatedResults, ::maxResults, and ::minResults. It also resets
+			 everything in the ProfilerResults pointed by ::ptr_repetitionResults.
+	@param _repetitionCount The number of repetitions.
+	@see Profile::ProfilerResults::Reset
+	*/
+	PROFILE_API void Reset(u64 _repetitionCount) noexcept;
 };
 } // namespace Profile

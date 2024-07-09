@@ -61,6 +61,19 @@ void Profile::ProfileBlockResult::Report() noexcept
 	printf(")\n");
 }
 
+void Profile::ProfileBlockResult::Reset() noexcept
+{
+	trackIdx = 0;
+	profileBlockRecorderIdx = 0;
+	elapsed = 0;
+	elapsedSec = 0.0;
+	hitCount = 0;
+	processedByteCount = 0;
+	proportionInTrack = 0.f;
+	proportionInTotal = 0.f;
+	bandwidthInB = 0;
+}
+
 void Profile::ProfileTrackResult::Capture(ProfileTrack& _track, u64 _trackIdx, u64 _totalElapsedReference) noexcept
 {
 	name = _track.name;
@@ -131,6 +144,18 @@ void Profile::ProfileTrackResult::Report() noexcept
 		{
 			record.Report();
 		}
+	}
+}
+
+void Profile::ProfileTrackResult::Reset() noexcept
+{
+	elapsed = 0;
+	elapsedSec = 0.0;
+	proportionInTotal = 0.0;
+	blockCount = 0;
+	for (NB_TIMINGS_TYPE i = 0; i < blockCount; ++i)
+	{
+		timings[i].Reset();
 	}
 }
 
@@ -232,6 +257,16 @@ void Profile::ProfilerResults::Report() noexcept
 	for (NB_TRACKS_TYPE i = 0; i < trackCount; ++i)
 	{
 		tracks[i].Report();
+	}
+}
+
+void Profile::ProfilerResults::Reset() noexcept
+{
+	elapsed = 0;
+	trackCount = 0;
+	for (NB_TRACKS_TYPE i = 0; i < NB_TRACKS; ++i)
+	{
+		tracks[i].Reset();
 	}
 }
 
@@ -381,6 +416,7 @@ void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCou
 	Profiler* ptr_profiler = GetProfiler();
 
 	ptr_profiler->Reset();
+	Reset(_repetitionCount);
 
 	for (u64 i = 0; i < _repetitionCount; ++i)
 	{
@@ -480,4 +516,17 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 #else
 	printf("RepetitionProfiler report was called but profiling is disabled. Report is therefore empty and will be skipped.\nThe profiler can be enabled by defining _PROFILER_ENABLED in the compiler options.\n");
 #endif
+}
+
+void Profile::RepetitionProfiler::Reset(u64 _repetitionCount) noexcept
+{
+	cumulatedResults.Reset();
+	averageResults.Reset();
+	stdResults.Reset();
+	maxResults.Reset();
+	minResults.Reset();
+	for (u64 i = 0; i < _repetitionCount; ++i)
+	{
+		ptr_repetitionResults[i].Reset();
+	}
 }
