@@ -53,9 +53,9 @@ namespace Profile
 		The final macro expanding to generate the unique profile block index
 		as well as the profile block opbject itself. 
 */
-#define PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount, ...)                                        \
+#define PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount)                                        \
 	static NB_TIMINGS_TYPE profileBlockRecorder_##profileBlockRecorderIdx = Profile::Profiler::GetProfileBlockRecorderIndex(trackIdx, __FILE__, __LINE__, blockName); \
-	Profile::ProfileBlock ProfiledBlock_##profileBlockRecorderIdx(trackIdx, profileBlockRecorder_##profileBlockRecorderIdx, byteCount, ## __VA_ARGS__)
+	Profile::ProfileBlock ProfiledBlock_##profileBlockRecorderIdx(trackIdx, profileBlockRecorder_##profileBlockRecorderIdx, byteCount)
 
 /*!
 @brief DO NOT USE in code. Prefer using PROFILE_BLOCK_TIME_BANDWIDTH, PROFILE_FUNCTION_TIME_BANDWIDTH,
@@ -63,21 +63,21 @@ namespace Profile
 		The intermediate macro expanding PROFILE_BLOCK_TIME_BANDWIDTH__. Used to handle
 		the VA_ARGS and the profileBlockRecorderIdx parameters.
 */
-#define PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, profileBlockRecorderIdx, byteCount, ...) PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount, ## __VA_ARGS__)
+#define PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, profileBlockRecorderIdx, byteCount) PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount)
 
 /*!
 @brief USE in code. The macro to profile an arbitrary block of code with a name
 		you can choose. This macro also accepts a number of bytes in parameter
 		to monitor data throughput as well.
 */
-#define PROFILE_BLOCK_TIME_BANDWIDTH(blockName, trackIdx, byteCount, ...) PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, __LINE__, ## __VA_ARGS__)
+#define PROFILE_BLOCK_TIME_BANDWIDTH(blockName, trackIdx, byteCount) PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, __LINE__, byteCount)
 
 /*!
 @brief USE in code. The macro to profile an arbitrary block of code with a name
 		you can choose. This expands to PROFILE_BLOCK_TIME_BANDWIDTH with byteCount=0.
 		So, you this when you only wish to profile processing time.
 */
-#define PROFILE_BLOCK_TIME(blockName, trackIdx, ...) PROFILE_BLOCK_TIME_BANDWIDTH(#blockName, trackIdx, 0, ## __VA_ARGS__)
+#define PROFILE_BLOCK_TIME(blockName, trackIdx) PROFILE_BLOCK_TIME_BANDWIDTH(#blockName, trackIdx, 0)
 
 /*!
 @brief USE in code. The macro to profile a function. This macro also accepts a
@@ -85,14 +85,14 @@ namespace Profile
 		expands to PROFILE_BLOCK_TIME_BANDWIDTH_ with the function's name as the
 		blockName (i.e., using __FUNCTION__).
 */
-#define PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, byteCount, ...) PROFILE_BLOCK_TIME_BANDWIDTH_(__FUNCTION__, trackIdx, __LINE__, byteCount, ## __VA_ARGS__)
+#define PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, byteCount) PROFILE_BLOCK_TIME_BANDWIDTH_(__FUNCTION__, trackIdx, __LINE__, byteCount)
 
 /*!
 @brief USE in code. The macro to profile a function. This expands to PROFILE_FUNCTION_TIME_BANDWIDTH
 		with byteCount=0. So, you this when you only wish to profile processing time
 		of the function.
 */
-#define PROFILE_FUNCTION_TIME(trackIdx,...) PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, 0, ## __VA_ARGS__)
+#define PROFILE_FUNCTION_TIME(trackIdx,...) PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, 0)
 
 #else // PROFILER_ENABLED
 
