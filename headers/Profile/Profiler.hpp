@@ -286,19 +286,19 @@ struct ProfileBlockResult
 	@brief The proportion of the block's time in its track's time.
 	@details No equivalent in ProfileBlockRecorder.
 	*/
-	f32 proportionInTrack = 0.0;
+	f32 proportionInTrack = 0.f;
 
 	/*!
 	@brief The proportion of the block's time in the total time of the profiler.
 	@details No equivalent in ProfileBlockRecorder.
 	*/
-	f32 proportionInTotal = 0.0;
+	f32 proportionInTotal = 0.f;
 
 	/*!
 	@brief The bandwidth in bytes per second.
 	@details No equivalent in ProfileBlockRecorder.
 	*/
-	f32 bandwidthInB = 0.0;
+	f32 bandwidthInB = 0.f;
 
 	ProfileBlockResult() = default;
 
@@ -583,7 +583,7 @@ extern PROFILE_API Profiler* GetProfiler();
 /*!
 @brief A mirror of the Profiler struct to store all the statistics of a profiler
 		and the tracks it contains (thanks to Profile::ProfileTrackResult).
-@brief In this mirror, the tracks are packed at the beginning of the array to
+@details In this mirror, the tracks are packed at the beginning of the array to
 		avoid having to iterate over all the tracks that might not have been used.
 */
 struct ProfilerResults
