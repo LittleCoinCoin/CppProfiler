@@ -286,19 +286,19 @@ struct ProfileBlockResult
 	@brief The proportion of the block's time in its track's time.
 	@details No equivalent in ProfileBlockRecorder.
 	*/
-	f32 proportionInTrack = 0.0;
+	f32 proportionInTrack = 0.f;
 
 	/*!
 	@brief The proportion of the block's time in the total time of the profiler.
 	@details No equivalent in ProfileBlockRecorder.
 	*/
-	f32 proportionInTotal = 0.0;
+	f32 proportionInTotal = 0.f;
 
 	/*!
 	@brief The bandwidth in bytes per second.
 	@details No equivalent in ProfileBlockRecorder.
 	*/
-	f32 bandwidthInB = 0.0;
+	f32 bandwidthInB = 0.f;
 
 	ProfileBlockResult() = default;
 
@@ -314,6 +314,12 @@ struct ProfileBlockResult
 	@brief Outputs the profiling statistics of the block.
 	*/
 	PROFILE_API void Report() noexcept;
+
+	/*!
+	@brief Resets the values of this struct.
+	@details Resetting do not change the ::blockName, the ::fileName, or the ::lineNumber.
+	*/
+	PROFILE_API void Reset() noexcept;
 };
 
 /*!
@@ -448,6 +454,13 @@ struct ProfileTrackResult
 	@brief Outputs the profiling statistics of the track.
 	*/
 	PROFILE_API void Report() noexcept;
+
+	/*!
+	@brief Resets the values of member variables of this struct and up to
+			::blockCount Profile::ProfileBlockResults in the ::timings array.
+	@details Resetting do not change the name.
+	*/
+	PROFILE_API void Reset() noexcept;
 };
 
 /*!
@@ -583,7 +596,7 @@ extern PROFILE_API Profiler* GetProfiler();
 /*!
 @brief A mirror of the Profiler struct to store all the statistics of a profiler
 		and the tracks it contains (thanks to Profile::ProfileTrackResult).
-@brief In this mirror, the tracks are packed at the beginning of the array to
+@details In this mirror, the tracks are packed at the beginning of the array to
 		avoid having to iterate over all the tracks that might not have been used.
 */
 struct ProfilerResults
@@ -638,6 +651,13 @@ struct ProfilerResults
 	@brief Outputs the profiling statistics of the profiler.
 	*/
 	PROFILE_API void Report() noexcept;
+
+	/*!
+	@brief Resets the values of member variables of this struct and up to
+			::trackCount Profile::ProfileTrackResults in the ::tracks array.
+	@details Resetting do not change the name.
+	*/
+	PROFILE_API void Reset() noexcept;
 };
 
 /*!
@@ -869,5 +889,15 @@ public:
 	@param _repetitionCount The number of repetitions.
 	*/
 	PROFILE_API void Report(u64 _repetitionCount) noexcept;
+
+	/*!
+	@brief Resets all the stored and computed results of the repeated profiling. 
+	@details The function will reset the values of ::averageResults, ::stdResults,
+			 ::cumulatedResults, ::maxResults, and ::minResults. It also resets
+			 everything in the ProfilerResults pointed by ::ptr_repetitionResults.
+	@param _repetitionCount The number of repetitions.
+	@see Profile::ProfilerResults::Reset
+	*/
+	PROFILE_API void Reset(u64 _repetitionCount) noexcept;
 };
 } // namespace Profile
