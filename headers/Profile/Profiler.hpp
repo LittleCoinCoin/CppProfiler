@@ -53,9 +53,9 @@ namespace Profile
 		The final macro expanding to generate the unique profile block index
 		as well as the profile block opbject itself. 
 */
-#define PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount, ...)                                        \
+#define PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount)                                        \
 	static NB_TIMINGS_TYPE profileBlockRecorder_##profileBlockRecorderIdx = Profile::Profiler::GetProfileBlockRecorderIndex(trackIdx, __FILE__, __LINE__, blockName); \
-	Profile::ProfileBlock ProfiledBlock_##profileBlockRecorderIdx(trackIdx, profileBlockRecorder_##profileBlockRecorderIdx, byteCount, ## __VA_ARGS__)
+	Profile::ProfileBlock ProfiledBlock_##profileBlockRecorderIdx(trackIdx, profileBlockRecorder_##profileBlockRecorderIdx, byteCount)
 
 /*!
 @brief DO NOT USE in code. Prefer using PROFILE_BLOCK_TIME_BANDWIDTH, PROFILE_FUNCTION_TIME_BANDWIDTH,
@@ -63,21 +63,21 @@ namespace Profile
 		The intermediate macro expanding PROFILE_BLOCK_TIME_BANDWIDTH__. Used to handle
 		the VA_ARGS and the profileBlockRecorderIdx parameters.
 */
-#define PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, profileBlockRecorderIdx, byteCount, ...) PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount, ## __VA_ARGS__)
+#define PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, profileBlockRecorderIdx, byteCount) PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount)
 
 /*!
 @brief USE in code. The macro to profile an arbitrary block of code with a name
 		you can choose. This macro also accepts a number of bytes in parameter
 		to monitor data throughput as well.
 */
-#define PROFILE_BLOCK_TIME_BANDWIDTH(blockName, trackIdx, byteCount, ...) PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, __LINE__, ## __VA_ARGS__)
+#define PROFILE_BLOCK_TIME_BANDWIDTH(blockName, trackIdx, byteCount) PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, __LINE__, byteCount)
 
 /*!
 @brief USE in code. The macro to profile an arbitrary block of code with a name
 		you can choose. This expands to PROFILE_BLOCK_TIME_BANDWIDTH with byteCount=0.
 		So, you this when you only wish to profile processing time.
 */
-#define PROFILE_BLOCK_TIME(blockName, trackIdx, ...) PROFILE_BLOCK_TIME_BANDWIDTH(#blockName, trackIdx, 0, ## __VA_ARGS__)
+#define PROFILE_BLOCK_TIME(blockName, trackIdx) PROFILE_BLOCK_TIME_BANDWIDTH(#blockName, trackIdx, 0)
 
 /*!
 @brief USE in code. The macro to profile a function. This macro also accepts a
@@ -85,14 +85,14 @@ namespace Profile
 		expands to PROFILE_BLOCK_TIME_BANDWIDTH_ with the function's name as the
 		blockName (i.e., using __FUNCTION__).
 */
-#define PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, byteCount, ...) PROFILE_BLOCK_TIME_BANDWIDTH_(__FUNCTION__, trackIdx, __LINE__, byteCount, ## __VA_ARGS__)
+#define PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, byteCount) PROFILE_BLOCK_TIME_BANDWIDTH_(__FUNCTION__, trackIdx, __LINE__, byteCount)
 
 /*!
 @brief USE in code. The macro to profile a function. This expands to PROFILE_FUNCTION_TIME_BANDWIDTH
 		with byteCount=0. So, you this when you only wish to profile processing time
 		of the function.
 */
-#define PROFILE_FUNCTION_TIME(trackIdx,...) PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, 0, ## __VA_ARGS__)
+#define PROFILE_FUNCTION_TIME(trackIdx,...) PROFILE_FUNCTION_TIME_BANDWIDTH(trackIdx, 0)
 
 #else // PROFILER_ENABLED
 
@@ -286,19 +286,19 @@ struct ProfileBlockResult
 	@brief The proportion of the block's time in its track's time.
 	@details No equivalent in ProfileBlockRecorder.
 	*/
-	f32 proportionInTrack = 0.0;
+	f32 proportionInTrack = 0.f;
 
 	/*!
 	@brief The proportion of the block's time in the total time of the profiler.
 	@details No equivalent in ProfileBlockRecorder.
 	*/
-	f32 proportionInTotal = 0.0;
+	f32 proportionInTotal = 0.f;
 
 	/*!
 	@brief The bandwidth in bytes per second.
 	@details No equivalent in ProfileBlockRecorder.
 	*/
-	f32 bandwidthInB = 0.0;
+	f32 bandwidthInB = 0.f;
 
 	ProfileBlockResult() = default;
 
@@ -314,6 +314,12 @@ struct ProfileBlockResult
 	@brief Outputs the profiling statistics of the block.
 	*/
 	PROFILE_API void Report() noexcept;
+
+	/*!
+	@brief Resets the values of this struct.
+	@details Resetting do not change the ::blockName, the ::fileName, or the ::lineNumber.
+	*/
+	PROFILE_API void Reset() noexcept;
 };
 
 /*!
@@ -448,6 +454,13 @@ struct ProfileTrackResult
 	@brief Outputs the profiling statistics of the track.
 	*/
 	PROFILE_API void Report() noexcept;
+
+	/*!
+	@brief Resets the values of member variables of this struct and up to
+			::blockCount Profile::ProfileBlockResults in the ::timings array.
+	@details Resetting do not change the name.
+	*/
+	PROFILE_API void Reset() noexcept;
 };
 
 /*!
@@ -583,7 +596,7 @@ extern PROFILE_API Profiler* GetProfiler();
 /*!
 @brief A mirror of the Profiler struct to store all the statistics of a profiler
 		and the tracks it contains (thanks to Profile::ProfileTrackResult).
-@brief In this mirror, the tracks are packed at the beginning of the array to
+@details In this mirror, the tracks are packed at the beginning of the array to
 		avoid having to iterate over all the tracks that might not have been used.
 */
 struct ProfilerResults
@@ -638,6 +651,13 @@ struct ProfilerResults
 	@brief Outputs the profiling statistics of the profiler.
 	*/
 	PROFILE_API void Report() noexcept;
+
+	/*!
+	@brief Resets the values of member variables of this struct and up to
+			::trackCount Profile::ProfileTrackResults in the ::tracks array.
+	@details Resetting do not change the name.
+	*/
+	PROFILE_API void Reset() noexcept;
 };
 
 /*!
@@ -869,5 +889,15 @@ public:
 	@param _repetitionCount The number of repetitions.
 	*/
 	PROFILE_API void Report(u64 _repetitionCount) noexcept;
+
+	/*!
+	@brief Resets all the stored and computed results of the repeated profiling. 
+	@details The function will reset the values of ::averageResults, ::stdResults,
+			 ::cumulatedResults, ::maxResults, and ::minResults. It also resets
+			 everything in the ProfilerResults pointed by ::ptr_repetitionResults.
+	@param _repetitionCount The number of repetitions.
+	@see Profile::ProfilerResults::Reset
+	*/
+	PROFILE_API void Reset(u64 _repetitionCount) noexcept;
 };
 } // namespace Profile

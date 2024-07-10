@@ -39,3 +39,27 @@ jobs:
           
           # This is the name of the CMakePresets.json's configuration to build the project.
           buildPreset: "Clang ${{ matrix.build_config }}"
+      
+      - name: Runtime test DirectBuild+ProfilerEnabled
+        uses: threeal/ctest-action@v1.0.0
+        with:
+          test-dir: out/build/Clang/src/Tests/DirectBuild/ProfilerEnabled
+          build-config: ${{ matrix.build_config }}
+        
+      - name: Runtime test DirectBuild+ProfilerDisabled
+        uses: threeal/ctest-action@v1.0.0
+        with:
+          test-dir: out/build/Clang/src/Tests/DirectBuild/ProfilerDisabled
+          build-config: ${{ matrix.build_config }}
+      
+      - name: Runtime test SharedLibraryLink+ProfilerEnabled
+        uses: threeal/ctest-action@v1.0.0
+        with:
+          test-dir: out/build/Clang/src/Tests/SharedLibraryLink/ProfilerEnabled
+          build-config: ${{ matrix.build_config }}
+      
+      - name: Runtime test SharedLibraryLink+ProfilerDisabled
+        uses: threeal/ctest-action@v1.0.0
+        with:
+          test-dir: out/build/Clang/src/Tests/SharedLibraryLink/ProfilerDisabled
+          build-config: ${{ matrix.build_config }}

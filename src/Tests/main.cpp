@@ -6,7 +6,7 @@
 @param _arr The array to fill.
 @param _count The number of elements to fill.
 */
-void TestFunction(Profile::u64 _arr[], Profile::u64 _count)
+void TestFunction_ProfileFunction(Profile::u64 _arr[], Profile::u64 _count)
 {
 	PROFILE_FUNCTION_TIME(0);
 
@@ -17,17 +17,33 @@ void TestFunction(Profile::u64 _arr[], Profile::u64 _count)
 }
 
 /*!
-@brief A wrapper around the TestFunction when it will be used TestFunction_FixedRepetitionTesting.
+@brief Tests the macro time profiling macro on track 0: PROFILE_BLOCK_TIME("TestFunction_ProfileBlock_Write", 0).
+@details Fills an array with the index of the element. Profiling happens within
+		 the loop filling the array.
+@param _arr The array to fill.
+@param _count The number of elements to fill.
 */
-struct RepetitionTest_TestFunction : public Profile::RepetitionTest
+void TestFunction_ProfileBlock(Profile::u64 _arr[], Profile::u64 _count)
+{
+	for (Profile::u64 i = 0; i < _count; ++i)
+	{
+		PROFILE_BLOCK_TIME("TestFunction_ProfileBlock_Write", 0);
+		_arr[i] = i;
+	}
+}
+
+/*!
+@brief A wrapper around the TestFunction_ProfileFunction when it will be used TestFunction_FixedRepetitionTesting.
+*/
+struct RepetitionTest_TestFunction_ProfileFunction : public Profile::RepetitionTest
 {
 	Profile::u64* arr = nullptr;
 	Profile::u64 count = 0;
-	RepetitionTest_TestFunction(Profile::u64* _arr, Profile::u64 _count) : arr(_arr), count(_count) {}
+	RepetitionTest_TestFunction_ProfileFunction(Profile::u64* _arr, Profile::u64 _count) : arr(_arr), count(_count) {}
 
 	inline void operator()() override
 	{
-		TestFunction(arr, count);
+		TestFunction_ProfileFunction(arr, count);
 	}
 };
 
@@ -70,7 +86,7 @@ void TestFunction_Track2(Profile::u64 _arr[], Profile::u64 _count)
 void TestFunction_FixedRepetitionTesting()
 {
 	Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * 8192);
-	RepetitionTest_TestFunction repetitionTest(arr, 8192);
+	RepetitionTest_TestFunction_ProfileFunction repetitionTest(arr, 8192);
 
 	Profile::u8 repetitionCount = 100;
 	Profile::RepetitionProfiler* repetitionProfiler = (Profile::RepetitionProfiler*)calloc(1, sizeof(Profile::RepetitionProfiler));
@@ -97,7 +113,8 @@ int main()
 	profiler->Initialize();
 	Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * 8192);
 
-	TestFunction(arr, 8192);
+	TestFunction_ProfileFunction(arr, 8192);
+	TestFunction_ProfileBlock(arr, 8192);
 	TestFunction_Bandwidth(arr, 8192);
 
 	profiler->SetTrackName(1, "SubTrack");

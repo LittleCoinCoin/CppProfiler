@@ -21,9 +21,14 @@ target_link_libraries(${TargetName} PRIVATE
 	ProfilerEnabled
 )
 
-#Copy the profiler library to the output directory if on Windows
+# 4) Copy the profiler library to the output directory if on Windows
 if(WIN32)
 	add_custom_command(TARGET ${TargetName} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different $ENV{TEST_SHAREDLIB_PROFILERENABLED_DIRECTORY}/ProfilerEnabled.dll ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>
 	)
+endif()
+
+# 5) Run the test
+if(RUNTIME_PROFILER_TESTS)
+	add_test(NAME ${TargetName} COMMAND ${TargetName})
 endif()
