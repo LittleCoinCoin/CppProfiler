@@ -9,7 +9,7 @@ var hierarchy =
     [ "Profile::ProfileTrackResult", "d0/d07/structProfile_1_1ProfileTrackResult.html", null ],
     [ "Profile::RepetitionProfiler", "de/d05/structProfile_1_1RepetitionProfiler.html", null ],
     [ "Profile::RepetitionTest", "d5/d06/structProfile_1_1RepetitionTest.html", [
-      [ "RepetitionTest_TestFunction", "d2/d05/structRepetitionTest__TestFunction.html", null ]
+      [ "RepetitionTest_TestFunction_ProfileFunction", "df/d04/structRepetitionTest__TestFunction__ProfileFunction.html", null ]
     ] ],
     [ "Profile::Timer", "d1/d04/structProfile_1_1Timer.html", null ]
 ];

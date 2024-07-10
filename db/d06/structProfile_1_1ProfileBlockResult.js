@@ -3,6 +3,7 @@ var structProfile_1_1ProfileBlockResult =
     [ "ProfileBlockResult", "db/d06/structProfile_1_1ProfileBlockResult.html#a76e401d59b40c0e24668d22244456a96", null ],
     [ "Capture", "db/d06/structProfile_1_1ProfileBlockResult.html#ae70fa3f95cabc888ecf81cebd549498c", null ],
     [ "Report", "db/d06/structProfile_1_1ProfileBlockResult.html#a8127eeab36ac22abbf34cd39ba70687a", null ],
+    [ "Reset", "db/d06/structProfile_1_1ProfileBlockResult.html#a47d2e8680b5031c0c331f0de5687f1d3", null ],
     [ "bandwidthInB", "db/d06/structProfile_1_1ProfileBlockResult.html#a2dc0d102793c732823de91a8c16d14c2", null ],
     [ "blockName", "db/d06/structProfile_1_1ProfileBlockResult.html#adcf414d91dfce1ec4f95b0747958f76f", null ],
     [ "elapsed", "db/d06/structProfile_1_1ProfileBlockResult.html#a97466585a08f7e3c5874694da6a3c49a", null ],

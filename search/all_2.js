@@ -5,7 +5,7 @@ var searchData=
   ['closeblock_2',['CloseBlock',['../dd/d06/structProfile_1_1ProfileTrack.html#a65c9a2c78502d1fc7c797524d14da74c',1,'Profile::ProfileTrack::CloseBlock()'],['../d4/d00/structProfile_1_1Profiler.html#ac34d80550cef4d0741ece5b88a7ea3b8',1,'Profile::Profiler::CloseBlock()']]],
   ['computeaverageresults_3',['ComputeAverageResults',['../de/d05/structProfile_1_1RepetitionProfiler.html#a1bb7e0d94d95756030ea26a218e51b02',1,'Profile::RepetitionProfiler']]],
   ['computestdresults_4',['ComputeStdResults',['../de/d05/structProfile_1_1RepetitionProfiler.html#a755e4de744ddf07ced8f28cc16e8756d',1,'Profile::RepetitionProfiler']]],
-  ['count_5',['count',['../d2/d05/structRepetitionTest__TestFunction.html#a6d5fac7ef0ab0ee93a63d1bc1686d4ad',1,'RepetitionTest_TestFunction']]],
+  ['count_5',['count',['../df/d04/structRepetitionTest__TestFunction__ProfileFunction.html#ac3419faba7aca22934a542c2e88f40d2',1,'RepetitionTest_TestFunction_ProfileFunction']]],
   ['cumulatedresults_6',['cumulatedResults',['../de/d05/structProfile_1_1RepetitionProfiler.html#a2517875ab41728b68fbec289e5fc95db',1,'Profile::RepetitionProfiler']]],
   ['cumulateresults_7',['CumulateResults',['../de/d05/structProfile_1_1RepetitionProfiler.html#ab8d4f9e8038674ffcad236d5b780ee14',1,'Profile::RepetitionProfiler']]]
 ];

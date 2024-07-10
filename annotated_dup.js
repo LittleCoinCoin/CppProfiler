@@ -12,5 +12,5 @@ var annotated_dup =
       [ "RepetitionTest", "d5/d06/structProfile_1_1RepetitionTest.html", "d5/d06/structProfile_1_1RepetitionTest" ],
       [ "Timer", "d1/d04/structProfile_1_1Timer.html", "d1/d04/structProfile_1_1Timer" ]
     ] ],
-    [ "RepetitionTest_TestFunction", "d2/d05/structRepetitionTest__TestFunction.html", "d2/d05/structRepetitionTest__TestFunction" ]
+    [ "RepetitionTest_TestFunction_ProfileFunction", "df/d04/structRepetitionTest__TestFunction__ProfileFunction.html", "df/d04/structRepetitionTest__TestFunction__ProfileFunction" ]
 ];

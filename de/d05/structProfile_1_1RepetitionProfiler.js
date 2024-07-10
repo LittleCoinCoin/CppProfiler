@@ -14,6 +14,7 @@ var structProfile_1_1RepetitionProfiler =
     [ "MinAssign", "de/d05/structProfile_1_1RepetitionProfiler.html#a174154e8227a280b44bf960fc1dacb89", null ],
     [ "MinAssign", "de/d05/structProfile_1_1RepetitionProfiler.html#a605a5f4d0a3f68f30a4a1bf01fa09da7", null ],
     [ "Report", "de/d05/structProfile_1_1RepetitionProfiler.html#a56083d005c00247b60a6d3bf899da848", null ],
+    [ "Reset", "de/d05/structProfile_1_1RepetitionProfiler.html#abd4475cd127d281ec0fee5500d8dfa22", null ],
     [ "SetRepetitionResults", "de/d05/structProfile_1_1RepetitionProfiler.html#a1b0b5bd2ebd13b23cd131153907388b9", null ],
     [ "averageResults", "de/d05/structProfile_1_1RepetitionProfiler.html#adf1fe54996d2d8f3999c2f612d728d7a", null ],
     [ "cumulatedResults", "de/d05/structProfile_1_1RepetitionProfiler.html#a2517875ab41728b68fbec289e5fc95db", null ],

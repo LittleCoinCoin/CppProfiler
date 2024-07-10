@@ -3,6 +3,7 @@ var structProfile_1_1ProfileTrackResult =
     [ "ProfileTrackResult", "d0/d07/structProfile_1_1ProfileTrackResult.html#a8b31be1437dd7379504ad5cb3c058cff", null ],
     [ "Capture", "d0/d07/structProfile_1_1ProfileTrackResult.html#a00bea23bcaf0abdf597ff22c9deb6818", null ],
     [ "Report", "d0/d07/structProfile_1_1ProfileTrackResult.html#a24eb399bbba8c9bd6b285bcccbd09663", null ],
+    [ "Reset", "d0/d07/structProfile_1_1ProfileTrackResult.html#acc7f77e91a713a80f8296eee36eef182", null ],
     [ "blockCount", "d0/d07/structProfile_1_1ProfileTrackResult.html#aec97690c8bce0961443f1073160991a1", null ],
     [ "elapsed", "d0/d07/structProfile_1_1ProfileTrackResult.html#a9c78e817b999ce6ea494acda9977f08b", null ],
     [ "elapsedSec", "d0/d07/structProfile_1_1ProfileTrackResult.html#a9a1ed05901edcc97eabae8cb6aafffed", null ],
