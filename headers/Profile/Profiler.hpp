@@ -840,13 +840,6 @@ public:
 	PROFILE_API void ComputeStdResults(u64 _repetitionCount) noexcept;
 
 	/*!
-	@brief Cumulates the results of the repeated profiling.
-	@param _repetitionCount The number of repetitions.
-	@see ::cumulatedResults
-	*/
-	PROFILE_API void CumulateResults(u64 _repetitionCount) noexcept;
-
-	/*!
 	@brief Goes through the repeated profiling to find the maximum results.
 	@details In the current implementation, there is no guarentee that the
 			 maximum results all come from the same repetition. For example,
