@@ -483,7 +483,6 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 
 void Profile::RepetitionProfiler::Reset(u64 _repetitionCount) noexcept
 {
-	cumulatedResults.Reset();
 	averageResults.Reset();
 	stdResults.Reset();
 	maxResults.Reset();

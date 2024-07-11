@@ -708,11 +708,6 @@ struct RepetitionProfiler
 	ProfilerResults averageResults;
 
 	/*!
-	@brief A result structure to store the cumulated results of the repeated profiling.
-	*/
-	ProfilerResults cumulatedResults;
-
-	/*!
 	@brief A result structure to store the maximum of the repeated profiling.
 	*/
 	ProfilerResults maxResults;
