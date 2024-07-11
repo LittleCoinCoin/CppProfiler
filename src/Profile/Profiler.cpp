@@ -323,12 +323,8 @@ void Profile::RepetitionProfiler::ComputeAverageResults(u64 _repetitionCount) no
 
 void Profile::RepetitionProfiler::ComputeVarianceResults(u64 _repetitionCount) noexcept
 {
-	if (averageResults.name == nullptr)
-	{
-		ComputeAverageResults(_repetitionCount);
-	}
+	ComputeAverageResults(_repetitionCount);
 
-	stdResults.name = averageResults.name;
 	for (u64 i = 0; i < _repetitionCount; ++i)
 	{
 		varianceResults.elapsed += (ptr_repetitionResults[i].elapsed - averageResults.elapsed) * (ptr_repetitionResults[i].elapsed - averageResults.elapsed);
@@ -380,7 +376,6 @@ void Profile::RepetitionProfiler::ComputeVarianceResults(u64 _repetitionCount) n
 
 void Profile::RepetitionProfiler::FindMaxResults(u64 _repetitionCount) noexcept
 {
-	maxResults.name = averageResults.name;
 	for (u64 i = 0; i < _repetitionCount; ++i)
 	{
 		MaxAssign(maxResults.elapsed, ptr_repetitionResults[i].elapsed);
@@ -411,7 +406,6 @@ void Profile::RepetitionProfiler::FindMaxResults(u64 _repetitionCount) noexcept
 
 void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
 {
-	minResults.name = averageResults.name;
 	for (u64 i = 0; i < _repetitionCount; ++i)
 	{
 		MinAssign(minResults.elapsed, ptr_repetitionResults[i].elapsed);
@@ -446,6 +440,11 @@ void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCou
 
 	ptr_profiler->Reset();
 	Reset(_repetitionCount);
+
+	averageResults.name = ptr_profiler->name;
+	maxResults.name = ptr_profiler->name;
+	minResults.name = ptr_profiler->name;
+	varianceResults.name = ptr_profiler->name;
 
 	for (u64 i = 0; i < _repetitionCount; ++i)
 	{
