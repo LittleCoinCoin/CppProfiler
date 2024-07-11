@@ -63,8 +63,6 @@ void Profile::ProfileBlockResult::Report() noexcept
 
 void Profile::ProfileBlockResult::Reset() noexcept
 {
-	trackIdx = 0;
-	profileBlockRecorderIdx = 0;
 	elapsed = 0;
 	elapsedSec = 0.0;
 	hitCount = 0;
