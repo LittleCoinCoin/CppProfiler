@@ -147,14 +147,14 @@ void Profile::ProfileTrackResult::Report() noexcept
 
 void Profile::ProfileTrackResult::Reset() noexcept
 {
-	elapsed = 0;
-	elapsedSec = 0.0;
-	proportionInTotal = 0.0;
-	blockCount = 0;
 	for (NB_TIMINGS_TYPE i = 0; i < blockCount; ++i)
 	{
 		timings[i].Reset();
 	}
+	elapsed = 0;
+	elapsedSec = 0.0;
+	proportionInTotal = 0.0;
+	blockCount = 0;
 }
 
 NB_TIMINGS_TYPE Profile::Profiler::GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _trackIdx,
@@ -260,12 +260,12 @@ void Profile::ProfilerResults::Report() noexcept
 
 void Profile::ProfilerResults::Reset() noexcept
 {
-	elapsed = 0;
-	trackCount = 0;
-	for (NB_TRACKS_TYPE i = 0; i < NB_TRACKS; ++i)
+	for (NB_TRACKS_TYPE i = 0; i < trackCount; ++i)
 	{
 		tracks[i].Reset();
 	}
+	elapsed = 0;
+	trackCount = 0;
 }
 
 void Profile::RepetitionProfiler::ComputeAverageResults(u64 _repetitionCount) noexcept
