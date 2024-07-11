@@ -321,7 +321,7 @@ void Profile::RepetitionProfiler::ComputeAverageResults(u64 _repetitionCount) no
 	}
 }
 
-void Profile::RepetitionProfiler::ComputeStdResults(u64 _repetitionCount) noexcept
+void Profile::RepetitionProfiler::ComputeVarianceResults(u64 _repetitionCount) noexcept
 {
 	if (averageResults.name == nullptr)
 	{
@@ -331,27 +331,27 @@ void Profile::RepetitionProfiler::ComputeStdResults(u64 _repetitionCount) noexce
 	stdResults.name = averageResults.name;
 	for (u64 i = 0; i < _repetitionCount; ++i)
 	{
-		stdResults.elapsed += (ptr_repetitionResults[i].elapsed - averageResults.elapsed)* (ptr_repetitionResults[i].elapsed - averageResults.elapsed);
-		stdResults.elapsedSec += (ptr_repetitionResults[i].elapsedSec - averageResults.elapsedSec) * (ptr_repetitionResults[i].elapsedSec - averageResults.elapsedSec);
-		if (stdResults.trackCount < ptr_repetitionResults[i].trackCount)
-			stdResults.trackCount = ptr_repetitionResults[i].trackCount;
+		varianceResults.elapsed += (ptr_repetitionResults[i].elapsed - averageResults.elapsed) * (ptr_repetitionResults[i].elapsed - averageResults.elapsed);
+		varianceResults.elapsedSec += (ptr_repetitionResults[i].elapsedSec - averageResults.elapsedSec) * (ptr_repetitionResults[i].elapsedSec - averageResults.elapsedSec);
+		if (varianceResults.trackCount < ptr_repetitionResults[i].trackCount)
+			varianceResults.trackCount = ptr_repetitionResults[i].trackCount;
 		for (IT_TRACKS_TYPE j = 0; j < ptr_repetitionResults[i].trackCount; ++j)
 		{
-			stdResults.tracks[j].name = ptr_repetitionResults[i].tracks[j].name;
-			stdResults.tracks[j].elapsed += (ptr_repetitionResults[i].tracks[j].elapsed - averageResults.tracks[j].elapsed) * (ptr_repetitionResults[i].tracks[j].elapsed - averageResults.tracks[j].elapsed);
-			stdResults.tracks[j].elapsedSec += (ptr_repetitionResults[i].tracks[j].elapsedSec - averageResults.tracks[j].elapsedSec) * (ptr_repetitionResults[i].tracks[j].elapsedSec - averageResults.tracks[j].elapsedSec);
-			stdResults.tracks[j].proportionInTotal += (ptr_repetitionResults[i].tracks[j].proportionInTotal - averageResults.tracks[j].proportionInTotal) * (ptr_repetitionResults[i].tracks[j].proportionInTotal - averageResults.tracks[j].proportionInTotal);
-			if (stdResults.tracks[j].blockCount < ptr_repetitionResults[i].tracks[j].blockCount)
-				stdResults.tracks[j].blockCount = ptr_repetitionResults[i].tracks[j].blockCount;
+			varianceResults.tracks[j].name = ptr_repetitionResults[i].tracks[j].name;
+			varianceResults.tracks[j].elapsed += (ptr_repetitionResults[i].tracks[j].elapsed - averageResults.tracks[j].elapsed) * (ptr_repetitionResults[i].tracks[j].elapsed - averageResults.tracks[j].elapsed);
+			varianceResults.tracks[j].elapsedSec += (ptr_repetitionResults[i].tracks[j].elapsedSec - averageResults.tracks[j].elapsedSec) * (ptr_repetitionResults[i].tracks[j].elapsedSec - averageResults.tracks[j].elapsedSec);
+			varianceResults.tracks[j].proportionInTotal += (ptr_repetitionResults[i].tracks[j].proportionInTotal - averageResults.tracks[j].proportionInTotal) * (ptr_repetitionResults[i].tracks[j].proportionInTotal - averageResults.tracks[j].proportionInTotal);
+			if (varianceResults.tracks[j].blockCount < ptr_repetitionResults[i].tracks[j].blockCount)
+				varianceResults.tracks[j].blockCount = ptr_repetitionResults[i].tracks[j].blockCount;
 			for (IT_TIMINGS_TYPE k = 0; k < ptr_repetitionResults[i].tracks[j].blockCount; ++k)
 			{
-				stdResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
-				stdResults.tracks[j].timings[k].elapsed += (ptr_repetitionResults[i].tracks[j].timings[k].elapsed - averageResults.tracks[j].timings[k].elapsed) * (ptr_repetitionResults[i].tracks[j].timings[k].elapsed - averageResults.tracks[j].timings[k].elapsed);
-				stdResults.tracks[j].timings[k].hitCount += (ptr_repetitionResults[i].tracks[j].timings[k].hitCount - averageResults.tracks[j].timings[k].hitCount) * (ptr_repetitionResults[i].tracks[j].timings[k].hitCount - averageResults.tracks[j].timings[k].hitCount);
-				stdResults.tracks[j].timings[k].processedByteCount += (ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount - averageResults.tracks[j].timings[k].processedByteCount) * (ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount - averageResults.tracks[j].timings[k].processedByteCount);
-				stdResults.tracks[j].timings[k].proportionInTrack += (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTrack - averageResults.tracks[j].timings[k].proportionInTrack) * (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTrack - averageResults.tracks[j].timings[k].proportionInTrack);
-				stdResults.tracks[j].timings[k].proportionInTotal += (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTotal - averageResults.tracks[j].timings[k].proportionInTotal) * (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTotal - averageResults.tracks[j].timings[k].proportionInTotal);
-				stdResults.tracks[j].timings[k].bandwidthInB += (ptr_repetitionResults[i].tracks[j].timings[k].bandwidthInB - averageResults.tracks[j].timings[k].bandwidthInB) * (ptr_repetitionResults[i].tracks[j].timings[k].bandwidthInB - averageResults.tracks[j].timings[k].bandwidthInB);
+				varianceResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
+				varianceResults.tracks[j].timings[k].elapsed += (ptr_repetitionResults[i].tracks[j].timings[k].elapsed - averageResults.tracks[j].timings[k].elapsed) * (ptr_repetitionResults[i].tracks[j].timings[k].elapsed - averageResults.tracks[j].timings[k].elapsed);
+				varianceResults.tracks[j].timings[k].hitCount += (ptr_repetitionResults[i].tracks[j].timings[k].hitCount - averageResults.tracks[j].timings[k].hitCount) * (ptr_repetitionResults[i].tracks[j].timings[k].hitCount - averageResults.tracks[j].timings[k].hitCount);
+				varianceResults.tracks[j].timings[k].processedByteCount += (ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount - averageResults.tracks[j].timings[k].processedByteCount) * (ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount - averageResults.tracks[j].timings[k].processedByteCount);
+				varianceResults.tracks[j].timings[k].proportionInTrack += (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTrack - averageResults.tracks[j].timings[k].proportionInTrack) * (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTrack - averageResults.tracks[j].timings[k].proportionInTrack);
+				varianceResults.tracks[j].timings[k].proportionInTotal += (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTotal - averageResults.tracks[j].timings[k].proportionInTotal) * (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTotal - averageResults.tracks[j].timings[k].proportionInTotal);
+				varianceResults.tracks[j].timings[k].bandwidthInB += (ptr_repetitionResults[i].tracks[j].timings[k].bandwidthInB - averageResults.tracks[j].timings[k].bandwidthInB) * (ptr_repetitionResults[i].tracks[j].timings[k].bandwidthInB - averageResults.tracks[j].timings[k].bandwidthInB);
 			}
 		}
 	}
@@ -440,7 +440,7 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 {
 #if PROFILER_ENABLED
 
-	ComputeStdResults(_repetitionCount);
+	ComputeVarianceResults(_repetitionCount);
 
 	FindMaxResults(_repetitionCount);
 
@@ -450,30 +450,36 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 	//standard deviation, the minimum and the maximum values
 	printf("\n---- ProfilerResults: %s ({%f, %f(+/-)%f, %f}ms) ----\n",
 		averageResults.name,
-		1000 * minResults.elapsedSec, 1000 * averageResults.elapsedSec, 1000 * std::sqrt(stdResults.elapsedSec), 1000 * maxResults.elapsedSec);
-	for (u64 i = 0; i < averageResults.trackCount; ++i)
+		1000 * minResults.elapsedSec, 1000 * averageResults.elapsedSec, 1000 * std::sqrt(varianceResults.elapsedSec), 1000 * maxResults.elapsedSec);
+	for (IT_TRACKS_TYPE i = 0; i < averageResults.trackCount; ++i)
 	{
-		printf("\n---- Profile Track Results: %s ({%f, %f(+/-)%f, %f}ms; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total) ----\n",
-			averageResults.tracks[i].name,
-			1000 * minResults.tracks[i].elapsedSec, 1000 * averageResults.tracks[i].elapsedSec,	1000 * std::sqrt(stdResults.tracks[i].elapsedSec), 1000 * maxResults.tracks[i].elapsedSec,
-			minResults.tracks[i].proportionInTotal, averageResults.tracks[i].proportionInTotal,	std::sqrt(stdResults.tracks[i].proportionInTotal), maxResults.tracks[i].proportionInTotal);
-
-		for (NB_TIMINGS_TYPE j = 0; j < averageResults.tracks[i].blockCount; ++j)
+		if (averageResults.tracks[i].name != nullptr)
 		{
-			printf("%s[{%llu, %llu(+/-)%f, %llu}]: {%llu, %llu(+/-)%f, %llu} ({%.2f, %.2f(+/-)%.2f, %.2f}%% of track; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total",
-				averageResults.tracks[i].timings[j].blockName,
-				minResults.tracks[i].timings[j].hitCount, averageResults.tracks[i].timings[j].hitCount, std::sqrt(stdResults.tracks[i].timings[j].hitCount), maxResults.tracks[i].timings[j].hitCount,
-				minResults.tracks[i].timings[j].elapsed, averageResults.tracks[i].timings[j].elapsed, std::sqrt(stdResults.tracks[i].timings[j].elapsed), maxResults.tracks[i].timings[j].elapsed,
-				minResults.tracks[i].timings[j].proportionInTrack, averageResults.tracks[i].timings[j].proportionInTrack, std::sqrt(stdResults.tracks[i].timings[j].proportionInTrack), maxResults.tracks[i].timings[j].proportionInTrack,
-				minResults.tracks[i].timings[j].proportionInTotal, averageResults.tracks[i].timings[j].proportionInTotal, std::sqrt(stdResults.tracks[i].timings[j].proportionInTotal), maxResults.tracks[i].timings[j].proportionInTotal);
-			if (averageResults.tracks[i].timings[j].processedByteCount > 0)
+			printf("\n---- Profile Track Results: %s ({%f, %f(+/-)%f, %f}ms; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total) ----\n",
+				averageResults.tracks[i].name,
+				1000 * minResults.tracks[i].elapsedSec, 1000 * averageResults.tracks[i].elapsedSec,	1000 * std::sqrt(varianceResults.tracks[i].elapsedSec), 1000 * maxResults.tracks[i].elapsedSec,
+				minResults.tracks[i].proportionInTotal, averageResults.tracks[i].proportionInTotal,	std::sqrt(varianceResults.tracks[i].proportionInTotal), maxResults.tracks[i].proportionInTotal);
+
+			for (IT_TIMINGS_TYPE j = 0; j < averageResults.tracks[i].blockCount; ++j)
 			{
-				printf("; {%.3f, %.3f(+/-)%.3f, %.3f}MB at {%.3f, %.3f(+/-)%.3f, %.3f}MB/s | {%.3f, %.3f(+/-)%.3f, %.3f}GB/s",
-					(f32)minResults.tracks[i].timings[j].processedByteCount / (1 << 20), (f32)averageResults.tracks[i].timings[j].processedByteCount / (1 << 20), std::sqrt(stdResults.tracks[i].timings[j].processedByteCount) / (1 << 20), (f32)maxResults.tracks[i].timings[j].processedByteCount / (1 << 20),
-					minResults.tracks[i].timings[j].bandwidthInB / (1 << 20), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 20),	std::sqrt(stdResults.tracks[i].timings[j].bandwidthInB) / (1 << 20), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 20),
-					minResults.tracks[i].timings[j].bandwidthInB / (1 << 30), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 30),	std::sqrt(stdResults.tracks[i].timings[j].bandwidthInB) / (1 << 30), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 30));
+				if (averageResults.tracks[i].timings[j].blockName != nullptr)
+				{
+					printf("%s[{%llu, %llu(+/-)%f, %llu}]: {%llu, %llu(+/-)%f, %llu} ({%.2f, %.2f(+/-)%.2f, %.2f}%% of track; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total",
+						averageResults.tracks[i].timings[j].blockName,
+						minResults.tracks[i].timings[j].hitCount, averageResults.tracks[i].timings[j].hitCount, std::sqrt(varianceResults.tracks[i].timings[j].hitCount), maxResults.tracks[i].timings[j].hitCount,
+						minResults.tracks[i].timings[j].elapsed, averageResults.tracks[i].timings[j].elapsed, std::sqrt(varianceResults.tracks[i].timings[j].elapsed), maxResults.tracks[i].timings[j].elapsed,
+						minResults.tracks[i].timings[j].proportionInTrack, averageResults.tracks[i].timings[j].proportionInTrack, std::sqrt(varianceResults.tracks[i].timings[j].proportionInTrack), maxResults.tracks[i].timings[j].proportionInTrack,
+						minResults.tracks[i].timings[j].proportionInTotal, averageResults.tracks[i].timings[j].proportionInTotal, std::sqrt(varianceResults.tracks[i].timings[j].proportionInTotal), maxResults.tracks[i].timings[j].proportionInTotal);
+					if (averageResults.tracks[i].timings[j].processedByteCount > 0)
+					{
+						printf("; {%.3f, %.3f(+/-)%.3f, %.3f}MB at {%.3f, %.3f(+/-)%.3f, %.3f}MB/s | {%.3f, %.3f(+/-)%.3f, %.3f}GB/s",
+							(f32)minResults.tracks[i].timings[j].processedByteCount / (1 << 20), (f32)averageResults.tracks[i].timings[j].processedByteCount / (1 << 20), std::sqrt(varianceResults.tracks[i].timings[j].processedByteCount) / (1 << 20), (f32)maxResults.tracks[i].timings[j].processedByteCount / (1 << 20),
+							minResults.tracks[i].timings[j].bandwidthInB / (1 << 20), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 20),	std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / (1 << 20), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 20),
+							minResults.tracks[i].timings[j].bandwidthInB / (1 << 30), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 30),	std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / (1 << 30), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 30));
+					}
+					printf(")\n");
+				}
 			}
-			printf(")\n");
 		}
 	}
 #else
@@ -484,7 +490,7 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 void Profile::RepetitionProfiler::Reset(u64 _repetitionCount) noexcept
 {
 	averageResults.Reset();
-	stdResults.Reset();
+	varianceResults.Reset();
 	maxResults.Reset();
 	minResults.Reset();
 	for (u64 i = 0; i < _repetitionCount; ++i)
