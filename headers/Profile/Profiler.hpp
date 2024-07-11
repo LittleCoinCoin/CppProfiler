@@ -30,6 +30,18 @@ namespace Profile
 	std::conditional_t<(x < (1ULL<<32)), Profile::u32, Profile::u64>>>
 
 /*!
+@brief The macro used to adapt the type of the integer used to iterate over the
+		Profile Blocks based on the value of the max number of profile blocks (NB_TIMINGS).
+*/
+#define IT_TIMINGS_TYPE U_SIZE_ADAPTER(NB_TIMINGS)
+
+/*!
+@brief The macro used to adapt the type of the integer used to iterate over the
+		Profile Tracks based on the value of the max number of profile tracks (NB_TRACKS).
+*/
+#define IT_TRACKS_TYPE U_SIZE_ADAPTER(NB_TRACKS)
+
+/*!
 @brief The macro used to adapt the type of the different variables used to
 		represent the number or index of Profile Blocks based on the value of the 
 		max number of profile blocks (NB_TIMINGS).

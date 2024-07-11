@@ -147,7 +147,7 @@ void Profile::ProfileTrackResult::Report() noexcept
 
 void Profile::ProfileTrackResult::Reset() noexcept
 {
-	for (NB_TIMINGS_TYPE i = 0; i < blockCount; ++i)
+	for (IT_TIMINGS_TYPE i = 0; i < blockCount; ++i)
 	{
 		timings[i].Reset();
 	}
@@ -252,7 +252,7 @@ void Profile::ProfilerResults::Report() noexcept
 {
 	printf("\n---- ProfilerResults: %s (%fms) ----\n", name, 1000 * elapsedSec);
 	
-	for (NB_TRACKS_TYPE i = 0; i < trackCount; ++i)
+	for (IT_TRACKS_TYPE i = 0; i < trackCount; ++i)
 	{
 		tracks[i].Report();
 	}
@@ -260,7 +260,7 @@ void Profile::ProfilerResults::Report() noexcept
 
 void Profile::ProfilerResults::Reset() noexcept
 {
-	for (NB_TRACKS_TYPE i = 0; i < trackCount; ++i)
+	for (IT_TRACKS_TYPE i = 0; i < trackCount; ++i)
 	{
 		tracks[i].Reset();
 	}
@@ -334,20 +334,16 @@ void Profile::RepetitionProfiler::ComputeStdResults(u64 _repetitionCount) noexce
 		stdResults.elapsed += (ptr_repetitionResults[i].elapsed - averageResults.elapsed)* (ptr_repetitionResults[i].elapsed - averageResults.elapsed);
 		stdResults.elapsedSec += (ptr_repetitionResults[i].elapsedSec - averageResults.elapsedSec) * (ptr_repetitionResults[i].elapsedSec - averageResults.elapsedSec);
 		if (stdResults.trackCount < ptr_repetitionResults[i].trackCount)
-		{
 			stdResults.trackCount = ptr_repetitionResults[i].trackCount;
-		}
-		for (NB_TRACKS_TYPE j = 0; j < ptr_repetitionResults[i].trackCount; ++j)
+		for (IT_TRACKS_TYPE j = 0; j < ptr_repetitionResults[i].trackCount; ++j)
 		{
 			stdResults.tracks[j].name = ptr_repetitionResults[i].tracks[j].name;
 			stdResults.tracks[j].elapsed += (ptr_repetitionResults[i].tracks[j].elapsed - averageResults.tracks[j].elapsed) * (ptr_repetitionResults[i].tracks[j].elapsed - averageResults.tracks[j].elapsed);
 			stdResults.tracks[j].elapsedSec += (ptr_repetitionResults[i].tracks[j].elapsedSec - averageResults.tracks[j].elapsedSec) * (ptr_repetitionResults[i].tracks[j].elapsedSec - averageResults.tracks[j].elapsedSec);
 			stdResults.tracks[j].proportionInTotal += (ptr_repetitionResults[i].tracks[j].proportionInTotal - averageResults.tracks[j].proportionInTotal) * (ptr_repetitionResults[i].tracks[j].proportionInTotal - averageResults.tracks[j].proportionInTotal);
 			if (stdResults.tracks[j].blockCount < ptr_repetitionResults[i].tracks[j].blockCount)
-			{
 				stdResults.tracks[j].blockCount = ptr_repetitionResults[i].tracks[j].blockCount;
-			}
-			for (NB_TIMINGS_TYPE k = 0; k < ptr_repetitionResults[i].tracks[j].blockCount; ++k)
+			for (IT_TIMINGS_TYPE k = 0; k < ptr_repetitionResults[i].tracks[j].blockCount; ++k)
 			{
 				stdResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
 				stdResults.tracks[j].timings[k].elapsed += (ptr_repetitionResults[i].tracks[j].timings[k].elapsed - averageResults.tracks[j].timings[k].elapsed) * (ptr_repetitionResults[i].tracks[j].timings[k].elapsed - averageResults.tracks[j].timings[k].elapsed);
@@ -369,20 +365,16 @@ void Profile::RepetitionProfiler::FindMaxResults(u64 _repetitionCount) noexcept
 		MaxAssign(maxResults.elapsed, ptr_repetitionResults[i].elapsed);
 		MaxAssign(maxResults.elapsedSec, ptr_repetitionResults[i].elapsedSec);
 		if (maxResults.trackCount < ptr_repetitionResults[i].trackCount)
-		{
 			maxResults.trackCount = ptr_repetitionResults[i].trackCount;
-		}
-		for (NB_TRACKS_TYPE j = 0; j < ptr_repetitionResults[i].trackCount; ++j)
+		for (IT_TRACKS_TYPE j = 0; j < ptr_repetitionResults[i].trackCount; ++j)
 		{
 			maxResults.tracks[j].name = ptr_repetitionResults[i].tracks[j].name;
 			MaxAssign(maxResults.tracks[j].elapsed, ptr_repetitionResults[i].tracks[j].elapsed);
 			MaxAssign(maxResults.tracks[j].elapsedSec, ptr_repetitionResults[i].tracks[j].elapsedSec);
 			MaxAssign(maxResults.tracks[j].proportionInTotal, ptr_repetitionResults[i].tracks[j].proportionInTotal);
 			if (maxResults.tracks[j].blockCount < ptr_repetitionResults[i].tracks[j].blockCount)
-			{
 				maxResults.tracks[j].blockCount = ptr_repetitionResults[i].tracks[j].blockCount;
-			}
-			for (NB_TIMINGS_TYPE k = 0; k < ptr_repetitionResults[i].tracks[j].blockCount; ++k)
+			for (IT_TIMINGS_TYPE k = 0; k < ptr_repetitionResults[i].tracks[j].blockCount; ++k)
 			{
 				maxResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
 				MaxAssign(maxResults.tracks[j].timings[k].elapsed, ptr_repetitionResults[i].tracks[j].timings[k].elapsed);
@@ -403,21 +395,17 @@ void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
 	{
 		MinAssign(minResults.elapsed, ptr_repetitionResults[i].elapsed);
 		MinAssign(minResults.elapsedSec, ptr_repetitionResults[i].elapsedSec);
-		if (minResults.trackCount > ptr_repetitionResults[i].trackCount)
-		{
+		if (minResults.trackCount < ptr_repetitionResults[i].trackCount)
 			minResults.trackCount = ptr_repetitionResults[i].trackCount;
-		}
-		for (NB_TRACKS_TYPE j = 0; j < ptr_repetitionResults[i].trackCount; ++j)
+		for (IT_TRACKS_TYPE j = 0; j < ptr_repetitionResults[i].trackCount; ++j)
 		{
 			minResults.tracks[j].name = ptr_repetitionResults[i].tracks[j].name;
 			MinAssign(minResults.tracks[j].elapsed, ptr_repetitionResults[i].tracks[j].elapsed);
 			MinAssign(minResults.tracks[j].elapsedSec, ptr_repetitionResults[i].tracks[j].elapsedSec);
 			MinAssign(minResults.tracks[j].proportionInTotal, ptr_repetitionResults[i].tracks[j].proportionInTotal);
-			if (minResults.tracks[j].blockCount > ptr_repetitionResults[i].tracks[j].blockCount)
-			{
+			if (minResults.tracks[j].blockCount < ptr_repetitionResults[i].tracks[j].blockCount)
 				minResults.tracks[j].blockCount = ptr_repetitionResults[i].tracks[j].blockCount;
-			}
-			for (NB_TIMINGS_TYPE k = 0; k < ptr_repetitionResults[i].tracks[j].blockCount; ++k)
+			for (IT_TIMINGS_TYPE k = 0; k < ptr_repetitionResults[i].tracks[j].blockCount; ++k)
 			{
 				minResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
 				MinAssign(minResults.tracks[j].timings[k].elapsed, ptr_repetitionResults[i].tracks[j].timings[k].elapsed);
