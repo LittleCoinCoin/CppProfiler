@@ -1,4 +1,4 @@
 <map id="Profile::RepetitionProfiler" name="Profile::RepetitionProfiler">
-<area shape="rect" id="node1" title="A wrapper to test the performance of a function by running it a number of times." alt="" coords="5,169,167,195"/>
+<area shape="rect" id="node1" title="A wrapper to test the performance of a function by running it a number of times." alt="" coords="5,154,167,180"/>
 <area shape="rect" id="node2" href="$d2/d02/structProfile_1_1ProfilerResults.html" title="A mirror of the Profiler struct to store all the statistics of a profiler and the tracks it contains ..." alt="" coords="12,5,160,31"/>
 </map>

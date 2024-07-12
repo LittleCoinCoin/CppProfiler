@@ -11,6 +11,5 @@ var searchData=
   ['setprofilername_8',['SetProfilerName',['../d4/d00/structProfile_1_1Profiler.html#a40547e225622d59ae6d11e65902c0b4b',1,'Profile::Profiler']]],
   ['setrepetitionresults_9',['SetRepetitionResults',['../de/d05/structProfile_1_1RepetitionProfiler.html#a1b0b5bd2ebd13b23cd131153907388b9',1,'Profile::RepetitionProfiler']]],
   ['settrackname_10',['SetTrackName',['../d4/d00/structProfile_1_1Profiler.html#a3749dde85d6f868fb92b0db10cea62d3',1,'Profile::Profiler']]],
-  ['start_11',['start',['../dd/d01/structProfile_1_1ProfileBlockRecorder.html#ad5d992d8268f4ebf95e45832a396221f',1,'Profile::ProfileBlockRecorder::start()'],['../d4/d00/structProfile_1_1Profiler.html#a81562afca52b894f8dd1796a27f41b1a',1,'Profile::Profiler::start()']]],
-  ['stdresults_12',['stdResults',['../de/d05/structProfile_1_1RepetitionProfiler.html#a79448a1501d445e1b4360ca99aee2a5e',1,'Profile::RepetitionProfiler']]]
+  ['start_11',['start',['../dd/d01/structProfile_1_1ProfileBlockRecorder.html#ad5d992d8268f4ebf95e45832a396221f',1,'Profile::ProfileBlockRecorder::start()'],['../d4/d00/structProfile_1_1Profiler.html#a81562afca52b894f8dd1796a27f41b1a',1,'Profile::Profiler::start()']]]
 ];

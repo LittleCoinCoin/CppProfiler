@@ -9,6 +9,8 @@ var Profiler_8hpp =
     [ "Profile::ProfilerResults", "d2/d02/structProfile_1_1ProfilerResults.html", "d2/d02/structProfile_1_1ProfilerResults" ],
     [ "Profile::RepetitionTest", "d5/d06/structProfile_1_1RepetitionTest.html", "d5/d06/structProfile_1_1RepetitionTest" ],
     [ "Profile::RepetitionProfiler", "de/d05/structProfile_1_1RepetitionProfiler.html", "de/d05/structProfile_1_1RepetitionProfiler" ],
+    [ "IT_TIMINGS_TYPE", "dc/d04/Profiler_8hpp.html#a1561cda8f8fc2a1e65596a6f56aae48f", null ],
+    [ "IT_TRACKS_TYPE", "dc/d04/Profiler_8hpp.html#aca8e407476c4e8bb3909b9204cc8112f", null ],
     [ "NB_TIMINGS", "dc/d04/Profiler_8hpp.html#a5db053b6103443c53e252eea97ce1745", null ],
     [ "NB_TIMINGS_TYPE", "dc/d04/Profiler_8hpp.html#a93f3d95f612f54610359beb7dbcb0e3b", null ],
     [ "NB_TRACKS", "dc/d04/Profiler_8hpp.html#a21f26789364f9e6444a127e242ead321", null ],

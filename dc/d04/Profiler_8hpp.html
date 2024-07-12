@@ -54,7 +54,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.0.17.77</span>
+   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.0.19.88</span>
    </div>
    <div id="projectbrief">A custom c++ profiler.</div>
   </td>
@@ -189,6 +189,12 @@ Macros</h2></td></tr>
 <tr class="memitem:aac5732a80012632a8305a8477810771a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d04/Profiler_8hpp.html#aac5732a80012632a8305a8477810771a">U_SIZE_ADAPTER</a>(x)</td></tr>
 <tr class="memdesc:aac5732a80012632a8305a8477810771a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expands to adapt the type of the unsigned integer to be u8, u16, u32, or u64 depending on the value of <code>x</code>.  <br /></td></tr>
 <tr class="separator:aac5732a80012632a8305a8477810771a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1561cda8f8fc2a1e65596a6f56aae48f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d04/Profiler_8hpp.html#a1561cda8f8fc2a1e65596a6f56aae48f">IT_TIMINGS_TYPE</a>&#160;&#160;&#160;<a class="el" href="../../dc/d04/Profiler_8hpp.html#aac5732a80012632a8305a8477810771a">U_SIZE_ADAPTER</a>(<a class="el" href="../../dc/d04/Profiler_8hpp.html#a5db053b6103443c53e252eea97ce1745">NB_TIMINGS</a>)</td></tr>
+<tr class="memdesc:a1561cda8f8fc2a1e65596a6f56aae48f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The macro used to adapt the type of the integer used to iterate over the <a class="el" href="../../d8/d02/namespaceProfile.html">Profile</a> Blocks based on the value of the max number of profile blocks (NB_TIMINGS).  <br /></td></tr>
+<tr class="separator:a1561cda8f8fc2a1e65596a6f56aae48f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca8e407476c4e8bb3909b9204cc8112f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d04/Profiler_8hpp.html#aca8e407476c4e8bb3909b9204cc8112f">IT_TRACKS_TYPE</a>&#160;&#160;&#160;<a class="el" href="../../dc/d04/Profiler_8hpp.html#aac5732a80012632a8305a8477810771a">U_SIZE_ADAPTER</a>(<a class="el" href="../../dc/d04/Profiler_8hpp.html#a21f26789364f9e6444a127e242ead321">NB_TRACKS</a>)</td></tr>
+<tr class="memdesc:aca8e407476c4e8bb3909b9204cc8112f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The macro used to adapt the type of the integer used to iterate over the <a class="el" href="../../d8/d02/namespaceProfile.html">Profile</a> Tracks based on the value of the max number of profile tracks (NB_TRACKS).  <br /></td></tr>
+<tr class="separator:aca8e407476c4e8bb3909b9204cc8112f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93f3d95f612f54610359beb7dbcb0e3b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d04/Profiler_8hpp.html#a93f3d95f612f54610359beb7dbcb0e3b">NB_TIMINGS_TYPE</a>&#160;&#160;&#160;<a class="el" href="../../dc/d04/Profiler_8hpp.html#aac5732a80012632a8305a8477810771a">U_SIZE_ADAPTER</a>(<a class="el" href="../../dc/d04/Profiler_8hpp.html#a5db053b6103443c53e252eea97ce1745">NB_TIMINGS</a>-1)</td></tr>
 <tr class="memdesc:a93f3d95f612f54610359beb7dbcb0e3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The macro used to adapt the type of the different variables used to represent the number or index of <a class="el" href="../../d8/d02/namespaceProfile.html">Profile</a> Blocks based on the value of the max number of profile blocks (NB_TIMINGS).  <br /></td></tr>
 <tr class="separator:a93f3d95f612f54610359beb7dbcb0e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -221,6 +227,38 @@ Functions</h2></td></tr>
 <tr class="separator:abd0ae6661d46104da0fa0943656e363d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a1561cda8f8fc2a1e65596a6f56aae48f" name="a1561cda8f8fc2a1e65596a6f56aae48f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1561cda8f8fc2a1e65596a6f56aae48f">&#9670;&#160;</a></span>IT_TIMINGS_TYPE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IT_TIMINGS_TYPE&#160;&#160;&#160;<a class="el" href="../../dc/d04/Profiler_8hpp.html#aac5732a80012632a8305a8477810771a">U_SIZE_ADAPTER</a>(<a class="el" href="../../dc/d04/Profiler_8hpp.html#a5db053b6103443c53e252eea97ce1745">NB_TIMINGS</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The macro used to adapt the type of the integer used to iterate over the <a class="el" href="../../d8/d02/namespaceProfile.html">Profile</a> Blocks based on the value of the max number of profile blocks (NB_TIMINGS). </p>
+
+</div>
+</div>
+<a id="aca8e407476c4e8bb3909b9204cc8112f" name="aca8e407476c4e8bb3909b9204cc8112f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca8e407476c4e8bb3909b9204cc8112f">&#9670;&#160;</a></span>IT_TRACKS_TYPE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IT_TRACKS_TYPE&#160;&#160;&#160;<a class="el" href="../../dc/d04/Profiler_8hpp.html#aac5732a80012632a8305a8477810771a">U_SIZE_ADAPTER</a>(<a class="el" href="../../dc/d04/Profiler_8hpp.html#a21f26789364f9e6444a127e242ead321">NB_TRACKS</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The macro used to adapt the type of the integer used to iterate over the <a class="el" href="../../d8/d02/namespaceProfile.html">Profile</a> Tracks based on the value of the max number of profile tracks (NB_TRACKS). </p>
+
+</div>
+</div>
 <a id="a5db053b6103443c53e252eea97ce1745" name="a5db053b6103443c53e252eea97ce1745"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5db053b6103443c53e252eea97ce1745">&#9670;&#160;</a></span>NB_TIMINGS</h2>
 
