@@ -27,7 +27,7 @@ void TestFunction_ProfileBlock(Profile::u64 _arr[], Profile::u64 _count)
 {
 	for (Profile::u64 i = 0; i < _count; ++i)
 	{
-		PROFILE_BLOCK_TIME("TestFunction_ProfileBlock_Write", 0);
+		PROFILE_BLOCK_TIME(TestFunction_ProfileBlock_Write, 0);
 		_arr[i] = i;
 	}
 }
