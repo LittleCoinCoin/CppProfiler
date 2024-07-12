@@ -27,7 +27,7 @@ void TestFunction_ProfileBlock(Profile::u64 _arr[], Profile::u64 _count)
 {
 	for (Profile::u64 i = 0; i < _count; ++i)
 	{
-		PROFILE_BLOCK_TIME("TestFunction_ProfileBlock_Write", 0);
+		PROFILE_BLOCK_TIME(TestFunction_ProfileBlock_Write, 0);
 		_arr[i] = i;
 	}
 }
@@ -88,13 +88,12 @@ void TestFunction_FixedRepetitionTesting()
 	Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * 8192);
 	RepetitionTest_TestFunction_ProfileFunction repetitionTest(arr, 8192);
 
-	Profile::u8 repetitionCount = 100;
+	Profile::u16 repetitionCount = 1000;
 	Profile::RepetitionProfiler* repetitionProfiler = (Profile::RepetitionProfiler*)calloc(1, sizeof(Profile::RepetitionProfiler));
 	Profile::ProfilerResults* results = (Profile::ProfilerResults*)calloc(repetitionCount, sizeof(Profile::ProfilerResults));
 
 	repetitionProfiler->SetRepetitionResults(results);
 	repetitionProfiler->FixedCountRepetitionTesting(repetitionCount, repetitionTest);
-	repetitionProfiler->ComputeAverageResults(repetitionCount);
 	repetitionProfiler->Report(repetitionCount);
 
 	free(results);
@@ -123,6 +122,11 @@ int main()
 	profiler->End();
 	profiler->Report();
 
+	TestFunction_FixedRepetitionTesting();
+
+	// Run the repetition profiling a second time to check that the internal 
+	// reset works appropriately. The profiling results should be close to the
+	// first run.
 	TestFunction_FixedRepetitionTesting();
 	
 	free(arr);
