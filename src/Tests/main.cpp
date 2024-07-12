@@ -94,7 +94,6 @@ void TestFunction_FixedRepetitionTesting()
 
 	repetitionProfiler->SetRepetitionResults(results);
 	repetitionProfiler->FixedCountRepetitionTesting(repetitionCount, repetitionTest);
-	repetitionProfiler->ComputeAverageResults(repetitionCount);
 	repetitionProfiler->Report(repetitionCount);
 
 	free(results);
