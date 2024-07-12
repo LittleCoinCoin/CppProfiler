@@ -30,6 +30,18 @@ namespace Profile
 	std::conditional_t<(x < (1ULL<<32)), Profile::u32, Profile::u64>>>
 
 /*!
+@brief The macro used to adapt the type of the integer used to iterate over the
+		Profile Blocks based on the value of the max number of profile blocks (NB_TIMINGS).
+*/
+#define IT_TIMINGS_TYPE U_SIZE_ADAPTER(NB_TIMINGS)
+
+/*!
+@brief The macro used to adapt the type of the integer used to iterate over the
+		Profile Tracks based on the value of the max number of profile tracks (NB_TRACKS).
+*/
+#define IT_TRACKS_TYPE U_SIZE_ADAPTER(NB_TRACKS)
+
+/*!
 @brief The macro used to adapt the type of the different variables used to
 		represent the number or index of Profile Blocks based on the value of the 
 		max number of profile blocks (NB_TIMINGS).
@@ -696,11 +708,6 @@ struct RepetitionProfiler
 	ProfilerResults averageResults;
 
 	/*!
-	@brief A result structure to store the cumulated results of the repeated profiling.
-	*/
-	ProfilerResults cumulatedResults;
-
-	/*!
 	@brief A result structure to store the maximum of the repeated profiling.
 	*/
 	ProfilerResults maxResults;
@@ -711,9 +718,9 @@ struct RepetitionProfiler
 	ProfilerResults minResults;
 
 	/*!
-	@brief A result structure to store the standard deviation of the repeated profiling.
+	@brief A result structure to store the variance of the repeated profiling.
 	*/
-	ProfilerResults stdResults;
+	ProfilerResults varianceResults;
 
 	/*!
 	@brief Sets the pointer for ::ptr_repetitionResults.
@@ -833,18 +840,11 @@ public:
 	PROFILE_API void ComputeAverageResults(u64 _repetitionCount) noexcept;
 
 	/*!
-	@brief Computes the standard deviation of the repeated profiling.
+	@brief Computes the variance of the repeated profiling.
 	@param _repetitionCount The number of repetitions.
-	@see ::stdResults
+	@see ::varianceResults
 	*/
-	PROFILE_API void ComputeStdResults(u64 _repetitionCount) noexcept;
-
-	/*!
-	@brief Cumulates the results of the repeated profiling.
-	@param _repetitionCount The number of repetitions.
-	@see ::cumulatedResults
-	*/
-	PROFILE_API void CumulateResults(u64 _repetitionCount) noexcept;
+	PROFILE_API void ComputeVarianceResults(u64 _repetitionCount) noexcept;
 
 	/*!
 	@brief Goes through the repeated profiling to find the maximum results.
@@ -884,7 +884,7 @@ public:
 	@brief Prints the results of the repeated profiling.
 	@details If none have been computed yet (i.e., the corresponding Profile::ProfilingResults
 			 have their names set to nullptr), the function will compute the
-			 average, the standard deviation, the maximum, and the minimum of
+			 average, the variance, the maximum, and the minimum of
 			 the repeated profiling before outputting the results.
 	@param _repetitionCount The number of repetitions.
 	*/
@@ -892,7 +892,7 @@ public:
 
 	/*!
 	@brief Resets all the stored and computed results of the repeated profiling. 
-	@details The function will reset the values of ::averageResults, ::stdResults,
+	@details The function will reset the values of ::averageResults, ::varianceResults,
 			 ::cumulatedResults, ::maxResults, and ::minResults. It also resets
 			 everything in the ProfilerResults pointed by ::ptr_repetitionResults.
 	@param _repetitionCount The number of repetitions.
