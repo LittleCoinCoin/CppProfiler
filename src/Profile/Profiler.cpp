@@ -78,6 +78,7 @@ void Profile::ProfileTrackResult::Capture(ProfileTrack& _track, u64 _trackIdx, u
 	elapsed = _track.elapsed;
 	elapsedSec = (f64)_track.elapsed / (f64)Timer::GetEstimatedCPUFreq();
 	proportionInTotal = _totalElapsedReference == 0 ? 0 : 100.0f * (f64)_track.elapsed / (f64)_totalElapsedReference;
+	blockCount = 0;
 	NB_TIMINGS_TYPE _profileBlockRecorderIdx = 0;
 	for (ProfileBlockRecorder record : _track.timings)
 	{
