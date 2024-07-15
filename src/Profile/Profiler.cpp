@@ -237,6 +237,7 @@ void Profile::ProfilerResults::Capture(Profiler* _profiler) noexcept
 	name = _profiler->name;
 	elapsed = _profiler->elapsed;
 	elapsedSec = (f64)_profiler->elapsed / (f64)Timer::GetEstimatedCPUFreq();
+	trackCount = 0;
 	NB_TRACKS_TYPE trackIdx = 0;
 	for (ProfileTrack& track : _profiler->tracks)
 	{
