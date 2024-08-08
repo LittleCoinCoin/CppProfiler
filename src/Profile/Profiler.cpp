@@ -36,10 +36,8 @@ void Profile::ProfileBlockRecorder::Reset() noexcept
 void Profile::ProfileBlockResult::Capture(ProfileBlockRecorder& _record, NB_TRACKS_TYPE _trackIdx,
 	NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _trackElapsedReference, u64 _totalElapsedReference) noexcept
 {
-	lineNumber = _record.lineNumber;
 	trackIdx = _trackIdx;
 	profileBlockRecorderIdx = _profileBlockRecorderIdx;
-	fileName = _record.fileName;
 	blockName = _record.blockName;
 	elapsed = _record.elapsed;
 	elapsedSec = (f64)_record.elapsed / (f64)Timer::GetEstimatedCPUFreq();
@@ -166,10 +164,7 @@ NB_TIMINGS_TYPE Profile::Profiler::GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _
 	ProfileBlockRecorder* profileBlockRecorder = &s_Profiler->tracks[_trackIdx].timings[profileBlockRecorderIndex];
 	ProfileBlockRecorder* InitialprofileBlockRecorder = profileBlockRecorder;
 
-	// no need to compare _fileName and LinenNumber values, because for
-	// each (_fileName, _lineNumber) pair function will be called only once,
-	// so simply find first unused place in table
-	while (profileBlockRecorder->fileName)
+	while (profileBlockRecorder->blockName)
 	{
 		profileBlockRecorderIndex = (profileBlockRecorderIndex + 1) % NB_TIMINGS;
 		profileBlockRecorder = &s_Profiler->tracks[_trackIdx].timings[profileBlockRecorderIndex];
@@ -178,11 +173,6 @@ NB_TIMINGS_TYPE Profile::Profiler::GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _
 		// than debug records we are putting in source code! Increase MAX_DEBUG_RECORD_COUNT!
 		//Assert(profileBlockRecorder != InitialprofileBlockRecorder);
 	}
-
-	s_Profiler->tracks[_trackIdx].hasBlock = true;
-	profileBlockRecorder->fileName = _fileName;
-	profileBlockRecorder->lineNumber = _lineNumber;
-	profileBlockRecorder->blockName = _blockName;
 
 	return profileBlockRecorderIndex;
 }

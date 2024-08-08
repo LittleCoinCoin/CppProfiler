@@ -171,16 +171,6 @@ struct PROFILE_API ProfileBlock
 struct ProfileBlockRecorder
 {
 	/*!
-	@brief The line number in the file where the block is located.
-	*/
-	u32 lineNumber = 0;
-
-	/*!
-	@brief The name of the file where the block is located.
-	*/
-	const char* fileName = nullptr;
-
-	/*!
 	@brief The name of the block.
 	*/
 	const char* blockName = nullptr;
@@ -230,7 +220,7 @@ struct ProfileBlockRecorder
 
 	/*!
 	@brief Resets the values of the block.
-	@details Resetting do not change the ::blockName, the ::fileName, or the ::lineNumber.
+	@details Resetting do not change the ::blockName.
 	*/
 	PROFILE_API void Reset() noexcept;
 };
@@ -242,12 +232,6 @@ struct ProfileBlockRecorder
 struct ProfileBlockResult
 {
 	/*!
-	@brief The line number in the file where the block is located.
-	@details Mirrors ProfileBlockRecorder::lineNumber.
-	*/
-	u32 lineNumber = 0;
-
-	/*!
 	@brief The index of the profiling track this block belongs to.
 	@details No equivalent in ProfileBlockRecorder.
 	*/
@@ -258,12 +242,6 @@ struct ProfileBlockResult
 	@details No equivalent in ProfileBlockRecorder.
 	*/
 	NB_TIMINGS_TYPE profileBlockRecorderIdx = 0;
-
-	/*!
-	@brief The name of the file where the block is located.
-	@details Mirrors ProfileBlockRecorder::fileName.
-	*/
-	const char* fileName = nullptr;
 
 	/*!
 	@brief The name of the block.
@@ -330,7 +308,7 @@ struct ProfileBlockResult
 
 	/*!
 	@brief Resets the values of this struct.
-	@details Resetting do not change the ::blockName, the ::fileName, or the ::lineNumber.
+	@details Resetting do not change the ::blockName.
 	*/
 	PROFILE_API void Reset() noexcept;
 };
