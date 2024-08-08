@@ -196,6 +196,14 @@ struct ProfileBlockRecorder
 	u64 processedByteCount = 0;
 
 	/*!
+	@brief Clears the values of the block.
+	@remarks This resets even the ::blockName.
+			 If you are looking to reset the values without changing the name,
+			 use ::Reset.
+	*/
+	PROFILE_API void Clear() noexcept;
+
+	/*!
 	@brief Update the profiling statistics of the block upon completion.
 	@return The time increment since the block was opened.
 	*/
@@ -302,6 +310,15 @@ struct ProfileBlockResult
 				NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _trackElapsedReference, u64 _totalElapsedReference) noexcept;
 
 	/*!
+	@brief Clears the values of the block.
+	@remarks This resets even the ::blockName.
+			 If you are looking to reset the values without changing the name,
+			 use ::Reset.
+
+	*/
+	PROFILE_API void Clear() noexcept;
+
+	/*!
 	@brief Outputs the profiling statistics of the block.
 	*/
 	PROFILE_API void Report() noexcept;
@@ -342,6 +359,21 @@ struct ProfileTrack
 	@brief The profiling statistics of the blocks in the track.
 	*/
 	std::array<ProfileBlockRecorder, NB_TIMINGS> timings;
+
+	/*
+	@brief Clears the values of the track and its blocks.
+	@remarks This resets even the ::name and ::elapsed.
+			 If you are looking to reset the values without changing the name,
+			 use ::Reset.
+			 If you are looking to reset the timings only, use ::ResetTimings.
+	*/
+	PROFILE_API void Clear() noexcept;
+
+	/*
+	@brief Clears the values of all blocks in ::timings.
+	@remarks This also resets ::hasBlock to false.
+	*/
+	PROFILE_API void ClearTimings() noexcept;
 
 	/*!
 	@brief Closes a block and updates the track's elapsed time.
@@ -442,6 +474,15 @@ struct ProfileTrackResult
 	PROFILE_API void Capture(ProfileTrack& _track, u64 _trackIdx, u64 _totalElapsedReference) noexcept;
 
 	/*!
+	@brief Clears the values of member variables of this struct and up to
+			::blockCount Profile::ProfileBlockResults in the ::timings array.
+	@remarks This resets even the ::name. 
+			 If you are looking to reset the values without changing the name,
+			 use ::Reset.
+	*/
+	PROFILE_API void Clear() noexcept;
+
+	/*!
 	@brief Outputs the profiling statistics of the track.
 	*/
 	PROFILE_API void Report() noexcept;
@@ -520,6 +561,22 @@ struct Profiler
 	}
 
 	/*!
+	@brief Clears the profiler's values as well as all its initialized tracks.
+	@remarks This resets even the ::name.
+			 If you are looking to reset the values without changing the name,
+			 use ::Reset.
+			 If you are looking to reset the tracks only, use ::ClearTracks.
+	*/
+	PROFILE_API void Clear() noexcept;
+
+	/*!
+	@brief Clears all used blocks of all used tracks in the profiler.
+	@remarks If you are looking to reset the values without changing the names,
+			 use ::ResetTracks.
+	*/
+	PROFILE_API void ClearTracks() noexcept;
+
+	/*!
 	@brief Closes a block.
 	@param _trackIdx The index of the track the block belongs to.
 	@param _profileBlockRecorderIdx The index of the profile result.
@@ -572,7 +629,7 @@ struct Profiler
 	@brief Resets the values of all blocks in all tracks that have a name.
 	@details Resetting do not change the names.
 	*/
-	PROFILE_API void ResetExistingTracks() noexcept;
+	PROFILE_API void ResetTracks() noexcept;
 };
 
 /*!
@@ -642,6 +699,15 @@ struct ProfilerResults
 			 of the profiler that have been used.
 	*/
 	PROFILE_API void Capture(Profiler* _profiler) noexcept;
+
+	/*!
+	@brief Clears the values of member variables of this struct and up to
+			::trackCount Profile::ProfileTrackResults in the ::tracks array.
+	@remarks This resets even the ::name.
+			 If you are looking to reset the values without changing the name,
+			 use ::Reset.
+	*/
+	PROFILE_API void Clear() noexcept;
 
 	/*!
 	@brief Outputs the profiling statistics of the profiler.
@@ -816,6 +882,19 @@ private:
 	}
 
 public:
+
+	/*!
+	@brief Clears all the stored and computed results of the repeated profiling.
+	@details The function will clear the values of ::averageResults, ::varianceResults,
+			 ::cumulatedResults, ::maxResults, and ::minResults. It also clears
+			 everything in the ProfilerResults pointed by ::ptr_repetitionResults.
+	@param _repetitionCount The number of repetitions.
+	@see Profile::ProfilerResults::Clear
+	@remarks If you don't want to clear the names of all the data concerned by the
+			 repeated profiling, you can use ::Reset.
+	*/
+	PROFILE_API void Clear(u64 _repetitionCount) noexcept;
+
 	/*!
 	@brief Computes the average of the repeated profiling.
 	@param _repetitionCount The number of repetitions.
