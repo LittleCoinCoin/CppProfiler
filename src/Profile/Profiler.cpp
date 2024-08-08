@@ -14,10 +14,10 @@ Profile::Profiler* Profile::GetProfiler()
 	return s_Profiler;
 }
 
-Profile::ProfileBlock::ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount) :
+Profile::ProfileBlock::ProfileBlock(NB_TRACKS_TYPE _trackIdx, const char* _blockName, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount) :
 	trackIdx(_trackIdx), profileBlockRecorderIdx(_profileBlockRecorderIdx)
 {
-	s_Profiler->OpenBlock(trackIdx, profileBlockRecorderIdx, _byteCount);
+	s_Profiler->OpenBlock(trackIdx, _blockName, profileBlockRecorderIdx, _byteCount);
 }
 
 Profile::ProfileBlock::~ProfileBlock()
