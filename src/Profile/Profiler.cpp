@@ -14,15 +14,24 @@ Profile::Profiler* Profile::GetProfiler()
 	return s_Profiler;
 }
 
-Profile::ProfileBlock::ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount) :
+Profile::ProfileBlock::ProfileBlock(NB_TRACKS_TYPE _trackIdx, const char* _blockName, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount) :
 	trackIdx(_trackIdx), profileBlockRecorderIdx(_profileBlockRecorderIdx)
 {
-	s_Profiler->OpenBlock(trackIdx, profileBlockRecorderIdx, _byteCount);
+	s_Profiler->OpenBlock(trackIdx, _blockName, profileBlockRecorderIdx, _byteCount);
 }
 
 Profile::ProfileBlock::~ProfileBlock()
 {
 	s_Profiler->CloseBlock(trackIdx, profileBlockRecorderIdx);
+}
+
+void Profile::ProfileBlockRecorder::Clear() noexcept
+{
+	blockName = nullptr;
+	start = 0;
+	elapsed = 0;
+	hitCount = 0;
+	processedByteCount = 0;
 }
 
 void Profile::ProfileBlockRecorder::Reset() noexcept
@@ -36,10 +45,8 @@ void Profile::ProfileBlockRecorder::Reset() noexcept
 void Profile::ProfileBlockResult::Capture(ProfileBlockRecorder& _record, NB_TRACKS_TYPE _trackIdx,
 	NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _trackElapsedReference, u64 _totalElapsedReference) noexcept
 {
-	lineNumber = _record.lineNumber;
 	trackIdx = _trackIdx;
 	profileBlockRecorderIdx = _profileBlockRecorderIdx;
-	fileName = _record.fileName;
 	blockName = _record.blockName;
 	elapsed = _record.elapsed;
 	elapsedSec = (f64)_record.elapsed / (f64)Timer::GetEstimatedCPUFreq();
@@ -48,6 +55,20 @@ void Profile::ProfileBlockResult::Capture(ProfileBlockRecorder& _record, NB_TRAC
 	proportionInTrack = _trackElapsedReference == 0 ? 0 : 100.0f * (f64)_record.elapsed / (f64)_trackElapsedReference;
 	proportionInTotal = _totalElapsedReference == 0 ? 0 : 100.0f * (f64)_record.elapsed / (f64)_totalElapsedReference;
 	bandwidthInB = _trackElapsedReference == 0 ? 0 : _record.processedByteCount / (((f64)_record.elapsed / (f64)_trackElapsedReference) * elapsedSec);
+}
+
+void Profile::ProfileBlockResult::Clear() noexcept
+{
+	trackIdx = 0;
+	profileBlockRecorderIdx = 0;
+	blockName = nullptr;
+	elapsed = 0;
+	elapsedSec = 0.0;
+	hitCount = 0;
+	processedByteCount = 0;
+	proportionInTrack = 0.f;
+	proportionInTotal = 0.f;
+	bandwidthInB = 0;
 }
 
 void Profile::ProfileBlockResult::Report() noexcept
@@ -91,6 +112,19 @@ void Profile::ProfileTrackResult::Capture(ProfileTrack& _track, u64 _trackIdx, u
 	}
 }
 
+void Profile::ProfileTrackResult::Clear() noexcept
+{
+	name = nullptr;
+	elapsed = 0;
+	elapsedSec = 0.0;
+	proportionInTotal = 0.0;
+	for (IT_TIMINGS_TYPE i = 0; i < blockCount; ++i)
+	{
+		timings[i].Clear();
+	}
+	blockCount = 0;
+}
+
 void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 {
 	f64 elapsedSec = (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq();
@@ -113,6 +147,25 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 				printf("; %.2fMB at %.2fMB/s | %.2fGB/s", (f64)record.processedByteCount / megaByte, bandwidth / megaByte, bandwidth / gigaByte);
 			}
 			printf(")\n");
+		}
+	}
+}
+
+void Profile::ProfileTrack::Clear() noexcept
+{
+	name = nullptr;
+	elapsed = 0;
+	ClearTimings();
+}
+
+void Profile::ProfileTrack::ClearTimings() noexcept
+{
+	hasBlock = false;
+	for (ProfileBlockRecorder& record : timings)
+	{
+		if (record.blockName != nullptr)
+		{
+			record.Clear();
 		}
 	}
 }
@@ -166,10 +219,7 @@ NB_TIMINGS_TYPE Profile::Profiler::GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _
 	ProfileBlockRecorder* profileBlockRecorder = &s_Profiler->tracks[_trackIdx].timings[profileBlockRecorderIndex];
 	ProfileBlockRecorder* InitialprofileBlockRecorder = profileBlockRecorder;
 
-	// no need to compare _fileName and LinenNumber values, because for
-	// each (_fileName, _lineNumber) pair function will be called only once,
-	// so simply find first unused place in table
-	while (profileBlockRecorder->fileName)
+	while (profileBlockRecorder->blockName)
 	{
 		profileBlockRecorderIndex = (profileBlockRecorderIndex + 1) % NB_TIMINGS;
 		profileBlockRecorder = &s_Profiler->tracks[_trackIdx].timings[profileBlockRecorderIndex];
@@ -179,12 +229,26 @@ NB_TIMINGS_TYPE Profile::Profiler::GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _
 		//Assert(profileBlockRecorder != InitialprofileBlockRecorder);
 	}
 
-	s_Profiler->tracks[_trackIdx].hasBlock = true;
-	profileBlockRecorder->fileName = _fileName;
-	profileBlockRecorder->lineNumber = _lineNumber;
-	profileBlockRecorder->blockName = _blockName;
-
 	return profileBlockRecorderIndex;
+}
+
+void Profile::Profiler::Clear() noexcept
+{
+	name = nullptr;
+	start = 0;
+	elapsed = 0;
+	ClearTracks();
+}
+
+void Profile::Profiler::ClearTracks() noexcept
+{
+	for (ProfileTrack& track : tracks)
+	{
+		if (track.hasBlock)
+		{
+			track.Clear();
+		}
+	}
 }
 
 void Profile::Profiler::End() noexcept
@@ -218,10 +282,10 @@ void Profile::Profiler::Reset() noexcept
 {
 	start = 0;
 	elapsed = 0;
-	ResetExistingTracks();
+	ResetTracks();
 }
 
-void Profile::Profiler::ResetExistingTracks() noexcept
+void Profile::Profiler::ResetTracks() noexcept
 {
 	for (ProfileTrack& track : tracks)
 	{
@@ -250,6 +314,18 @@ void Profile::ProfilerResults::Capture(Profiler* _profiler) noexcept
 	}
 }
 
+void Profile::ProfilerResults::Clear() noexcept
+{
+	name = nullptr;
+	elapsed = 0;
+	elapsedSec = 0.0;
+	for (IT_TRACKS_TYPE i = 0; i < trackCount; ++i)
+	{
+		tracks[i].Clear();
+	}
+	trackCount = 0;
+}
+
 void Profile::ProfilerResults::Report() noexcept
 {
 	printf("\n---- ProfilerResults: %s (%fms) ----\n", name, 1000 * elapsedSec);
@@ -268,6 +344,18 @@ void Profile::ProfilerResults::Reset() noexcept
 	}
 	elapsed = 0;
 	trackCount = 0;
+}
+
+void Profile::RepetitionProfiler::Clear(u64 _repetitionCount) noexcept
+{
+	averageResults.Clear();
+	maxResults.Clear();
+	minResults.Clear();
+	varianceResults.Clear();
+	for (u64 i = 0; i < _repetitionCount; ++i)
+	{
+		ptr_repetitionResults[i].Clear();
+	}
 }
 
 void Profile::RepetitionProfiler::ComputeAverageResults(u64 _repetitionCount) noexcept
@@ -436,12 +524,20 @@ void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
 	}
 }
 
-void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest)
+void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest, bool _reset, bool _clear)
 {
 	Profiler* ptr_profiler = GetProfiler();
 
-	ptr_profiler->Reset();
-	Reset(_repetitionCount);
+	if (_reset && !_clear)
+	{
+		ptr_profiler->Reset();
+		Reset(_repetitionCount);
+	}
+	else if (_clear)
+	{
+		ptr_profiler->Reset();
+		Clear(_repetitionCount);
+	}
 
 	averageResults.name = ptr_profiler->name;
 	maxResults.name = ptr_profiler->name;
@@ -454,7 +550,7 @@ void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCou
 		_repetitionTest();
 		ptr_profiler->End();
 		ptr_repetitionResults[i].Capture(ptr_profiler);
-		ptr_profiler->ResetExistingTracks();
+		ptr_profiler->ResetTracks();
 	}
 }
 

@@ -116,12 +116,31 @@ int main()
 	TestFunction_ProfileBlock(arr, 8192);
 	TestFunction_Bandwidth(arr, 8192);
 
+	profiler->End();
+	profiler->Report();
+	profiler->ClearTracks();
+
 	profiler->SetTrackName(1, "SubTrack");
+	profiler->Initialize();
 	TestFunction_Track2(arr, 8192);
 
 	profiler->End();
 	profiler->Report();
+	profiler->ClearTracks();
 
+	profiler->SetTrackName(0, "Main");
+	profiler->Initialize();
+
+	TestFunction_ProfileFunction(arr, 8192);
+	TestFunction_ProfileBlock(arr, 8192);
+	TestFunction_Bandwidth(arr, 8192);
+
+	profiler->End();
+	profiler->Report();
+	profiler->ClearTracks();
+
+	profiler->SetProfilerName("FixedRepetitionTesting");
+	profiler->SetTrackName(0, "Main");
 	TestFunction_FixedRepetitionTesting();
 
 	// Run the repetition profiling a second time to check that the internal 
