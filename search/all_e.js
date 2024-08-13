@@ -1,15 +1,16 @@
 var searchData=
 [
-  ['s16_0',['s16',['../d8/d02/namespaceProfile.html#aad71c4b4a34f64a4eff2cffe913909f9',1,'Profile']]],
-  ['s32_1',['s32',['../d8/d02/namespaceProfile.html#acd3ed2c4ae60d6d3c963055a087a0946',1,'Profile']]],
-  ['s64_2',['s64',['../d8/d02/namespaceProfile.html#a7fe68f8184122b5cbb49ca7506f06d77',1,'Profile']]],
-  ['s8_3',['s8',['../d8/d02/namespaceProfile.html#adc0c34aa08f34025120acc1208b33651',1,'Profile']]],
-  ['s_5festimatedcpufreq_4',['s_estimatedCPUFreq',['../d1/d04/structProfile_1_1Timer.html#aa2992d8ddfde37d60af0574a9abb0eba',1,'Profile::Timer']]],
-  ['s_5fprofiler_5',['s_Profiler',['../d3/d02/Profiler_8cpp.html#a2b06ca080f6b9ef1f3f4dd783053ac38',1,'Profiler.cpp']]],
-  ['setestimatedcpufreq_6',['SetEstimatedCPUFreq',['../d1/d04/structProfile_1_1Timer.html#a527e0d901b4f826195a9d89afcacc4de',1,'Profile::Timer']]],
-  ['setprofiler_7',['SetProfiler',['../d8/d02/namespaceProfile.html#a49e732cf7ce8f2ad82b8e4d7124a708e',1,'Profile']]],
-  ['setprofilername_8',['SetProfilerName',['../d4/d00/structProfile_1_1Profiler.html#a40547e225622d59ae6d11e65902c0b4b',1,'Profile::Profiler']]],
-  ['setrepetitionresults_9',['SetRepetitionResults',['../de/d05/structProfile_1_1RepetitionProfiler.html#a1b0b5bd2ebd13b23cd131153907388b9',1,'Profile::RepetitionProfiler']]],
-  ['settrackname_10',['SetTrackName',['../d4/d00/structProfile_1_1Profiler.html#a3749dde85d6f868fb92b0db10cea62d3',1,'Profile::Profiler']]],
-  ['start_11',['start',['../dd/d01/structProfile_1_1ProfileBlockRecorder.html#ad5d992d8268f4ebf95e45832a396221f',1,'Profile::ProfileBlockRecorder::start()'],['../d4/d00/structProfile_1_1Profiler.html#a81562afca52b894f8dd1796a27f41b1a',1,'Profile::Profiler::start()']]]
+  ['testfunction_5fbandwidth_0',['TestFunction_Bandwidth',['../df/d02/main_8cpp.html#aea60d4a32af2d8b1928dba828d076c49',1,'main.cpp']]],
+  ['testfunction_5ffixedrepetitiontesting_1',['TestFunction_FixedRepetitionTesting',['../df/d02/main_8cpp.html#a9e10844ad18074f28c94e375c6141dd3',1,'main.cpp']]],
+  ['testfunction_5fprofileblock_2',['TestFunction_ProfileBlock',['../df/d02/main_8cpp.html#af689fe32fa34e2742fcf2f46da9b621a',1,'main.cpp']]],
+  ['testfunction_5fprofilefunction_3',['TestFunction_ProfileFunction',['../df/d02/main_8cpp.html#a0a8c1ed403c169a9829493aa57a408e1',1,'main.cpp']]],
+  ['testfunction_5ftrack2_4',['TestFunction_Track2',['../df/d02/main_8cpp.html#afc8c3a41895eb64128a2951e1da4089b',1,'main.cpp']]],
+  ['timer_5',['Timer',['../d1/d04/structProfile_1_1Timer.html',1,'Profile']]],
+  ['timing_2ecpp_6',['Timing.cpp',['../dc/d04/Timing_8cpp.html',1,'']]],
+  ['timing_2ehpp_7',['Timing.hpp',['../d7/d04/Timing_8hpp.html',1,'']]],
+  ['timings_8',['timings',['../dd/d06/structProfile_1_1ProfileTrack.html#a72966f7628b37f26db26e376752191fc',1,'Profile::ProfileTrack::timings()'],['../d0/d07/structProfile_1_1ProfileTrackResult.html#a8b8ce99debd11b06bf6b5a9569dafc51',1,'Profile::ProfileTrackResult::timings()']]],
+  ['trackcount_9',['trackCount',['../d2/d02/structProfile_1_1ProfilerResults.html#ac0974baa4f749ac966ea2170301f1738',1,'Profile::ProfilerResults']]],
+  ['trackidx_10',['trackIdx',['../d6/d04/structProfile_1_1ProfileBlock.html#a49393717418d5a3a704d273c021df9ee',1,'Profile::ProfileBlock::trackIdx()'],['../db/d06/structProfile_1_1ProfileBlockResult.html#a82978a32d857401dd6e038f00c667c24',1,'Profile::ProfileBlockResult::trackIdx()']]],
+  ['tracks_11',['tracks',['../d4/d00/structProfile_1_1Profiler.html#ab9d7f13dce6209317ad585b96ebdb727',1,'Profile::Profiler::tracks()'],['../d2/d02/structProfile_1_1ProfilerResults.html#ab0c16311578bfc7fad4a2d574545ecee',1,'Profile::ProfilerResults::tracks()']]],
+  ['types_2ehpp_12',['Types.hpp',['../d5/d04/Types_8hpp.html',1,'']]]
 ];

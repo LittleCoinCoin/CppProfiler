@@ -1,11 +1,12 @@
 var structProfile_1_1RepetitionProfiler =
 [
     [ "RepetitionProfiler", "de/d05/structProfile_1_1RepetitionProfiler.html#a36ff19242889d4c94dfd348a172e2af5", null ],
+    [ "Clear", "de/d05/structProfile_1_1RepetitionProfiler.html#ac82df469a2185a75ed69a64f71f7a3ef", null ],
     [ "ComputeAverageResults", "de/d05/structProfile_1_1RepetitionProfiler.html#a1bb7e0d94d95756030ea26a218e51b02", null ],
     [ "ComputeVarianceResults", "de/d05/structProfile_1_1RepetitionProfiler.html#aacaaf50cbf91a6606b562d33864163b8", null ],
     [ "FindMaxResults", "de/d05/structProfile_1_1RepetitionProfiler.html#a63fbf25ffd8f0228f513309b73e0c4e6", null ],
     [ "FindMinResults", "de/d05/structProfile_1_1RepetitionProfiler.html#a2fcec0e002e5366caf63da408ec8217a", null ],
-    [ "FixedCountRepetitionTesting", "de/d05/structProfile_1_1RepetitionProfiler.html#a4aa8849f12d7cad28bd14eba34d04323", null ],
+    [ "FixedCountRepetitionTesting", "de/d05/structProfile_1_1RepetitionProfiler.html#afa67b7865f229b8cbffc336208b94e17", null ],
     [ "MaxAssign", "de/d05/structProfile_1_1RepetitionProfiler.html#a00a8008611cc3d5230865566ecaa14d0", null ],
     [ "MaxAssign", "de/d05/structProfile_1_1RepetitionProfiler.html#acd8863eb3abce341f5641fe4b89e818f", null ],
     [ "MaxAssign", "de/d05/structProfile_1_1RepetitionProfiler.html#ac4036c23a261d9233ab4cbd6224df18f", null ],

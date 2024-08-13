@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['name_0',['name',['../dd/d06/structProfile_1_1ProfileTrack.html#ac62b06739bf6fb409e5f31da5df716d7',1,'Profile::ProfileTrack::name()'],['../d0/d07/structProfile_1_1ProfileTrackResult.html#ae83ee51648a85d0a43d11c429052feac',1,'Profile::ProfileTrackResult::name()'],['../d4/d00/structProfile_1_1Profiler.html#a67c60527ecc79c229ccc32bffde50ec7',1,'Profile::Profiler::name()'],['../d2/d02/structProfile_1_1ProfilerResults.html#a9c3f780c0c54ebaf00f55fb7344a5ee0',1,'Profile::ProfilerResults::name()']]]
+  ['s_5festimatedcpufreq_0',['s_estimatedCPUFreq',['../d1/d04/structProfile_1_1Timer.html#aa2992d8ddfde37d60af0574a9abb0eba',1,'Profile::Timer']]],
+  ['s_5fprofiler_1',['s_Profiler',['../d3/d02/Profiler_8cpp.html#a2b06ca080f6b9ef1f3f4dd783053ac38',1,'Profiler.cpp']]],
+  ['start_2',['start',['../dd/d01/structProfile_1_1ProfileBlockRecorder.html#ad5d992d8268f4ebf95e45832a396221f',1,'Profile::ProfileBlockRecorder::start()'],['../d4/d00/structProfile_1_1Profiler.html#a81562afca52b894f8dd1796a27f41b1a',1,'Profile::Profiler::start()']]]
 ];

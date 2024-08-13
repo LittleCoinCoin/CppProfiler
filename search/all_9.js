@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['main_0',['main',['../df/d02/main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main.cpp']]],
-  ['main_2ecpp_1',['main.cpp',['../df/d02/main_8cpp.html',1,'']]],
-  ['maxassign_2',['MaxAssign',['../de/d05/structProfile_1_1RepetitionProfiler.html#ac4036c23a261d9233ab4cbd6224df18f',1,'Profile::RepetitionProfiler::MaxAssign(u64 &amp;_a, u64 &amp;_b) noexcept'],['../de/d05/structProfile_1_1RepetitionProfiler.html#a00a8008611cc3d5230865566ecaa14d0',1,'Profile::RepetitionProfiler::MaxAssign(f32 &amp;_a, f32 &amp;_b) noexcept'],['../de/d05/structProfile_1_1RepetitionProfiler.html#acd8863eb3abce341f5641fe4b89e818f',1,'Profile::RepetitionProfiler::MaxAssign(f64 &amp;_a, f64 &amp;_b) noexcept']]],
-  ['maxresults_3',['maxResults',['../de/d05/structProfile_1_1RepetitionProfiler.html#a14d3bff5678f35723ec04a19e4ac7104',1,'Profile::RepetitionProfiler']]],
-  ['minassign_4',['MinAssign',['../de/d05/structProfile_1_1RepetitionProfiler.html#a605a5f4d0a3f68f30a4a1bf01fa09da7',1,'Profile::RepetitionProfiler::MinAssign(u64 &amp;_a, u64 &amp;_b) noexcept'],['../de/d05/structProfile_1_1RepetitionProfiler.html#ae7828e6979c77dc0fe92fd4f7092da1c',1,'Profile::RepetitionProfiler::MinAssign(f32 &amp;_a, f32 &amp;_b) noexcept'],['../de/d05/structProfile_1_1RepetitionProfiler.html#a174154e8227a280b44bf960fc1dacb89',1,'Profile::RepetitionProfiler::MinAssign(f64 &amp;_a, f64 &amp;_b) noexcept']]],
-  ['minresults_5',['minResults',['../de/d05/structProfile_1_1RepetitionProfiler.html#a57f71d8b89be621176520f4c94aea899',1,'Profile::RepetitionProfiler']]]
+  ['name_0',['name',['../dd/d06/structProfile_1_1ProfileTrack.html#ac62b06739bf6fb409e5f31da5df716d7',1,'Profile::ProfileTrack::name()'],['../d0/d07/structProfile_1_1ProfileTrackResult.html#ae83ee51648a85d0a43d11c429052feac',1,'Profile::ProfileTrackResult::name()'],['../d4/d00/structProfile_1_1Profiler.html#a67c60527ecc79c229ccc32bffde50ec7',1,'Profile::Profiler::name()'],['../d2/d02/structProfile_1_1ProfilerResults.html#a9c3f780c0c54ebaf00f55fb7344a5ee0',1,'Profile::ProfilerResults::name()']]],
+  ['nb_5ftimings_1',['NB_TIMINGS',['../dc/d04/Profiler_8hpp.html#a5db053b6103443c53e252eea97ce1745',1,'Profiler.hpp']]],
+  ['nb_5ftimings_5ftype_2',['NB_TIMINGS_TYPE',['../dc/d04/Profiler_8hpp.html#a93f3d95f612f54610359beb7dbcb0e3b',1,'Profiler.hpp']]],
+  ['nb_5ftracks_3',['NB_TRACKS',['../dc/d04/Profiler_8hpp.html#a21f26789364f9e6444a127e242ead321',1,'Profiler.hpp']]],
+  ['nb_5ftracks_5ftype_4',['NB_TRACKS_TYPE',['../dc/d04/Profiler_8hpp.html#a72c7a450942c2e0d3ba106d9724f6d8a',1,'Profiler.hpp']]]
 ];

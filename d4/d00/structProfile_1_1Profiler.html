@@ -54,7 +54,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.0.19.88</span>
+   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.4.22.94</span>
    </div>
    <div id="projectbrief">A custom c++ profiler.</div>
   </td>
@@ -142,6 +142,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3749dde85d6f868fb92b0db10cea62d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a3749dde85d6f868fb92b0db10cea62d3">SetTrackName</a> (<a class="el" href="../../dc/d04/Profiler_8hpp.html#a72c7a450942c2e0d3ba106d9724f6d8a">NB_TRACKS_TYPE</a> _trackIdx, const char *_name) noexcept</td></tr>
 <tr class="memdesc:a3749dde85d6f868fb92b0db10cea62d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the name of a track.  <br /></td></tr>
 <tr class="separator:a3749dde85d6f868fb92b0db10cea62d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d295224cabb61e468023e92fd93d08f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a6d295224cabb61e468023e92fd93d08f">Clear</a> () noexcept</td></tr>
+<tr class="memdesc:a6d295224cabb61e468023e92fd93d08f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the profiler's values as well as all its initialized tracks.  <br /></td></tr>
+<tr class="separator:a6d295224cabb61e468023e92fd93d08f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab99e1f3d110e3e6293e9d033f4975b41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#ab99e1f3d110e3e6293e9d033f4975b41">ClearTracks</a> () noexcept</td></tr>
+<tr class="memdesc:ab99e1f3d110e3e6293e9d033f4975b41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears all used blocks of all used tracks in the profiler.  <br /></td></tr>
+<tr class="separator:ab99e1f3d110e3e6293e9d033f4975b41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac34d80550cef4d0741ece5b88a7ea3b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#ac34d80550cef4d0741ece5b88a7ea3b8">CloseBlock</a> (<a class="el" href="../../dc/d04/Profiler_8hpp.html#a72c7a450942c2e0d3ba106d9724f6d8a">NB_TRACKS_TYPE</a> _trackIdx, <a class="el" href="../../dc/d04/Profiler_8hpp.html#a93f3d95f612f54610359beb7dbcb0e3b">NB_TIMINGS_TYPE</a> _profileBlockRecorderIdx)</td></tr>
 <tr class="memdesc:ac34d80550cef4d0741ece5b88a7ea3b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closes a block.  <br /></td></tr>
 <tr class="separator:ac34d80550cef4d0741ece5b88a7ea3b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -151,18 +157,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a717c76e9841bcd9c4ea1d11cb150d709"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a717c76e9841bcd9c4ea1d11cb150d709">Initialize</a> () noexcept</td></tr>
 <tr class="memdesc:a717c76e9841bcd9c4ea1d11cb150d709"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the profiler.  <br /></td></tr>
 <tr class="separator:a717c76e9841bcd9c4ea1d11cb150d709"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a578813ff15bfce6adeaece4e6271d17b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a578813ff15bfce6adeaece4e6271d17b">OpenBlock</a> (<a class="el" href="../../dc/d04/Profiler_8hpp.html#a72c7a450942c2e0d3ba106d9724f6d8a">NB_TRACKS_TYPE</a> _trackIdx, <a class="el" href="../../dc/d04/Profiler_8hpp.html#a93f3d95f612f54610359beb7dbcb0e3b">NB_TIMINGS_TYPE</a> _profileBlockRecorderIdx, <a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _byteCount)</td></tr>
-<tr class="memdesc:a578813ff15bfce6adeaece4e6271d17b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens a block.  <br /></td></tr>
-<tr class="separator:a578813ff15bfce6adeaece4e6271d17b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f683a64165f9aa16160f7191cf140e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a0f683a64165f9aa16160f7191cf140e0">OpenBlock</a> (<a class="el" href="../../dc/d04/Profiler_8hpp.html#a72c7a450942c2e0d3ba106d9724f6d8a">NB_TRACKS_TYPE</a> _trackIdx, const char *_blockName, <a class="el" href="../../dc/d04/Profiler_8hpp.html#a93f3d95f612f54610359beb7dbcb0e3b">NB_TIMINGS_TYPE</a> _profileBlockRecorderIdx, <a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _byteCount)</td></tr>
+<tr class="memdesc:a0f683a64165f9aa16160f7191cf140e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens a block.  <br /></td></tr>
+<tr class="separator:a0f683a64165f9aa16160f7191cf140e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7032cab41162f73513d2bca37753a28f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a7032cab41162f73513d2bca37753a28f">Report</a> () noexcept</td></tr>
 <tr class="memdesc:a7032cab41162f73513d2bca37753a28f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outputs the profiling statistics of all tracks in the profiler.  <br /></td></tr>
 <tr class="separator:a7032cab41162f73513d2bca37753a28f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cabfd8770cb20dc8dc7c02370291c99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a6cabfd8770cb20dc8dc7c02370291c99">Reset</a> () noexcept</td></tr>
 <tr class="memdesc:a6cabfd8770cb20dc8dc7c02370291c99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the profiler's values as well as all its initialized tracks.  <br /></td></tr>
 <tr class="separator:a6cabfd8770cb20dc8dc7c02370291c99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32c350071e2e52587fc1dc9ff5b31e4b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a32c350071e2e52587fc1dc9ff5b31e4b">ResetExistingTracks</a> () noexcept</td></tr>
-<tr class="memdesc:a32c350071e2e52587fc1dc9ff5b31e4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the values of all blocks in all tracks that have a name.  <br /></td></tr>
-<tr class="separator:a32c350071e2e52587fc1dc9ff5b31e4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ed3027444e250180dc77cac08c01dce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a3ed3027444e250180dc77cac08c01dce">ResetTracks</a> () noexcept</td></tr>
+<tr class="memdesc:a3ed3027444e250180dc77cac08c01dce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the values of all blocks in all tracks that have a name.  <br /></td></tr>
+<tr class="separator:a3ed3027444e250180dc77cac08c01dce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -215,6 +221,62 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6d295224cabb61e468023e92fd93d08f" name="a6d295224cabb61e468023e92fd93d08f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d295224cabb61e468023e92fd93d08f">&#9670;&#160;</a></span>Clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Profile::Profiler::Clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clears the profiler's values as well as all its initialized tracks. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>This resets even the <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a67c60527ecc79c229ccc32bffde50ec7" title="The name of the profiler.">name</a>. If you are looking to reset the values without changing the name, use <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a6cabfd8770cb20dc8dc7c02370291c99" title="Resets the profiler&#39;s values as well as all its initialized tracks.">Reset</a>. If you are looking to reset the tracks only, use <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#ab99e1f3d110e3e6293e9d033f4975b41" title="Clears all used blocks of all used tracks in the profiler.">ClearTracks</a>. </dd></dl>
+
+</div>
+</div>
+<a id="ab99e1f3d110e3e6293e9d033f4975b41" name="ab99e1f3d110e3e6293e9d033f4975b41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab99e1f3d110e3e6293e9d033f4975b41">&#9670;&#160;</a></span>ClearTracks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Profile::Profiler::ClearTracks </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clears all used blocks of all used tracks in the profiler. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>If you are looking to reset the values without changing the names, use <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a3ed3027444e250180dc77cac08c01dce" title="Resets the values of all blocks in all tracks that have a name.">ResetTracks</a>. </dd></dl>
+
+</div>
+</div>
 <a id="ac34d80550cef4d0741ece5b88a7ea3b8" name="ac34d80550cef4d0741ece5b88a7ea3b8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac34d80550cef4d0741ece5b88a7ea3b8">&#9670;&#160;</a></span>CloseBlock()</h2>
 
@@ -376,8 +438,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a578813ff15bfce6adeaece4e6271d17b" name="a578813ff15bfce6adeaece4e6271d17b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a578813ff15bfce6adeaece4e6271d17b">&#9670;&#160;</a></span>OpenBlock()</h2>
+<a id="a0f683a64165f9aa16160f7191cf140e0" name="a0f683a64165f9aa16160f7191cf140e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f683a64165f9aa16160f7191cf140e0">&#9670;&#160;</a></span>OpenBlock()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -390,6 +452,12 @@ Public Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="../../dc/d04/Profiler_8hpp.html#a72c7a450942c2e0d3ba106d9724f6d8a">NB_TRACKS_TYPE</a>&#160;</td>
           <td class="paramname"><em>_trackIdx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>_blockName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -483,8 +551,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a32c350071e2e52587fc1dc9ff5b31e4b" name="a32c350071e2e52587fc1dc9ff5b31e4b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a32c350071e2e52587fc1dc9ff5b31e4b">&#9670;&#160;</a></span>ResetExistingTracks()</h2>
+<a id="a3ed3027444e250180dc77cac08c01dce" name="a3ed3027444e250180dc77cac08c01dce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ed3027444e250180dc77cac08c01dce">&#9670;&#160;</a></span>ResetTracks()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -493,7 +561,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Profile::Profiler::ResetExistingTracks </td>
+          <td class="memname">void Profile::Profiler::ResetTracks </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

@@ -54,7 +54,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.0.19.88</span>
+   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.4.22.94</span>
    </div>
    <div id="projectbrief">A custom c++ profiler.</div>
   </td>
@@ -138,6 +138,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6b18c973d35855345c455471ed7a78d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#a6b18c973d35855345c455471ed7a78d7">Capture</a> (<a class="el" href="../../d4/d00/structProfile_1_1Profiler.html">Profiler</a> *_profiler) noexcept</td></tr>
 <tr class="memdesc:a6b18c973d35855345c455471ed7a78d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Captures the statistics of a <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html" title="A struct to manage the profiling of a program.">Profile::Profiler</a>.  <br /></td></tr>
 <tr class="separator:a6b18c973d35855345c455471ed7a78d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21de62f170465a2e7536d1ea71cfe128"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#a21de62f170465a2e7536d1ea71cfe128">Clear</a> () noexcept</td></tr>
+<tr class="memdesc:a21de62f170465a2e7536d1ea71cfe128"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the values of member variables of this struct and up to <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#ac0974baa4f749ac966ea2170301f1738" title="The number of tracks used in the profiler (i.e, which have at least one used block).">trackCount</a> Profile::ProfileTrackResults in the <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#ab0c16311578bfc7fad4a2d574545ecee" title="The array of mirrors to the Profile::ProfileTrack structs originally stored in the profiler.">tracks</a> array.  <br /></td></tr>
+<tr class="separator:a21de62f170465a2e7536d1ea71cfe128"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16f2394f3a2a71c1d678f95211469431"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#a16f2394f3a2a71c1d678f95211469431">Report</a> () noexcept</td></tr>
 <tr class="memdesc:a16f2394f3a2a71c1d678f95211469431"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outputs the profiling statistics of the profiler.  <br /></td></tr>
 <tr class="separator:a16f2394f3a2a71c1d678f95211469431"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -219,6 +222,34 @@ Public Attributes</h2></td></tr>
 
 <p>Captures the statistics of a <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html" title="A struct to manage the profiling of a program.">Profile::Profiler</a>. </p>
 <p>It will effectively assign or compute the values of all the member variables of this struct. In particular, it will fill the <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#ab0c16311578bfc7fad4a2d574545ecee" title="The array of mirrors to the Profile::ProfileTrack structs originally stored in the profiler.">tracks</a> array with the statistics of the Profile::ProfileTracks of the profiler that have been used. </p>
+
+</div>
+</div>
+<a id="a21de62f170465a2e7536d1ea71cfe128" name="a21de62f170465a2e7536d1ea71cfe128"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21de62f170465a2e7536d1ea71cfe128">&#9670;&#160;</a></span>Clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Profile::ProfilerResults::Clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clears the values of member variables of this struct and up to <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#ac0974baa4f749ac966ea2170301f1738" title="The number of tracks used in the profiler (i.e, which have at least one used block).">trackCount</a> Profile::ProfileTrackResults in the <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#ab0c16311578bfc7fad4a2d574545ecee" title="The array of mirrors to the Profile::ProfileTrack structs originally stored in the profiler.">tracks</a> array. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>This resets even the <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#a9c3f780c0c54ebaf00f55fb7344a5ee0" title="The name of the profiler.">name</a>. If you are looking to reset the values without changing the name, use <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#a855880daa2e088e7185babab0ab6cae1" title="Resets the values of member variables of this struct and up to trackCount Profile::ProfileTrackResult...">Reset</a>. </dd></dl>
 
 </div>
 </div>

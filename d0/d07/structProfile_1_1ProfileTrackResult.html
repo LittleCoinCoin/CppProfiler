@@ -54,7 +54,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.0.19.88</span>
+   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.4.22.94</span>
    </div>
    <div id="projectbrief">A custom c++ profiler.</div>
   </td>
@@ -138,6 +138,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a00bea23bcaf0abdf597ff22c9deb6818"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d07/structProfile_1_1ProfileTrackResult.html#a00bea23bcaf0abdf597ff22c9deb6818">Capture</a> (<a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html">ProfileTrack</a> &amp;_track, <a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _trackIdx, <a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _totalElapsedReference) noexcept</td></tr>
 <tr class="memdesc:a00bea23bcaf0abdf597ff22c9deb6818"><td class="mdescLeft">&#160;</td><td class="mdescRight">Captures the statistics of a <a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html" title="A container for several profiling blocks.">Profile::ProfileTrack</a>.  <br /></td></tr>
 <tr class="separator:a00bea23bcaf0abdf597ff22c9deb6818"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8a3eb80fcff5daa7f477590b07890a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d07/structProfile_1_1ProfileTrackResult.html#ad8a3eb80fcff5daa7f477590b07890a8">Clear</a> () noexcept</td></tr>
+<tr class="memdesc:ad8a3eb80fcff5daa7f477590b07890a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the values of member variables of this struct and up to <a class="el" href="../../d0/d07/structProfile_1_1ProfileTrackResult.html#aec97690c8bce0961443f1073160991a1" title="The number of blocks used in the track.">blockCount</a> Profile::ProfileBlockResults in the <a class="el" href="../../d0/d07/structProfile_1_1ProfileTrackResult.html#a8b8ce99debd11b06bf6b5a9569dafc51" title="The array of mirrors to the Profile::ProfileBlockRecorder structs originally stored in the track.">timings</a> array.  <br /></td></tr>
+<tr class="separator:ad8a3eb80fcff5daa7f477590b07890a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24eb399bbba8c9bd6b285bcccbd09663"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d07/structProfile_1_1ProfileTrackResult.html#a24eb399bbba8c9bd6b285bcccbd09663">Report</a> () noexcept</td></tr>
 <tr class="memdesc:a24eb399bbba8c9bd6b285bcccbd09663"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outputs the profiling statistics of the track.  <br /></td></tr>
 <tr class="separator:a24eb399bbba8c9bd6b285bcccbd09663"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -238,6 +241,34 @@ Public Attributes</h2></td></tr>
 
 <p>Captures the statistics of a <a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html" title="A container for several profiling blocks.">Profile::ProfileTrack</a>. </p>
 <p>It will effectively assign or compute the values of all the member variables of this struct. In particular, it will fill the <a class="el" href="../../d0/d07/structProfile_1_1ProfileTrackResult.html#a8b8ce99debd11b06bf6b5a9569dafc51" title="The array of mirrors to the Profile::ProfileBlockRecorder structs originally stored in the track.">timings</a> array with the statistics of the Profile::ProfileBlockRecorders of the track that have been used. </p>
+
+</div>
+</div>
+<a id="ad8a3eb80fcff5daa7f477590b07890a8" name="ad8a3eb80fcff5daa7f477590b07890a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8a3eb80fcff5daa7f477590b07890a8">&#9670;&#160;</a></span>Clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Profile::ProfileTrackResult::Clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clears the values of member variables of this struct and up to <a class="el" href="../../d0/d07/structProfile_1_1ProfileTrackResult.html#aec97690c8bce0961443f1073160991a1" title="The number of blocks used in the track.">blockCount</a> Profile::ProfileBlockResults in the <a class="el" href="../../d0/d07/structProfile_1_1ProfileTrackResult.html#a8b8ce99debd11b06bf6b5a9569dafc51" title="The array of mirrors to the Profile::ProfileBlockRecorder structs originally stored in the track.">timings</a> array. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>This resets even the <a class="el" href="../../d0/d07/structProfile_1_1ProfileTrackResult.html#ae83ee51648a85d0a43d11c429052feac" title="The name of the track.">name</a>. If you are looking to reset the values without changing the name, use <a class="el" href="../../d0/d07/structProfile_1_1ProfileTrackResult.html#acc7f77e91a713a80f8296eee36eef182" title="Resets the values of member variables of this struct and up to blockCount Profile::ProfileBlockResult...">Reset</a>. </dd></dl>
 
 </div>
 </div>

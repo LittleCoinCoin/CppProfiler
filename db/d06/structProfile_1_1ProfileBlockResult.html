@@ -54,7 +54,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.0.19.88</span>
+   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.4.22.94</span>
    </div>
    <div id="projectbrief">A custom c++ profiler.</div>
   </td>
@@ -138,6 +138,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae70fa3f95cabc888ecf81cebd549498c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d06/structProfile_1_1ProfileBlockResult.html#ae70fa3f95cabc888ecf81cebd549498c">Capture</a> (<a class="el" href="../../dd/d01/structProfile_1_1ProfileBlockRecorder.html">ProfileBlockRecorder</a> &amp;_record, <a class="el" href="../../dc/d04/Profiler_8hpp.html#a72c7a450942c2e0d3ba106d9724f6d8a">NB_TRACKS_TYPE</a> _trackIdx, <a class="el" href="../../dc/d04/Profiler_8hpp.html#a93f3d95f612f54610359beb7dbcb0e3b">NB_TIMINGS_TYPE</a> _profileBlockRecorderIdx, <a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _trackElapsedReference, <a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _totalElapsedReference) noexcept</td></tr>
 <tr class="memdesc:ae70fa3f95cabc888ecf81cebd549498c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Captures the statistics of a <a class="el" href="../../dd/d01/structProfile_1_1ProfileBlockRecorder.html" title="A struct to store the profiling statistics of a profiled block.">Profile::ProfileBlockRecorder</a>.  <br /></td></tr>
 <tr class="separator:ae70fa3f95cabc888ecf81cebd549498c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71310c5a6bc97a25c135ae19c69ae038"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d06/structProfile_1_1ProfileBlockResult.html#a71310c5a6bc97a25c135ae19c69ae038">Clear</a> () noexcept</td></tr>
+<tr class="memdesc:a71310c5a6bc97a25c135ae19c69ae038"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the values of the block.  <br /></td></tr>
+<tr class="separator:a71310c5a6bc97a25c135ae19c69ae038"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8127eeab36ac22abbf34cd39ba70687a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d06/structProfile_1_1ProfileBlockResult.html#a8127eeab36ac22abbf34cd39ba70687a">Report</a> () noexcept</td></tr>
 <tr class="memdesc:a8127eeab36ac22abbf34cd39ba70687a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outputs the profiling statistics of the block.  <br /></td></tr>
 <tr class="separator:a8127eeab36ac22abbf34cd39ba70687a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,18 +150,12 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a9a3cc1045c99ffe94dc78128385ffeba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d02/namespaceProfile.html#a5d5d8ad7813ee80730b4a9db25b34b4d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d06/structProfile_1_1ProfileBlockResult.html#a9a3cc1045c99ffe94dc78128385ffeba">lineNumber</a> = 0</td></tr>
-<tr class="memdesc:a9a3cc1045c99ffe94dc78128385ffeba"><td class="mdescLeft">&#160;</td><td class="mdescRight">The line number in the file where the block is located.  <br /></td></tr>
-<tr class="separator:a9a3cc1045c99ffe94dc78128385ffeba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82978a32d857401dd6e038f00c667c24"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d04/Profiler_8hpp.html#a72c7a450942c2e0d3ba106d9724f6d8a">NB_TRACKS_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d06/structProfile_1_1ProfileBlockResult.html#a82978a32d857401dd6e038f00c667c24">trackIdx</a> = 0</td></tr>
 <tr class="memdesc:a82978a32d857401dd6e038f00c667c24"><td class="mdescLeft">&#160;</td><td class="mdescRight">The index of the profiling track this block belongs to.  <br /></td></tr>
 <tr class="separator:a82978a32d857401dd6e038f00c667c24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c81a358d92263c260b8a46c8fa4dcc1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d04/Profiler_8hpp.html#a93f3d95f612f54610359beb7dbcb0e3b">NB_TIMINGS_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d06/structProfile_1_1ProfileBlockResult.html#a4c81a358d92263c260b8a46c8fa4dcc1">profileBlockRecorderIdx</a> = 0</td></tr>
 <tr class="memdesc:a4c81a358d92263c260b8a46c8fa4dcc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The index of this block in the profiling track.  <br /></td></tr>
 <tr class="separator:a4c81a358d92263c260b8a46c8fa4dcc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6310d2744d71e775cdfed7bd52ba1e3f"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d06/structProfile_1_1ProfileBlockResult.html#a6310d2744d71e775cdfed7bd52ba1e3f">fileName</a> = nullptr</td></tr>
-<tr class="memdesc:a6310d2744d71e775cdfed7bd52ba1e3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the file where the block is located.  <br /></td></tr>
-<tr class="separator:a6310d2744d71e775cdfed7bd52ba1e3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcf414d91dfce1ec4f95b0747958f76f"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d06/structProfile_1_1ProfileBlockResult.html#adcf414d91dfce1ec4f95b0747958f76f">blockName</a> = nullptr</td></tr>
 <tr class="memdesc:adcf414d91dfce1ec4f95b0747958f76f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the block.  <br /></td></tr>
 <tr class="separator:adcf414d91dfce1ec4f95b0747958f76f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -270,6 +267,34 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a71310c5a6bc97a25c135ae19c69ae038" name="a71310c5a6bc97a25c135ae19c69ae038"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71310c5a6bc97a25c135ae19c69ae038">&#9670;&#160;</a></span>Clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Profile::ProfileBlockResult::Clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clears the values of the block. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>This resets even the <a class="el" href="../../db/d06/structProfile_1_1ProfileBlockResult.html#adcf414d91dfce1ec4f95b0747958f76f" title="The name of the block.">blockName</a>. If you are looking to reset the values without changing the name, use <a class="el" href="../../db/d06/structProfile_1_1ProfileBlockResult.html#a47d2e8680b5031c0c331f0de5687f1d3" title="Resets the values of this struct.">Reset</a>. </dd></dl>
+
+</div>
+</div>
 <a id="a8127eeab36ac22abbf34cd39ba70687a" name="a8127eeab36ac22abbf34cd39ba70687a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8127eeab36ac22abbf34cd39ba70687a">&#9670;&#160;</a></span>Report()</h2>
 
@@ -321,7 +346,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Resets the values of this struct. </p>
-<p>Resetting do not change the <a class="el" href="../../db/d06/structProfile_1_1ProfileBlockResult.html#adcf414d91dfce1ec4f95b0747958f76f" title="The name of the block.">blockName</a>, the <a class="el" href="../../db/d06/structProfile_1_1ProfileBlockResult.html#a6310d2744d71e775cdfed7bd52ba1e3f" title="The name of the file where the block is located.">fileName</a>, or the <a class="el" href="../../db/d06/structProfile_1_1ProfileBlockResult.html#a9a3cc1045c99ffe94dc78128385ffeba" title="The line number in the file where the block is located.">lineNumber</a>. </p>
+<p>Resetting do not change the <a class="el" href="../../db/d06/structProfile_1_1ProfileBlockResult.html#adcf414d91dfce1ec4f95b0747958f76f" title="The name of the block.">blockName</a>. </p>
 
 </div>
 </div>
@@ -394,23 +419,6 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a6310d2744d71e775cdfed7bd52ba1e3f" name="a6310d2744d71e775cdfed7bd52ba1e3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6310d2744d71e775cdfed7bd52ba1e3f">&#9670;&#160;</a></span>fileName</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const char* Profile::ProfileBlockResult::fileName = nullptr</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>The name of the file where the block is located. </p>
-<p>Mirrors <a class="el" href="../../dd/d01/structProfile_1_1ProfileBlockRecorder.html#a774c3a09f3e55440922aa6322783e243" title="The name of the file where the block is located.">ProfileBlockRecorder::fileName</a>. </p>
-
-</div>
-</div>
 <a id="af9d7ac43f5808dd61cfc93d8e48204a6" name="af9d7ac43f5808dd61cfc93d8e48204a6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af9d7ac43f5808dd61cfc93d8e48204a6">&#9670;&#160;</a></span>hitCount</h2>
 
@@ -425,23 +433,6 @@ Public Attributes</h2></td></tr>
 
 <p>The number of times the block was executed. </p>
 <p>Mirrors <a class="el" href="../../dd/d01/structProfile_1_1ProfileBlockRecorder.html#a4da992e8a6c32fc5951c11e40b2dcde9" title="The number of times the block was executed.">ProfileBlockRecorder::hitCount</a>. </p>
-
-</div>
-</div>
-<a id="a9a3cc1045c99ffe94dc78128385ffeba" name="a9a3cc1045c99ffe94dc78128385ffeba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a3cc1045c99ffe94dc78128385ffeba">&#9670;&#160;</a></span>lineNumber</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../d8/d02/namespaceProfile.html#a5d5d8ad7813ee80730b4a9db25b34b4d">u32</a> Profile::ProfileBlockResult::lineNumber = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>The line number in the file where the block is located. </p>
-<p>Mirrors <a class="el" href="../../dd/d01/structProfile_1_1ProfileBlockRecorder.html#a5874638f00a2a934bcee46a338334b35" title="The line number in the file where the block is located.">ProfileBlockRecorder::lineNumber</a>. </p>
 
 </div>
 </div>

@@ -1,7 +1,9 @@
 var structProfile_1_1ProfileTrack =
 [
+    [ "Clear", "dd/d06/structProfile_1_1ProfileTrack.html#abf3da9c09913a44c6290743daca0318a", null ],
+    [ "ClearTimings", "dd/d06/structProfile_1_1ProfileTrack.html#aabcbf251873704992ff820ede4b7b1a2", null ],
     [ "CloseBlock", "dd/d06/structProfile_1_1ProfileTrack.html#a65c9a2c78502d1fc7c797524d14da74c", null ],
-    [ "OpenBlock", "dd/d06/structProfile_1_1ProfileTrack.html#a57a27b7054b7f2db59b9e6aa5f213516", null ],
+    [ "OpenBlock", "dd/d06/structProfile_1_1ProfileTrack.html#a8bd818155d061296e178eeb130fc2c40", null ],
     [ "Report", "dd/d06/structProfile_1_1ProfileTrack.html#a91d567441cb5b1a4c9615646a3d41e66", null ],
     [ "Reset", "dd/d06/structProfile_1_1ProfileTrack.html#a77d907bae6906167d3ead516dcf515ab", null ],
     [ "ResetTimings", "dd/d06/structProfile_1_1ProfileTrack.html#a4716ffcb6c396b5fa29e119c223763c0", null ],

@@ -2,6 +2,7 @@ var structProfile_1_1ProfilerResults =
 [
     [ "ProfilerResults", "d2/d02/structProfile_1_1ProfilerResults.html#af6a2b81d972db074092bd710c93c060f", null ],
     [ "Capture", "d2/d02/structProfile_1_1ProfilerResults.html#a6b18c973d35855345c455471ed7a78d7", null ],
+    [ "Clear", "d2/d02/structProfile_1_1ProfilerResults.html#a21de62f170465a2e7536d1ea71cfe128", null ],
     [ "Report", "d2/d02/structProfile_1_1ProfilerResults.html#a16f2394f3a2a71c1d678f95211469431", null ],
     [ "Reset", "d2/d02/structProfile_1_1ProfilerResults.html#a855880daa2e088e7185babab0ab6cae1", null ],
     [ "elapsed", "d2/d02/structProfile_1_1ProfilerResults.html#a41887a0a1424fdb0583e4d148b16dec7", null ],
