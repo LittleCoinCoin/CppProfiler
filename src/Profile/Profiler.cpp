@@ -524,12 +524,20 @@ void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
 	}
 }
 
-void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest)
+void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest, bool _reset, bool _clear)
 {
 	Profiler* ptr_profiler = GetProfiler();
 
-	ptr_profiler->Reset();
-	Reset(_repetitionCount);
+	if (_reset && !_clear)
+	{
+		ptr_profiler->Reset();
+		Reset(_repetitionCount);
+	}
+	else if (_clear)
+	{
+		ptr_profiler->Reset();
+		Clear(_repetitionCount);
+	}
 
 	averageResults.name = ptr_profiler->name;
 	maxResults.name = ptr_profiler->name;

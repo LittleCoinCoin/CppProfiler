@@ -940,8 +940,12 @@ public:
 			 of size @p _repetitionCount.
 	@param _repetitionCount The number of repetitions.
 	@param _repetitionTest The wrapper to the function to test.
+	@param _reset Whether to reset the results before testing. Default is true.
+				  See ::Reset, ::Profiler::Reset, and ::Profiler::ResetTracks.
+	@param _clear Whether to clear the results before testing. Default is false.
+				  See ::Clear, ::Profiler::Clear, and ::Profiler::ClearTracks.
 	*/
-	PROFILE_API void FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest);
+	PROFILE_API void FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest, bool _reset = true, bool _clear = false);
 
 	/*!
 	@brief Prints the results of the repeated profiling.
