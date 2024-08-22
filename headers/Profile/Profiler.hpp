@@ -216,6 +216,7 @@ struct ProfileBlockRecorder
 
 	/*!
 	@brief Update the profiling statistics of the block upon execution.
+	@param _blockName The name given to this block.
 	@param _byteCount The number of bytes processed by the block.
 	*/
 	inline void Open(const char* _blockName, u64 _byteCount)
@@ -388,6 +389,7 @@ struct ProfileTrack
 	/*!
 	@brief Opens a block of the track.
 	@param _profileBlockRecorderIdx The index of the block timing in the track.
+	@param _blockName The name given to the block being profiled.
 	@param _byteCount The number of bytes processed by the block.
 	@see Profile::ProfileBlockRecorder::Open(Profile::u64 _byteCount)
 	*/
@@ -601,6 +603,7 @@ struct Profiler
 	/*!
 	@brief Opens a block.
 	@param _trackIdx The index of the track the block belongs to.
+	@param _blockName The name given to the block being profiled.
 	@param _profileBlockRecorderIdx The index of the profile result.
 	@param _byteCount The number of bytes processed by the block.
 	*/
@@ -724,7 +727,7 @@ struct ProfilerResults
 
 /*!
 @brief A functor to wrap around code that will be profiled multiple times
-		via the ::RepetitionProfiler.
+		via the Profile::RepetitionProfiler.
 @see ::RepetitionProfiler::FixedCountRepetitionTesting
 */
 struct RepetitionTest
@@ -886,8 +889,8 @@ public:
 	/*!
 	@brief Clears all the stored and computed results of the repeated profiling.
 	@details The function will clear the values of ::averageResults, ::varianceResults,
-			 ::cumulatedResults, ::maxResults, and ::minResults. It also clears
-			 everything in the ProfilerResults pointed by ::ptr_repetitionResults.
+			 ::maxResults, and ::minResults. It also clears everything in the
+			 ProfilerResults pointed by ::ptr_repetitionResults.
 	@param _repetitionCount The number of repetitions.
 	@see Profile::ProfilerResults::Clear
 	@remarks If you don't want to clear the names of all the data concerned by the
@@ -960,8 +963,8 @@ public:
 	/*!
 	@brief Resets all the stored and computed results of the repeated profiling. 
 	@details The function will reset the values of ::averageResults, ::varianceResults,
-			 ::cumulatedResults, ::maxResults, and ::minResults. It also resets
-			 everything in the ProfilerResults pointed by ::ptr_repetitionResults.
+			 ::maxResults, and ::minResults. It also resets everything in the
+			 ProfilerResults pointed by ::ptr_repetitionResults.
 	@param _repetitionCount The number of repetitions.
 	@see Profile::ProfilerResults::Reset
 	*/
