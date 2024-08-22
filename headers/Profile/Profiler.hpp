@@ -216,6 +216,7 @@ struct ProfileBlockRecorder
 
 	/*!
 	@brief Update the profiling statistics of the block upon execution.
+	@param _blockName The name given to this block.
 	@param _byteCount The number of bytes processed by the block.
 	*/
 	inline void Open(const char* _blockName, u64 _byteCount)
@@ -388,6 +389,7 @@ struct ProfileTrack
 	/*!
 	@brief Opens a block of the track.
 	@param _profileBlockRecorderIdx The index of the block timing in the track.
+	@param _blockName The name given to the block being profiled.
 	@param _byteCount The number of bytes processed by the block.
 	@see Profile::ProfileBlockRecorder::Open(Profile::u64 _byteCount)
 	*/
@@ -601,6 +603,7 @@ struct Profiler
 	/*!
 	@brief Opens a block.
 	@param _trackIdx The index of the track the block belongs to.
+	@param _blockName The name given to the block being profiled.
 	@param _profileBlockRecorderIdx The index of the profile result.
 	@param _byteCount The number of bytes processed by the block.
 	*/
