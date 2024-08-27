@@ -48,6 +48,22 @@ struct RepetitionTest_TestFunction_ProfileFunction : public Profile::RepetitionT
 };
 
 /*!
+@brief A wrapper around the TestFunction_ProfileBlock when it will be used TestFunction_FixedRepetitionTesting.
+*/
+struct RepetitionTest_TestFunction_ProfileBlock : public Profile::RepetitionTest
+{
+	Profile::u64* arr = nullptr;
+	Profile::u64 count = 0;
+	RepetitionTest_TestFunction_ProfileBlock(Profile::u64* _arr, Profile::u64 _count) : arr(_arr), count(_count) {}
+
+	inline void operator()() override
+	{
+		TestFunction_ProfileBlock(arr, count);
+	}
+};
+
+
+/*!
 @brief Tests the macro time and bandwidth profiling macro on track 0: PROFILE_FUNCTION_TIME_BANDWIDTH(0, sizeof(Profile::u64) * _count).
 @details Fills an array with the index of the element.
 @param _arr The array to fill.
@@ -78,6 +94,20 @@ void TestFunction_Track2(Profile::u64 _arr[], Profile::u64 _count)
 		_arr[i] = i;
 	}
 }
+
+void TestFunction_BestPerfSearch()
+{
+	Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * 8192);
+
+	Profile::RepetitionTest* repetitionTests = {
+		RepetitionTest_TestFunction_ProfileFunction(arr, 8192),
+		RepetitionTest_TestFunction_ProfileBlock(arr, 8192)
+	};
+
+	Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(3, 
+
+}
+
 
 /*!
 @brief Tests the FixedCountRepetitionTesting function of the RepetitionProfiler.
@@ -147,6 +177,9 @@ int main()
 	// reset works appropriately. The profiling results should be close to the
 	// first run.
 	TestFunction_FixedRepetitionTesting();
+
+
+
 	
 	free(arr);
 	free(profiler);

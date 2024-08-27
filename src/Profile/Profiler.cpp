@@ -524,6 +524,69 @@ void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
 	}
 }
 
+void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(u16 _repetitionTestTimeOut, u8 _repetitionTestsCount, RepetitionTest* _repetitionTests, bool _reset, bool _clear, u16 _globalTimeOut)
+{
+	Profiler* ptr_profiler = GetProfiler();
+
+	u64 startTime = Timer::GetCPUTimer();
+	u64 nextTestTimeOut = startTime + _repetitionTestTimeOut * Timer::GetEstimatedCPUFreq();
+	u64 testGlobalTimeOut = startTime + max(_repetitionTestTimeOut, _globalTimeOut) * Timer::GetEstimatedCPUFreq();
+
+	u64* bestPerfs = (u64*)malloc(_repetitionTestsCount * sizeof(u64));
+
+	if (bestPerfs)
+	{
+		for (int i = 0; i < _repetitionTestsCount; i++)
+		{
+			bestPerfs[i] = SIZE_MAX;
+		}
+
+		while (Timer::GetCPUTimer() < testGlobalTimeOut)
+		{
+			for (int i = 0; i < _repetitionTestsCount; i++)
+			{
+				if (_reset && !_clear)
+				{
+					ptr_profiler->Reset();
+					Reset(_repetitionTestsCount);
+				}
+				else if (_clear)
+				{
+					ptr_profiler->Clear();
+					Clear(_repetitionTestsCount);
+				}
+
+
+				// Run the test as as long as we find a new profile that has a better performance
+				// than the previous one.
+				while (Timer::GetCPUTimer() < nextTestTimeOut)
+				{
+					ptr_profiler->ResetTracks();
+					ptr_profiler->Initialize();
+					_repetitionTests[i]();
+					ptr_profiler->End();
+
+					// If we find a better performance
+					if (ptr_profiler->elapsed < bestPerfs[i])
+					{
+						// Reset the test time out
+						nextTestTimeOut += Timer::GetCPUTimer() + _repetitionTestTimeOut * Timer::GetEstimatedCPUFreq();
+					}
+				}
+				ptr_profiler->Report();
+			}
+		}
+	}
+	else
+	{
+		std::printf("ERROR: Insufficiant memory to run BestPerfSearchRepetitionTesting.");
+	}
+
+	free(bestPerfs);
+
+}
+
+
 void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest, bool _reset, bool _clear)
 {
 	Profiler* ptr_profiler = GetProfiler();
@@ -535,7 +598,7 @@ void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCou
 	}
 	else if (_clear)
 	{
-		ptr_profiler->Reset();
+		ptr_profiler->Clear();
 		Clear(_repetitionCount);
 	}
 

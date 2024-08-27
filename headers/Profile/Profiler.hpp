@@ -934,6 +934,8 @@ public:
 	*/
 	PROFILE_API void FindMinResults(u64 _repetitionCount) noexcept;
 
+	PROFILE_API void BestPerfSearchRepetitionTesting(u16 _repetitionTestTimeOut, u8 _repetitionTestsCount, RepetitionTest* _repetitionTests, bool _reset = false, bool _clear = true, u16 _globalTimeOut = 0xFFFFu);
+
 	/*!
 	@brief Repeatedly tests a function and stores the profiling statistics.
 	@details The function will be called @p _repetitionCount times. The profiling
