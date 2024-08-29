@@ -2,6 +2,7 @@
 
 #include <array> // for the timings and tracks arrays
 #include <cstdio> // for printf
+#include <vector> // for storing the functions that will undergo the repetition testing
 #include <type_traits> // for std::conditional_t in U_SIZE_ADAPTER
 
 //#include "Export.hpp"
@@ -980,10 +981,29 @@ public:
 	*/
 	PROFILE_API void FindMinResults(u64 _repetitionCount) noexcept;
 
-	PROFILE_API void BestPerfSearchRepetitionTesting(u16 _repetitionTestTimeOut, u8 _repetitionTestsCount, RepetitionTest* _repetitionTests, bool _reset = false, bool _clear = true, u16 _globalTimeOut = 0xFFFFu);
+	/*!
+	@brief Repeatedly tests all functions wrapped in ::repetitionTests for as long
+			as allowed by the time out parameters and reports only about the best
+			performance.
+	@details The function will keep running until the @p _globalTimeOut is reached.
+			 We garentee that all functions will be tested at least once. When a 
+			 new best performance is found, the time out is reset by @p _repetitionTestTimeOut.
+			 The best profiling results of each function will be stored in the
+			 ProfilerResults pointed by ::ptr_repetitionResults. In this case,
+			 ::ptr_repetitionResults must be set before calling this function
+			 and must be an array of at least of size ::repetitionTests.size().
+	@param _repetitionTestTimeOut The time out in seconds for each repetition test.
+	@param _reset Whether to reset the results before testing. Default is false.
+				  See ::Reset, ::Profiler::Reset, and ::Profiler::ResetTracks.
+	@param _clear Whether to clear the results before testing. Default is true.
+					See ::Clear, ::Profiler::Clear, and ::Profiler::ClearTracks.
+	@param _globalTimeOut The time out in seconds for the whole testing.
+	*/
+	PROFILE_API void BestPerfSearchRepetitionTesting(u16 _repetitionTestTimeOut, bool _reset = false, bool _clear = true, u16 _globalTimeOut = 0xFFFFu);
 
 	/*!
-	@brief Repeatedly tests a function and stores the profiling statistics.
+	@brief Repeatedly tests all functions wrapped in ::repetitionTests and consecutively
+			reports the profiling statistics.
 	@details The function will be called @p _repetitionCount times. The profiling
 			 statistics of each repetition will be stored in the ProfilerResults
 			 pointed by ::ptr_repetitionResults. In this case, ::ptr_repetitionResults

@@ -524,46 +524,46 @@ void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
 	}
 }
 
-void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(u16 _repetitionTestTimeOut, u8 _repetitionTestsCount, RepetitionTest* _repetitionTests, bool _reset, bool _clear, u16 _globalTimeOut)
+void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(u16 _repetitionTestTimeOut, bool _reset, bool _clear, u16 _globalTimeOut)
 {
 	Profiler* ptr_profiler = GetProfiler();
 
-	u64 startTime = Timer::GetCPUTimer();
-	u64 nextTestTimeOut = startTime + _repetitionTestTimeOut * Timer::GetEstimatedCPUFreq();
-	u64 testGlobalTimeOut = startTime + max(_repetitionTestTimeOut, _globalTimeOut) * Timer::GetEstimatedCPUFreq();
+	u64 nextTestTimeOut = 0;
+	u64 testGlobalTimeOut = Timer::GetCPUTimer() + max(_repetitionTestTimeOut, _globalTimeOut) * Timer::GetEstimatedCPUFreq();
 
-	u64* bestPerfs = (u64*)malloc(_repetitionTestsCount * sizeof(u64));
+	u16 repetitionTestsCount = (u16)repetitionTests.size();
+	u64* bestPerfs = (u64*)malloc(repetitionTestsCount * sizeof(u64));
 
 	if (bestPerfs)
 	{
-		for (int i = 0; i < _repetitionTestsCount; i++)
+		for (int i = 0; i < repetitionTestsCount; i++)
 		{
 			bestPerfs[i] = SIZE_MAX;
 		}
 
 		while (Timer::GetCPUTimer() < testGlobalTimeOut)
 		{
-			for (int i = 0; i < _repetitionTestsCount; i++)
+			for (int i = 0; i < repetitionTestsCount; i++)
 			{
 				if (_reset && !_clear)
 				{
 					ptr_profiler->Reset();
-					Reset(_repetitionTestsCount);
+					Reset(repetitionTestsCount);
 				}
 				else if (_clear)
 				{
 					ptr_profiler->Clear();
-					Clear(_repetitionTestsCount);
+					Clear(repetitionTestsCount);
 				}
 
-
+				nextTestTimeOut = Timer::GetCPUTimer() + _repetitionTestTimeOut * Timer::GetEstimatedCPUFreq();
 				// Run the test as as long as we find a new profile that has a better performance
 				// than the previous one.
 				while (Timer::GetCPUTimer() < nextTestTimeOut)
 				{
 					ptr_profiler->ResetTracks();
 					ptr_profiler->Initialize();
-					_repetitionTests[i]();
+					(*repetitionTests[i])();
 					ptr_profiler->End();
 
 					// If we find a better performance
@@ -576,6 +576,7 @@ void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(u16 _repetitio
 				ptr_profiler->Report();
 			}
 		}
+		std::printf("Exited BestPerfSearchRepetitionTesting due to global time out.");
 	}
 	else
 	{
