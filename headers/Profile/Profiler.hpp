@@ -2,6 +2,7 @@
 
 #include <array> // for the timings and tracks arrays
 #include <cstdio> // for printf
+#include <vector> // for storing the functions that will undergo the repetition testing
 #include <type_traits> // for std::conditional_t in U_SIZE_ADAPTER
 
 //#include "Export.hpp"
@@ -788,6 +789,15 @@ struct RepetitionProfiler
 private:
 
 	/*!
+	@brief The vector of the function wrappers to profile multiple times.
+	@details The functions will be profiled in the order they were added.
+			 It will be used in ::FixedCountRepetitionTesting, and ::BestPerfSearchRepetitionTesting
+	@see ::PushBackRepetitionTest, ::ClearRepetitionTests, ::RemoveRepetitionTest,
+		 ::PopBackRepetitionTest
+	*/
+	std::vector<RepetitionTest*> repetitionTests;
+
+	/*!
 	@brief A function to assign the maximum of two values to the first one.
 	@details The function is overloaded for u64, f32, and f64. It's used to
 			 lighten the code in ::FindMaxResults.
@@ -887,6 +897,43 @@ private:
 public:
 
 	/*!
+	@brief Pushes back a wrapper of a function to profile multiple times to
+			::repetitionTests.
+	*/
+	PROFILE_API inline void PushBackRepetitionTest(RepetitionTest* _repetitionTest) noexcept
+	{
+		repetitionTests.push_back(_repetitionTest);
+	}
+
+	/*!
+	@brief Clears all function wrappers in ::repetitionTests.
+	*/
+	PROFILE_API inline void ClearRepetitionTests() noexcept
+	{
+		repetitionTests.clear();
+	}
+
+	/*
+	@brief Removes a function wrapper from ::repetitionTests.
+	@param _index The index of the function wrapper to remove.
+	*/
+	PROFILE_API inline void RemoveRepetitionTest(u16 _index) noexcept
+	{
+		if (_index < repetitionTests.size())
+		{
+			repetitionTests.erase(repetitionTests.begin() + _index);
+		}
+	}
+
+	/*!
+	@brief Removes the function wrapper at the back of ::repetitionTests.
+	*/
+	PROFILE_API inline void PopBackRepetitionTest() noexcept
+	{
+		repetitionTests.pop_back();
+	}
+
+	/*!
 	@brief Clears all the stored and computed results of the repeated profiling.
 	@details The function will clear the values of ::averageResults, ::varianceResults,
 			 ::maxResults, and ::minResults. It also clears everything in the
@@ -935,20 +982,40 @@ public:
 	PROFILE_API void FindMinResults(u64 _repetitionCount) noexcept;
 
 	/*!
-	@brief Repeatedly tests a function and stores the profiling statistics.
+	@brief Repeatedly tests all functions wrapped in ::repetitionTests for as long
+			as allowed by the time out parameters and reports only about the best
+			performance.
+	@details The function will keep running until the @p _globalTimeOut is reached.
+			 We garentee that all functions will be tested at least once. When a 
+			 new best performance is found, the time out is reset by @p _repetitionTestTimeOut.
+			 The best profiling results of each function will be stored in the
+			 ProfilerResults pointed by ::ptr_repetitionResults. In this case,
+			 ::ptr_repetitionResults must be set before calling this function
+			 and must be an array of at least of size ::repetitionTests.size().
+	@param _repetitionTestTimeOut The time out in seconds for each repetition test.
+	@param _reset Whether to reset the results before testing. Default is false.
+				  See ::Reset, ::Profiler::Reset, and ::Profiler::ResetTracks.
+	@param _clear Whether to clear the results before testing. Default is true.
+					See ::Clear, ::Profiler::Clear, and ::Profiler::ClearTracks.
+	@param _globalTimeOut The time out in seconds for the whole testing.
+	*/
+	PROFILE_API void BestPerfSearchRepetitionTesting(u16 _repetitionTestTimeOut, bool _reset = false, bool _clear = true, u16 _globalTimeOut = 0xFFFFu);
+
+	/*!
+	@brief Repeatedly tests all functions wrapped in ::repetitionTests and consecutively
+			reports the profiling statistics.
 	@details The function will be called @p _repetitionCount times. The profiling
 			 statistics of each repetition will be stored in the ProfilerResults
 			 pointed by ::ptr_repetitionResults. In this case, ::ptr_repetitionResults
 			 must be set before calling this function and must be an array of at least
 			 of size @p _repetitionCount.
 	@param _repetitionCount The number of repetitions.
-	@param _repetitionTest The wrapper to the function to test.
 	@param _reset Whether to reset the results before testing. Default is true.
 				  See ::Reset, ::Profiler::Reset, and ::Profiler::ResetTracks.
 	@param _clear Whether to clear the results before testing. Default is false.
 				  See ::Clear, ::Profiler::Clear, and ::Profiler::ClearTracks.
 	*/
-	PROFILE_API void FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest, bool _reset = true, bool _clear = false);
+	PROFILE_API void FixedCountRepetitionTesting(u64 _repetitionCount, bool _reset = true, bool _clear = false);
 
 	/*!
 	@brief Prints the results of the repeated profiling.

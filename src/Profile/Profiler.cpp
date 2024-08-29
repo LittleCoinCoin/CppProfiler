@@ -524,33 +524,102 @@ void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
 	}
 }
 
-void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest, bool _reset, bool _clear)
+void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(u16 _repetitionTestTimeOut, bool _reset, bool _clear, u16 _globalTimeOut)
 {
 	Profiler* ptr_profiler = GetProfiler();
 
-	if (_reset && !_clear)
+	u64 nextTestTimeOut = 0;
+	u64 testGlobalTimeOut = Timer::GetCPUTimer() + max(_repetitionTestTimeOut, _globalTimeOut) * Timer::GetEstimatedCPUFreq();
+
+	u16 repetitionTestsCount = (u16)repetitionTests.size();
+	u64* bestPerfs = (u64*)malloc(repetitionTestsCount * sizeof(u64));
+
+	if (bestPerfs)
 	{
-		ptr_profiler->Reset();
-		Reset(_repetitionCount);
+		for (int i = 0; i < repetitionTestsCount; i++)
+		{
+			bestPerfs[i] = SIZE_MAX;
+		}
+
+		while (Timer::GetCPUTimer() < testGlobalTimeOut)
+		{
+			for (int i = 0; i < repetitionTestsCount; i++)
+			{
+				if (_reset && !_clear)
+				{
+					ptr_profiler->Reset();
+					Reset(repetitionTestsCount);
+				}
+				else if (_clear)
+				{
+					ptr_profiler->Clear();
+					Clear(repetitionTestsCount);
+				}
+
+				nextTestTimeOut = Timer::GetCPUTimer() + _repetitionTestTimeOut * Timer::GetEstimatedCPUFreq();
+				// Run the test as as long as we find a new profile that has a better performance
+				// than the previous one.
+				while (Timer::GetCPUTimer() < nextTestTimeOut)
+				{
+					ptr_profiler->ResetTracks();
+					ptr_profiler->Initialize();
+					(*repetitionTests[i])();
+					ptr_profiler->End();
+
+					// If we find a better performance
+					if (ptr_profiler->elapsed < bestPerfs[i])
+					{
+						// Reset the test time out
+						nextTestTimeOut += Timer::GetCPUTimer() + _repetitionTestTimeOut * Timer::GetEstimatedCPUFreq();
+					}
+				}
+				ptr_profiler->Report();
+			}
+		}
+		std::printf("Exited BestPerfSearchRepetitionTesting due to global time out.");
 	}
-	else if (_clear)
+	else
 	{
-		ptr_profiler->Reset();
-		Clear(_repetitionCount);
+		std::printf("ERROR: Insufficiant memory to run BestPerfSearchRepetitionTesting.");
 	}
+
+	free(bestPerfs);
+
+}
+
+
+void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, bool _reset, bool _clear)
+{
+	Profiler* ptr_profiler = GetProfiler();
 
 	averageResults.name = ptr_profiler->name;
 	maxResults.name = ptr_profiler->name;
 	minResults.name = ptr_profiler->name;
 	varianceResults.name = ptr_profiler->name;
 
-	for (u64 i = 0; i < _repetitionCount; ++i)
+	for (RepetitionTest* _repetitionTest : repetitionTests)
 	{
-		ptr_profiler->Initialize();
-		_repetitionTest();
-		ptr_profiler->End();
-		ptr_repetitionResults[i].Capture(ptr_profiler);
-		ptr_profiler->ResetTracks();
+		if (_reset && !_clear)
+		{
+			ptr_profiler->Reset();
+			Reset(_repetitionCount);
+		}
+		else if (_clear)
+		{
+			ptr_profiler->Clear();
+			Clear(_repetitionCount);
+		}
+
+		for (u64 i = 0; i < _repetitionCount; ++i)
+		{
+			ptr_profiler->Initialize();
+			(*_repetitionTest)();
+			ptr_profiler->End();
+			ptr_repetitionResults[i].Capture(ptr_profiler);
+			ptr_profiler->ResetTracks();
+		}
+		
+		Report(_repetitionCount);
 	}
 }
 
