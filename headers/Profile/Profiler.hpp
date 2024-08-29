@@ -788,6 +788,15 @@ struct RepetitionProfiler
 private:
 
 	/*!
+	@brief The vector of the function wrappers to profile multiple times.
+	@details The functions will be profiled in the order they were added.
+			 It will be used in ::FixedCountRepetitionTesting, and ::BestPerfSearchRepetitionTesting
+	@see ::PushBackRepetitionTest, ::ClearRepetitionTests, ::RemoveRepetitionTest,
+		 ::PopBackRepetitionTest
+	*/
+	std::vector<RepetitionTest*> repetitionTests;
+
+	/*!
 	@brief A function to assign the maximum of two values to the first one.
 	@details The function is overloaded for u64, f32, and f64. It's used to
 			 lighten the code in ::FindMaxResults.
@@ -885,6 +894,43 @@ private:
 	}
 
 public:
+
+	/*!
+	@brief Pushes back a wrapper of a function to profile multiple times to
+			::repetitionTests.
+	*/
+	PROFILE_API inline void PushBackRepetitionTest(RepetitionTest* _repetitionTest) noexcept
+	{
+		repetitionTests.push_back(_repetitionTest);
+	}
+
+	/*!
+	@brief Clears all function wrappers in ::repetitionTests.
+	*/
+	PROFILE_API inline void ClearRepetitionTests() noexcept
+	{
+		repetitionTests.clear();
+	}
+
+	/*
+	@brief Removes a function wrapper from ::repetitionTests.
+	@param _index The index of the function wrapper to remove.
+	*/
+	PROFILE_API inline void RemoveRepetitionTest(u16 _index) noexcept
+	{
+		if (_index < repetitionTests.size())
+		{
+			repetitionTests.erase(repetitionTests.begin() + _index);
+		}
+	}
+
+	/*!
+	@brief Removes the function wrapper at the back of ::repetitionTests.
+	*/
+	PROFILE_API inline void PopBackRepetitionTest() noexcept
+	{
+		repetitionTests.pop_back();
+	}
 
 	/*!
 	@brief Clears all the stored and computed results of the repeated profiling.
