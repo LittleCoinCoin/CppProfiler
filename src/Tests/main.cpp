@@ -116,15 +116,17 @@ void TestFunction_BestPerfSearch()
 void TestFunction_FixedRepetitionTesting()
 {
 	Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * 8192);
-	RepetitionTest_TestFunction_ProfileFunction repetitionTest(arr, 8192);
 
 	Profile::u16 repetitionCount = 1000;
-	Profile::RepetitionProfiler* repetitionProfiler = (Profile::RepetitionProfiler*)calloc(1, sizeof(Profile::RepetitionProfiler));
 	Profile::ProfilerResults* results = (Profile::ProfilerResults*)calloc(repetitionCount, sizeof(Profile::ProfilerResults));
+	Profile::RepetitionProfiler* repetitionProfiler = (Profile::RepetitionProfiler*)calloc(1, sizeof(Profile::RepetitionProfiler));
+	
+	RepetitionTest_TestFunction_ProfileFunction repetitiontest(arr, 8192);
+	repetitionProfiler->PushBackRepetitionTest(&repetitiontest);
 
 	repetitionProfiler->SetRepetitionResults(results);
-	repetitionProfiler->FixedCountRepetitionTesting(repetitionCount, repetitionTest);
-	repetitionProfiler->Report(repetitionCount);
+	repetitionProfiler->FixedCountRepetitionTesting(repetitionCount);
+	
 
 	free(results);
 	free(repetitionProfiler);

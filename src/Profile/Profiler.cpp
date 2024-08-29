@@ -587,33 +587,38 @@ void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(u16 _repetitio
 }
 
 
-void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest, bool _reset, bool _clear)
+void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, bool _reset, bool _clear)
 {
 	Profiler* ptr_profiler = GetProfiler();
-
-	if (_reset && !_clear)
-	{
-		ptr_profiler->Reset();
-		Reset(_repetitionCount);
-	}
-	else if (_clear)
-	{
-		ptr_profiler->Clear();
-		Clear(_repetitionCount);
-	}
 
 	averageResults.name = ptr_profiler->name;
 	maxResults.name = ptr_profiler->name;
 	minResults.name = ptr_profiler->name;
 	varianceResults.name = ptr_profiler->name;
 
-	for (u64 i = 0; i < _repetitionCount; ++i)
+	for (RepetitionTest* _repetitionTest : repetitionTests)
 	{
-		ptr_profiler->Initialize();
-		_repetitionTest();
-		ptr_profiler->End();
-		ptr_repetitionResults[i].Capture(ptr_profiler);
-		ptr_profiler->ResetTracks();
+		if (_reset && !_clear)
+		{
+			ptr_profiler->Reset();
+			Reset(_repetitionCount);
+		}
+		else if (_clear)
+		{
+			ptr_profiler->Clear();
+			Clear(_repetitionCount);
+		}
+
+		for (u64 i = 0; i < _repetitionCount; ++i)
+		{
+			ptr_profiler->Initialize();
+			(*_repetitionTest)();
+			ptr_profiler->End();
+			ptr_repetitionResults[i].Capture(ptr_profiler);
+			ptr_profiler->ResetTracks();
+		}
+		
+		Report(_repetitionCount);
 	}
 }
 
