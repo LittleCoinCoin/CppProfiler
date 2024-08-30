@@ -507,7 +507,7 @@ struct Profiler
 	/*!
 	@brief The name of the profiler.
 	*/
-	const char* name = nullptr;
+	char name[64] = { 0 };
 
 	/*!
 	@brief The time when the profiler was initialized (when ::Initialize
@@ -526,10 +526,7 @@ struct Profiler
 	*/
 	std::array<ProfileTrack, NB_TRACKS> tracks;
 
-	Profiler(const char* _name) : name(_name)
-	{
-
-	}
+	Profiler() = default;
 
 	/*!
 	@brief Gets an index for a profile result.
@@ -548,8 +545,10 @@ struct Profiler
 	*/
 	PROFILE_API inline void SetProfilerName(const char* _name) noexcept
 	{
-		name = _name;
+		SetProfilerNameFmt(_name);
 	}
+
+	PROFILE_API void SetProfilerNameFmt(const char* _fmt, ...);
 
 	/*!
 	@brief Sets the name of a track.

@@ -232,6 +232,27 @@ NB_TIMINGS_TYPE Profile::Profiler::GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _
 	return profileBlockRecorderIndex;
 }
 
+void Profile::Profiler::SetProfilerNameFmt(const char* _fmt, ...)
+{
+	//for security, check if the _fmt and the arguments is not bigger than the track name
+	std::va_list args;
+	va_start(args, _fmt);
+	int length = std::vsnprintf(nullptr, 0, _fmt, args);
+	va_end(args);
+
+	if (length > sizeof(name))
+	{
+		printf("Warning: Tried to a name for the profiler that is too long for the buffer. The name will be truncated.\n");
+	}
+
+	if (length > 0)
+	{
+		va_start(args, _fmt);
+		std::vsnprintf(name, sizeof(name), _fmt, args);
+		va_end(args);
+	}
+}
+
 void Profile::Profiler::SetTrackNameFmt(NB_TRACKS_TYPE _trackIdx, const char* _fmt, ...)
 {
 	if (_trackIdx < NB_TRACKS)
@@ -258,7 +279,7 @@ void Profile::Profiler::SetTrackNameFmt(NB_TRACKS_TYPE _trackIdx, const char* _f
 
 void Profile::Profiler::Clear() noexcept
 {
-	name = nullptr;
+	strcpy(name, "\0");
 	start = 0;
 	elapsed = 0;
 	ClearTracks();
