@@ -743,7 +743,15 @@ struct ProfilerResults
 */
 struct RepetitionTest
 {	
+	const char* name = nullptr;
+
 	RepetitionTest() = default;
+
+	/*!
+	@brief Constructs a RepetitionTest with a name.
+	@param _name The name of the test.
+	*/
+	RepetitionTest(const char* _name) : name(_name){}
 	~RepetitionTest() = default;
 
 	/*!

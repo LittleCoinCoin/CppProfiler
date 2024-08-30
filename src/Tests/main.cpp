@@ -40,6 +40,7 @@ struct RepetitionTest_TestFunction_ProfileFunction : public Profile::RepetitionT
 	Profile::u64* arr = nullptr;
 	Profile::u64 count = 0;
 	RepetitionTest_TestFunction_ProfileFunction(Profile::u64* _arr, Profile::u64 _count) : arr(_arr), count(_count) {}
+	RepetitionTest_TestFunction_ProfileFunction(const char* _name, Profile::u64* _arr, Profile::u64 _count) : RepetitionTest(_name), arr(_arr), count(_count) {}
 
 	inline void operator()() override
 	{
@@ -55,6 +56,7 @@ struct RepetitionTest_TestFunction_ProfileBlock : public Profile::RepetitionTest
 	Profile::u64* arr = nullptr;
 	Profile::u64 count = 0;
 	RepetitionTest_TestFunction_ProfileBlock(Profile::u64* _arr, Profile::u64 _count) : arr(_arr), count(_count) {}
+	RepetitionTest_TestFunction_ProfileBlock(const char* _name, Profile::u64* _arr, Profile::u64 _count) : RepetitionTest(_name), arr(_arr), count(_count) {}
 
 	inline void operator()() override
 	{
@@ -103,7 +105,7 @@ void TestFunction_BestPerfSearch()
 	Profile::RepetitionProfiler* repetitionProfiler = (Profile::RepetitionProfiler*)calloc(1, sizeof(Profile::RepetitionProfiler));
 	
 	Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * 8192);
-	RepetitionTest_TestFunction_ProfileBlock repetitiontest(arr, 8192);
+	RepetitionTest_TestFunction_ProfileBlock repetitiontest("TestFunction_ProfileBlock", arr, 8192);
 	RepetitionTest_TestFunction_ProfileFunction repetitiontest2(arr, 8192);
 	repetitionProfiler->PushBackRepetitionTest(&repetitiontest);
 	repetitionProfiler->PushBackRepetitionTest(&repetitiontest2);
@@ -179,8 +181,6 @@ int main()
 	profiler->Report();
 	profiler->ClearTracks();
 
-	profiler->SetProfilerName("FixedRepetitionTesting");
-	profiler->SetTrackName(0, "Main");
 	TestFunction_FixedRepetitionTesting();
 
 	// Run the repetition profiling a second time to check that the internal 
