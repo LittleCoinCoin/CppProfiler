@@ -2,6 +2,7 @@
 
 #include <array> // for the timings and tracks arrays
 #include <cstdio> // for printf
+#include <cstdarg> // for va_list
 #include <vector> // for storing the functions that will undergo the repetition testing
 #include <type_traits> // for std::conditional_t in U_SIZE_ADAPTER
 
@@ -350,7 +351,7 @@ struct ProfileTrack
 	/*!
 	@brief The name of the track.
 	*/
-	const char* name = nullptr;
+	char name[32] = {0};
 
 	/*!
 	@brief The accumulated time from all blocks in the track.
@@ -506,7 +507,7 @@ struct Profiler
 	/*!
 	@brief The name of the profiler.
 	*/
-	const char* name = nullptr;
+	char name[64] = { 0 };
 
 	/*!
 	@brief The time when the profiler was initialized (when ::Initialize
@@ -525,10 +526,7 @@ struct Profiler
 	*/
 	std::array<ProfileTrack, NB_TRACKS> tracks;
 
-	Profiler(const char* _name) : name(_name)
-	{
-
-	}
+	Profiler() = default;
 
 	/*!
 	@brief Gets an index for a profile result.
@@ -547,21 +545,33 @@ struct Profiler
 	*/
 	PROFILE_API inline void SetProfilerName(const char* _name) noexcept
 	{
-		name = _name;
+		SetProfilerNameFmt(_name);
 	}
+
+	PROFILE_API void SetProfilerNameFmt(const char* _fmt, ...);
 
 	/*!
 	@brief Sets the name of a track.
 	@param _trackIdx The index of the track.
 	@param _name The name of the track.
+	@remarks The name will be truncated if it is longer than 31 characters.
 	*/
 	PROFILE_API inline void SetTrackName(NB_TRACKS_TYPE _trackIdx, const char* _name) noexcept
 	{
 		if (_trackIdx < NB_TRACKS)
 		{
-			tracks[_trackIdx].name = _name;
+			SetTrackNameFmt(_trackIdx, _name);
 		}
 	}
+	
+    /*!
+	@brief Sets the name of a track with a format string.
+	@param _trackIdx The index of the track.
+	@param _fmt The format string of the name of the track.
+	@param ... The arguments to the format string.
+	@remarks The name will be truncated if it is longer than 31 characters.
+	*/
+	PROFILE_API void SetTrackNameFmt(NB_TRACKS_TYPE _trackIdx, const char* _fmt, ...);
 
 	/*!
 	@brief Clears the profiler's values as well as all its initialized tracks.
@@ -733,7 +743,15 @@ struct ProfilerResults
 */
 struct RepetitionTest
 {	
+	const char* name = nullptr;
+
 	RepetitionTest() = default;
+
+	/*!
+	@brief Constructs a RepetitionTest with a name.
+	@param _name The name of the test.
+	*/
+	RepetitionTest(const char* _name) : name(_name){}
 	~RepetitionTest() = default;
 
 	/*!

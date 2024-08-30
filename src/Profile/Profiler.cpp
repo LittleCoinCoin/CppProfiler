@@ -153,7 +153,7 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 
 void Profile::ProfileTrack::Clear() noexcept
 {
-	name = nullptr;
+	strcpy(name, "\0");
 	elapsed = 0;
 	ClearTimings();
 }
@@ -232,9 +232,54 @@ NB_TIMINGS_TYPE Profile::Profiler::GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _
 	return profileBlockRecorderIndex;
 }
 
+void Profile::Profiler::SetProfilerNameFmt(const char* _fmt, ...)
+{
+	//for security, check if the _fmt and the arguments is not bigger than the track name
+	std::va_list args;
+	va_start(args, _fmt);
+	int length = std::vsnprintf(nullptr, 0, _fmt, args);
+	va_end(args);
+
+	if (length > sizeof(name))
+	{
+		printf("Warning: Tried to a name for the profiler that is too long for the buffer. The name will be truncated.\n");
+	}
+
+	if (length > 0)
+	{
+		va_start(args, _fmt);
+		std::vsnprintf(name, sizeof(name), _fmt, args);
+		va_end(args);
+	}
+}
+
+void Profile::Profiler::SetTrackNameFmt(NB_TRACKS_TYPE _trackIdx, const char* _fmt, ...)
+{
+	if (_trackIdx < NB_TRACKS)
+	{
+		//for security, check if the _fmt and the arguments is not bigger than the track name
+		std::va_list args;
+		va_start(args, _fmt);
+		int length = std::vsnprintf(nullptr, 0, _fmt, args);
+		va_end(args);
+
+		if (length > sizeof(tracks[_trackIdx].name))
+		{
+			printf("Warning: Tried to set a track name that is too long for the buffer. Track index: %d. The name will be truncated.\n", _trackIdx);
+		}
+
+		if (length > 0)
+		{
+			va_start(args, _fmt);
+			std::vsnprintf(tracks[_trackIdx].name, sizeof(tracks[_trackIdx].name), _fmt, args);
+			va_end(args);
+		}
+	}
+}
+
 void Profile::Profiler::Clear() noexcept
 {
-	name = nullptr;
+	strcpy(name, "\0");
 	start = 0;
 	elapsed = 0;
 	ClearTracks();
@@ -543,7 +588,7 @@ void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(u16 _repetitio
 
 		while (Timer::GetCPUTimer() < testGlobalTimeOut)
 		{
-			for (int i = 0; i < repetitionTestsCount; i++)
+			for (u32 i = 0; i < repetitionTestsCount; i++)
 			{
 				if (_reset && !_clear)
 				{
@@ -554,6 +599,21 @@ void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(u16 _repetitio
 				{
 					ptr_profiler->Clear();
 					Clear(repetitionTestsCount);
+
+					if (repetitionTests[i]->name)
+					{
+						ptr_profiler->SetProfilerName(repetitionTests[i]->name);
+					}
+					else
+					{
+						ptr_profiler->SetProfilerNameFmt("Best Perf Search Repetition Test %d", i);
+					}
+
+					//Give default names to the tracks in the profiler
+					for (NB_TRACKS_TYPE i = 0; i < NB_TRACKS; i++)
+					{
+						ptr_profiler->SetTrackNameFmt(i, "Track %d", i);
+					}
 				}
 
 				nextTestTimeOut = Timer::GetCPUTimer() + _repetitionTestTimeOut * Timer::GetEstimatedCPUFreq();
@@ -592,12 +652,7 @@ void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCou
 {
 	Profiler* ptr_profiler = GetProfiler();
 
-	averageResults.name = ptr_profiler->name;
-	maxResults.name = ptr_profiler->name;
-	minResults.name = ptr_profiler->name;
-	varianceResults.name = ptr_profiler->name;
-
-	for (RepetitionTest* _repetitionTest : repetitionTests)
+	for (u32 i = 0; i < repetitionTests.size(); i++)
 	{
 		if (_reset && !_clear)
 		{
@@ -608,14 +663,34 @@ void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCou
 		{
 			ptr_profiler->Clear();
 			Clear(_repetitionCount);
+
+			if (repetitionTests[i]->name)
+			{
+				ptr_profiler->SetProfilerName(repetitionTests[i]->name);
+			}
+			else
+			{
+				ptr_profiler->SetProfilerNameFmt("Fixed Count Repetition Test %d", i);
+			}
+
+			averageResults.name = ptr_profiler->name;
+			maxResults.name = ptr_profiler->name;
+			minResults.name = ptr_profiler->name;
+			varianceResults.name = ptr_profiler->name;
+
+			//Give default names to the tracks in the profiler
+			for (NB_TRACKS_TYPE i = 0; i < NB_TRACKS; i++)
+			{
+				ptr_profiler->SetTrackNameFmt(i, "Track %d", i);
+			}
 		}
 
-		for (u64 i = 0; i < _repetitionCount; ++i)
+		for (u64 j = 0; j < _repetitionCount; ++j)
 		{
 			ptr_profiler->Initialize();
-			(*_repetitionTest)();
+			(*repetitionTests[i])();
 			ptr_profiler->End();
-			ptr_repetitionResults[i].Capture(ptr_profiler);
+			ptr_repetitionResults[j].Capture(ptr_profiler);
 			ptr_profiler->ResetTracks();
 		}
 		
