@@ -574,7 +574,10 @@ void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(u16 _repetitio
 	Profiler* ptr_profiler = GetProfiler();
 
 	u64 nextTestTimeOut = 0;
-	u64 testGlobalTimeOut = Timer::GetCPUTimer() + max(_repetitionTestTimeOut, _globalTimeOut) * Timer::GetEstimatedCPUFreq();
+
+	//The inline comparison is equivalent to a max function.
+	//It's the only place where I need a max function so I didn't bother to implement one (and even less to include <algorithm> for it).
+	u64 testGlobalTimeOut = Timer::GetCPUTimer() + (_repetitionTestTimeOut >= _globalTimeOut ? _repetitionTestTimeOut : _globalTimeOut) * Timer::GetEstimatedCPUFreq();
 
 	u16 repetitionTestsCount = (u16)repetitionTests.size();
 	u64* bestPerfs = (u64*)malloc(repetitionTestsCount * sizeof(u64));
