@@ -1012,7 +1012,7 @@ public:
 			 The best profiling results of each function will be stored in the
 			 ProfilerResults pointed by ::ptr_repetitionResults. In this case,
 			 ::ptr_repetitionResults must be set before calling this function
-			 and must be an array of at least of size ::repetitionTests.size().
+			 and must be an array of at least of the size of ::repetitionTests.
 	@param _repetitionTestTimeOut The time out in seconds for each repetition test.
 	@param _reset Whether to reset the results before testing. Default is false.
 				  See ::Reset, ::Profiler::Reset, and ::Profiler::ResetTracks.
