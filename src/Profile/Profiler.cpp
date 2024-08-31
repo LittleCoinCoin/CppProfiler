@@ -633,7 +633,8 @@ void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(u16 _repetitio
 					if (ptr_profiler->elapsed < bestPerfs[i])
 					{
 						// Reset the test time out
-						nextTestTimeOut += Timer::GetCPUTimer() + _repetitionTestTimeOut * Timer::GetEstimatedCPUFreq();
+						nextTestTimeOut = Timer::GetCPUTimer() + _repetitionTestTimeOut * Timer::GetEstimatedCPUFreq();
+						bestPerfs[i] = ptr_profiler->elapsed;
 					}
 				}
 				ptr_profiler->Report();
