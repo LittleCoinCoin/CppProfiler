@@ -586,7 +586,7 @@ void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(u16 _repetitio
 	{
 		for (int i = 0; i < repetitionTestsCount; i++)
 		{
-			bestPerfs[i] = 0xffffffffffffffffui64;
+			bestPerfs[i] = 0xffffffffffffffffull;
 		}
 
 		while (Timer::GetCPUTimer() < testGlobalTimeOut)
