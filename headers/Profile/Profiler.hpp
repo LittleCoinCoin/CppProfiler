@@ -1004,8 +1004,11 @@ public:
 			as allowed by the time out parameters and reports only about the best
 			performance.
 	@details The function will keep running until the @p _globalTimeOut is reached.
-			 We garentee that all functions will be tested at least once. When a 
-			 new best performance is found, the time out is reset by @p _repetitionTestTimeOut.
+			 We garentee that all functions will be tested at least once. In
+			 particular, in case there is a user mistake and @p _globalTimeOut
+			 is shorter than @p _repetitionTestTimeOut, the latter will be used
+			 such that at least one test is done for each function. When a new
+			 best performance is found, the time out is reset by @p _repetitionTestTimeOut.
 			 The best profiling results of each function will be stored in the
 			 ProfilerResults pointed by ::ptr_repetitionResults. In this case,
 			 ::ptr_repetitionResults must be set before calling this function
