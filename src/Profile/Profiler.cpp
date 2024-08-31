@@ -128,7 +128,7 @@ void Profile::ProfileTrackResult::Clear() noexcept
 void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 {
 	f64 elapsedSec = (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq();
-	printf("\n---- Profile Track: %s (%fms; %.2f%% of total) ----\n", name, 1000 * elapsedSec,
+	printf("---- Profile Track: %s (%fms; %.2f%% of total) ----\n", name, 1000 * elapsedSec,
 		_totalElapsedReference == 0 ? 0 : 100.0f * (f64)elapsed / (f64)_totalElapsedReference);
 	
 	static f64 megaByte = 1<<20;
@@ -153,7 +153,7 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 
 void Profile::ProfileTrack::Clear() noexcept
 {
-	name = nullptr;
+	strcpy(name, "\0");
 	elapsed = 0;
 	ClearTimings();
 }
@@ -189,7 +189,7 @@ void Profile::ProfileTrack::ResetTimings() noexcept
 
 void Profile::ProfileTrackResult::Report() noexcept
 {
-	printf("\n---- Profile Track Results: %s (%fms; %.2f%% of total) ----\n", name, 1000 * elapsedSec, proportionInTotal);
+	printf("---- Profile Track Results: %s (%fms; %.2f%% of total) ----\n", name, 1000 * elapsedSec, proportionInTotal);
 	for (ProfileBlockResult& record : timings)
 	{
 		if (record.blockName != nullptr)
@@ -232,9 +232,54 @@ NB_TIMINGS_TYPE Profile::Profiler::GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _
 	return profileBlockRecorderIndex;
 }
 
+void Profile::Profiler::SetProfilerNameFmt(const char* _fmt, ...)
+{
+	//for security, check if the _fmt and the arguments is not bigger than the track name
+	std::va_list args;
+	va_start(args, _fmt);
+	int length = std::vsnprintf(nullptr, 0, _fmt, args);
+	va_end(args);
+
+	if (length > sizeof(name))
+	{
+		printf("Warning: Tried to a name for the profiler that is too long for the buffer. The name will be truncated.\n");
+	}
+
+	if (length > 0)
+	{
+		va_start(args, _fmt);
+		std::vsnprintf(name, sizeof(name), _fmt, args);
+		va_end(args);
+	}
+}
+
+void Profile::Profiler::SetTrackNameFmt(NB_TRACKS_TYPE _trackIdx, const char* _fmt, ...)
+{
+	if (_trackIdx < NB_TRACKS)
+	{
+		//for security, check if the _fmt and the arguments is not bigger than the track name
+		std::va_list args;
+		va_start(args, _fmt);
+		int length = std::vsnprintf(nullptr, 0, _fmt, args);
+		va_end(args);
+
+		if (length > sizeof(tracks[_trackIdx].name))
+		{
+			printf("Warning: Tried to set a track name that is too long for the buffer. Track index: %d. The name will be truncated.\n", _trackIdx);
+		}
+
+		if (length > 0)
+		{
+			va_start(args, _fmt);
+			std::vsnprintf(tracks[_trackIdx].name, sizeof(tracks[_trackIdx].name), _fmt, args);
+			va_end(args);
+		}
+	}
+}
+
 void Profile::Profiler::Clear() noexcept
 {
-	name = nullptr;
+	strcpy(name, "\0");
 	start = 0;
 	elapsed = 0;
 	ClearTracks();
@@ -264,8 +309,8 @@ void Profile::Profiler::Initialize() noexcept
 void Profile::Profiler::Report() noexcept
 {
 #if PROFILER_ENABLED
-	printf("Estimated CPU Frequency: %llu\n", Timer::GetEstimatedCPUFreq());
-	printf("\n---- Profiler: %s (%fms) ----\n", name, 1000 * (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
+	printf("\n---- Estimated CPU Frequency: %llu ----\n", Timer::GetEstimatedCPUFreq());
+	printf("---- Profiler Report: %s (%fms) ----\n", name, 1000 * (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
 	for (ProfileTrack& track : tracks)
 	{
 		if (track.hasBlock)
@@ -328,7 +373,7 @@ void Profile::ProfilerResults::Clear() noexcept
 
 void Profile::ProfilerResults::Report() noexcept
 {
-	printf("\n---- ProfilerResults: %s (%fms) ----\n", name, 1000 * elapsedSec);
+	printf("---- ProfilerResults: %s (%fms) ----\n", name, 1000 * elapsedSec);
 	
 	for (IT_TRACKS_TYPE i = 0; i < trackCount; ++i)
 	{
@@ -524,33 +569,141 @@ void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
 	}
 }
 
-void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, RepetitionTest& _repetitionTest, bool _reset, bool _clear)
+void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(u16 _repetitionTestTimeOut, bool _reset, bool _clear, u16 _globalTimeOut)
 {
 	Profiler* ptr_profiler = GetProfiler();
 
-	if (_reset && !_clear)
+	u64 nextTestTimeOut = 0;
+
+	//The inline comparison is equivalent to a max function.
+	//It's the only place where I need a max function so I didn't bother to implement one (and even less to include <algorithm> for it).
+	u64 testGlobalTimeOut = Timer::GetCPUTimer() + (_repetitionTestTimeOut >= _globalTimeOut ? _repetitionTestTimeOut : _globalTimeOut) * Timer::GetEstimatedCPUFreq();
+
+	u16 repetitionTestsCount = (u16)repetitionTests.size();
+	u64* bestPerfs = (u64*)malloc(repetitionTestsCount * sizeof(u64));
+
+	if (bestPerfs)
 	{
-		ptr_profiler->Reset();
-		Reset(_repetitionCount);
+		for (int i = 0; i < repetitionTestsCount; i++)
+		{
+			bestPerfs[i] = 0xffffffffffffffffull;
+		}
+
+		while (Timer::GetCPUTimer() < testGlobalTimeOut)
+		{
+			for (u32 i = 0; i < repetitionTestsCount; i++)
+			{
+				if (_reset && !_clear)
+				{
+					ptr_profiler->Reset();
+					Reset(repetitionTestsCount);
+				}
+				else if (_clear)
+				{
+					ptr_profiler->Clear();
+					Clear(repetitionTestsCount);
+
+					if (repetitionTests[i]->name)
+					{
+						ptr_profiler->SetProfilerName(repetitionTests[i]->name);
+					}
+					else
+					{
+						ptr_profiler->SetProfilerNameFmt("Best Perf Search Repetition Test %d", i);
+					}
+
+					//Give default names to the tracks in the profiler
+					for (NB_TRACKS_TYPE i = 0; i < NB_TRACKS; i++)
+					{
+						ptr_profiler->SetTrackNameFmt(i, "Track %d", i);
+					}
+				}
+
+				printf("\n");
+				nextTestTimeOut = Timer::GetCPUTimer() + _repetitionTestTimeOut * Timer::GetEstimatedCPUFreq();
+				// Run the test as as long as we find a new profile that has a better performance
+				// than the previous one.
+				while (Timer::GetCPUTimer() < nextTestTimeOut)
+				{
+					ptr_profiler->ResetTracks();
+					ptr_profiler->Initialize();
+					(*repetitionTests[i])();
+					ptr_profiler->End();
+
+					// If we find a better performance
+					if (ptr_profiler->elapsed < bestPerfs[i])
+					{
+						// Reset the test time out
+						printf("New best performance found for test %s: %llu", ptr_profiler->name, ptr_profiler->elapsed);
+						nextTestTimeOut = Timer::GetCPUTimer() + _repetitionTestTimeOut * Timer::GetEstimatedCPUFreq();
+						bestPerfs[i] = ptr_profiler->elapsed;
+
+						// bring the cursor back to the beginning of the console line
+						printf("\r");
+					}
+				}
+				ptr_profiler->Report();
+			}
+		}
+		std::printf("\nExited BestPerfSearchRepetitionTesting due to global time out.\n");
 	}
-	else if (_clear)
+	else
 	{
-		ptr_profiler->Reset();
-		Clear(_repetitionCount);
+		std::printf("ERROR: Insufficiant memory to run BestPerfSearchRepetitionTesting.");
 	}
 
-	averageResults.name = ptr_profiler->name;
-	maxResults.name = ptr_profiler->name;
-	minResults.name = ptr_profiler->name;
-	varianceResults.name = ptr_profiler->name;
+	free(bestPerfs);
 
-	for (u64 i = 0; i < _repetitionCount; ++i)
+}
+
+
+void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, bool _reset, bool _clear)
+{
+	Profiler* ptr_profiler = GetProfiler();
+
+	for (u32 i = 0; i < repetitionTests.size(); i++)
 	{
-		ptr_profiler->Initialize();
-		_repetitionTest();
-		ptr_profiler->End();
-		ptr_repetitionResults[i].Capture(ptr_profiler);
-		ptr_profiler->ResetTracks();
+		if (_reset && !_clear)
+		{
+			ptr_profiler->Reset();
+			Reset(_repetitionCount);
+		}
+		else if (_clear)
+		{
+			ptr_profiler->Clear();
+			Clear(_repetitionCount);
+
+			if (repetitionTests[i]->name)
+			{
+				ptr_profiler->SetProfilerName(repetitionTests[i]->name);
+			}
+			else
+			{
+				ptr_profiler->SetProfilerNameFmt("Fixed Count Repetition Test %d", i);
+			}
+
+			averageResults.name = ptr_profiler->name;
+			maxResults.name = ptr_profiler->name;
+			minResults.name = ptr_profiler->name;
+			varianceResults.name = ptr_profiler->name;
+
+			//Give default names to the tracks in the profiler
+			for (NB_TRACKS_TYPE i = 0; i < NB_TRACKS; i++)
+			{
+				ptr_profiler->SetTrackNameFmt(i, "Track %d", i);
+			}
+		}
+
+		for (u64 j = 0; j < _repetitionCount; ++j)
+		{
+			ptr_profiler->Initialize();
+			(*repetitionTests[i])();
+			ptr_profiler->End();
+			ptr_repetitionResults[j].Capture(ptr_profiler);
+			ptr_profiler->ResetTracks();
+		}
+		
+		Report(_repetitionCount);
 	}
 }
 
@@ -566,14 +719,15 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 
 	//go through all blocks and all tracks and print the average results with the
 	//standard deviation, the minimum and the maximum values
-	printf("\n---- ProfilerResults: %s ({%f, %f(+/-)%f, %f}ms) ----\n",
+	printf("\n---- Estimated CPU Frequency: %llu ----\n", Timer::GetEstimatedCPUFreq());
+	printf("---- Repetition Profiler Report: %s ({%f, %f(+/-)%f, %f}ms) ----\n",
 		averageResults.name,
 		1000 * minResults.elapsedSec, 1000 * averageResults.elapsedSec, 1000 * std::sqrt(varianceResults.elapsedSec), 1000 * maxResults.elapsedSec);
 	for (IT_TRACKS_TYPE i = 0; i < averageResults.trackCount; ++i)
 	{
 		if (averageResults.tracks[i].name != nullptr)
 		{
-			printf("\n---- Profile Track Results: %s ({%f, %f(+/-)%f, %f}ms; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total) ----\n",
+			printf("---- Profile Track Results : % s({% f,% f(+/ -) % f,% f}ms; { % .2f, % .2f(+/ -) % .2f, % .2f }%% of total) ----\n",
 				averageResults.tracks[i].name,
 				1000 * minResults.tracks[i].elapsedSec, 1000 * averageResults.tracks[i].elapsedSec,	1000 * std::sqrt(varianceResults.tracks[i].elapsedSec), 1000 * maxResults.tracks[i].elapsedSec,
 				minResults.tracks[i].proportionInTotal, averageResults.tracks[i].proportionInTotal,	std::sqrt(varianceResults.tracks[i].proportionInTotal), maxResults.tracks[i].proportionInTotal);
