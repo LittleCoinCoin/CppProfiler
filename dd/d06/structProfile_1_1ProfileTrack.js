@@ -9,6 +9,6 @@ var structProfile_1_1ProfileTrack =
     [ "ResetTimings", "dd/d06/structProfile_1_1ProfileTrack.html#a4716ffcb6c396b5fa29e119c223763c0", null ],
     [ "elapsed", "dd/d06/structProfile_1_1ProfileTrack.html#a8435876176a3cb2ea24b77c47f9bfb3a", null ],
     [ "hasBlock", "dd/d06/structProfile_1_1ProfileTrack.html#afebbe879f77a81ad3e5612fed26e8b68", null ],
-    [ "name", "dd/d06/structProfile_1_1ProfileTrack.html#ac62b06739bf6fb409e5f31da5df716d7", null ],
+    [ "name", "dd/d06/structProfile_1_1ProfileTrack.html#a461c2c6f8645cb1702792a3d1e59593e", null ],
     [ "timings", "dd/d06/structProfile_1_1ProfileTrack.html#a72966f7628b37f26db26e376752191fc", null ]
 ];

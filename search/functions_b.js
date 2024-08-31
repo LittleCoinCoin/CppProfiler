@@ -1,8 +1,10 @@
 var searchData=
 [
-  ['testfunction_5fbandwidth_0',['TestFunction_Bandwidth',['../df/d02/main_8cpp.html#aea60d4a32af2d8b1928dba828d076c49',1,'main.cpp']]],
-  ['testfunction_5ffixedrepetitiontesting_1',['TestFunction_FixedRepetitionTesting',['../df/d02/main_8cpp.html#a9e10844ad18074f28c94e375c6141dd3',1,'main.cpp']]],
-  ['testfunction_5fprofileblock_2',['TestFunction_ProfileBlock',['../df/d02/main_8cpp.html#af689fe32fa34e2742fcf2f46da9b621a',1,'main.cpp']]],
-  ['testfunction_5fprofilefunction_3',['TestFunction_ProfileFunction',['../df/d02/main_8cpp.html#a0a8c1ed403c169a9829493aa57a408e1',1,'main.cpp']]],
-  ['testfunction_5ftrack2_4',['TestFunction_Track2',['../df/d02/main_8cpp.html#afc8c3a41895eb64128a2951e1da4089b',1,'main.cpp']]]
+  ['setestimatedcpufreq_0',['SetEstimatedCPUFreq',['../d1/d04/structProfile_1_1Timer.html#a527e0d901b4f826195a9d89afcacc4de',1,'Profile::Timer']]],
+  ['setprofiler_1',['SetProfiler',['../d8/d02/namespaceProfile.html#a49e732cf7ce8f2ad82b8e4d7124a708e',1,'Profile']]],
+  ['setprofilername_2',['SetProfilerName',['../d4/d00/structProfile_1_1Profiler.html#a40547e225622d59ae6d11e65902c0b4b',1,'Profile::Profiler']]],
+  ['setprofilernamefmt_3',['SetProfilerNameFmt',['../d4/d00/structProfile_1_1Profiler.html#aade0dab6d3f4ffb74c79799d2d608590',1,'Profile::Profiler']]],
+  ['setrepetitionresults_4',['SetRepetitionResults',['../de/d05/structProfile_1_1RepetitionProfiler.html#a1b0b5bd2ebd13b23cd131153907388b9',1,'Profile::RepetitionProfiler']]],
+  ['settrackname_5',['SetTrackName',['../d4/d00/structProfile_1_1Profiler.html#a3749dde85d6f868fb92b0db10cea62d3',1,'Profile::Profiler']]],
+  ['settracknamefmt_6',['SetTrackNameFmt',['../d4/d00/structProfile_1_1Profiler.html#a559f167d98b1cb0da6c8d64de6981e2b',1,'Profile::Profiler']]]
 ];

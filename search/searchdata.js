@@ -4,8 +4,8 @@ var indexSectionsWithContent =
   1: "prt",
   2: "p",
   3: "empt",
-  4: "cefghimoprst~",
-  5: "abcehmnpstv",
+  4: "bcefghimoprst~",
+  5: "abcehmnprstv",
   6: "fsu",
   7: "inpu"
 };

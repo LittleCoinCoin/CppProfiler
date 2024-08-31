@@ -54,7 +54,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.4.22.94</span>
+   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.5.27.111</span>
    </div>
    <div id="projectbrief">A custom c++ profiler.</div>
   </td>
@@ -128,12 +128,14 @@ $(document).ready(function(){initNavTree('dc/d04/Profiler_8hpp.html','../../'); 
 <div class="contents">
 <div class="textblock"><code>#include &lt;array&gt;</code><br />
 <code>#include &lt;cstdio&gt;</code><br />
+<code>#include &lt;cstdarg&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;type_traits&gt;</code><br />
 <code>#include &quot;<a class="el" href="../../d7/d04/Timing_8hpp_source.html">Timing.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for Profiler.hpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="../../d8/d04/Profiler_8hpp__incl.svg" width="511" height="184"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="../../d8/d04/Profiler_8hpp__incl.svg" width="100%" height="438"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -169,7 +171,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A mirror of the <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html" title="A struct to manage the profiling of a program.">Profiler</a> struct to store all the statistics of a profiler and the tracks it contains (thanks to <a class="el" href="../../d0/d07/structProfile_1_1ProfileTrackResult.html" title="A mirror of the ProfileTrack struct to store statistics matching a profiled track and the blocks it c...">Profile::ProfileTrackResult</a>).  <a href="../../d2/d02/structProfile_1_1ProfilerResults.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d06/structProfile_1_1RepetitionTest.html">Profile::RepetitionTest</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A functor to wrap around code that will be profiled multiple times via the ::RepetitionProfiler.  <a href="../../d5/d06/structProfile_1_1RepetitionTest.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A functor to wrap around code that will be profiled multiple times via the <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html" title="A wrapper to test the performance of a function by running it a number of times.">Profile::RepetitionProfiler</a>.  <a href="../../d5/d06/structProfile_1_1RepetitionTest.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html">Profile::RepetitionProfiler</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A wrapper to test the performance of a function by running it a number of times.  <a href="../../de/d05/structProfile_1_1RepetitionProfiler.html#details">More...</a><br /></td></tr>

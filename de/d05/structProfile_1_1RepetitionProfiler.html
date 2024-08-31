@@ -54,7 +54,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.4.22.94</span>
+   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.5.27.111</span>
    </div>
    <div id="projectbrief">A custom c++ profiler.</div>
   </td>
@@ -122,6 +122,7 @@ $(document).ready(function(){initNavTree('de/d05/structProfile_1_1RepetitionProf
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="../../d0/d07/structProfile_1_1RepetitionProfiler-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Profile::RepetitionProfiler Struct Reference</div></div>
 </div><!--header-->
@@ -145,6 +146,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1b0b5bd2ebd13b23cd131153907388b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a1b0b5bd2ebd13b23cd131153907388b9">SetRepetitionResults</a> (<a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html">ProfilerResults</a> *_repetitionResults) noexcept</td></tr>
 <tr class="memdesc:a1b0b5bd2ebd13b23cd131153907388b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the pointer for <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a01ff1b156c1e19093bfbd76351a2ce58" title="The pointer to the ProfilerResults storing the results of the repeated profiling.">ptr_repetitionResults</a>.  <br /></td></tr>
 <tr class="separator:a1b0b5bd2ebd13b23cd131153907388b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cb7bc9da2a8b968416b8c68e7c7f11c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a2cb7bc9da2a8b968416b8c68e7c7f11c">PushBackRepetitionTest</a> (<a class="el" href="../../d5/d06/structProfile_1_1RepetitionTest.html">RepetitionTest</a> *_repetitionTest) noexcept</td></tr>
+<tr class="memdesc:a2cb7bc9da2a8b968416b8c68e7c7f11c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pushes back a wrapper of a function to profile multiple times to <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8bbe39125888ba012ec0c63773210e52" title="The vector of the function wrappers to profile multiple times.">repetitionTests</a>.  <br /></td></tr>
+<tr class="separator:a2cb7bc9da2a8b968416b8c68e7c7f11c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f2fdc663783c10c9ad264b66af4058b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a9f2fdc663783c10c9ad264b66af4058b">ClearRepetitionTests</a> () noexcept</td></tr>
+<tr class="memdesc:a9f2fdc663783c10c9ad264b66af4058b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears all function wrappers in <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8bbe39125888ba012ec0c63773210e52" title="The vector of the function wrappers to profile multiple times.">repetitionTests</a>.  <br /></td></tr>
+<tr class="separator:a9f2fdc663783c10c9ad264b66af4058b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95d637bc9452c6d5bc4d7f6e9a12a2ad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a95d637bc9452c6d5bc4d7f6e9a12a2ad">RemoveRepetitionTest</a> (<a class="el" href="../../d8/d02/namespaceProfile.html#a1198d3c4fb1b6b7afa08f818de800e5a">u16</a> _index) noexcept</td></tr>
+<tr class="separator:a95d637bc9452c6d5bc4d7f6e9a12a2ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b61d4af11f66a1bdf60f8c71edd705a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8b61d4af11f66a1bdf60f8c71edd705a">PopBackRepetitionTest</a> () noexcept</td></tr>
+<tr class="memdesc:a8b61d4af11f66a1bdf60f8c71edd705a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the function wrapper at the back of <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8bbe39125888ba012ec0c63773210e52" title="The vector of the function wrappers to profile multiple times.">repetitionTests</a>.  <br /></td></tr>
+<tr class="separator:a8b61d4af11f66a1bdf60f8c71edd705a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac82df469a2185a75ed69a64f71f7a3ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#ac82df469a2185a75ed69a64f71f7a3ef">Clear</a> (<a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _repetitionCount) noexcept</td></tr>
 <tr class="memdesc:ac82df469a2185a75ed69a64f71f7a3ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears all the stored and computed results of the repeated profiling.  <br /></td></tr>
 <tr class="separator:ac82df469a2185a75ed69a64f71f7a3ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,9 +171,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a63fbf25ffd8f0228f513309b73e0c4e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fcec0e002e5366caf63da408ec8217a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a2fcec0e002e5366caf63da408ec8217a">FindMinResults</a> (<a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _repetitionCount) noexcept</td></tr>
 <tr class="separator:a2fcec0e002e5366caf63da408ec8217a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa67b7865f229b8cbffc336208b94e17"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#afa67b7865f229b8cbffc336208b94e17">FixedCountRepetitionTesting</a> (<a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _repetitionCount, <a class="el" href="../../d5/d06/structProfile_1_1RepetitionTest.html">RepetitionTest</a> &amp;_repetitionTest, bool _reset=true, bool _clear=false)</td></tr>
-<tr class="memdesc:afa67b7865f229b8cbffc336208b94e17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repeatedly tests a function and stores the profiling statistics.  <br /></td></tr>
-<tr class="separator:afa67b7865f229b8cbffc336208b94e17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dcfbf6b1073af347ef017373c256641"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a7dcfbf6b1073af347ef017373c256641">BestPerfSearchRepetitionTesting</a> (<a class="el" href="../../d8/d02/namespaceProfile.html#a1198d3c4fb1b6b7afa08f818de800e5a">u16</a> _repetitionTestTimeOut, bool _reset=false, bool _clear=true, <a class="el" href="../../d8/d02/namespaceProfile.html#a1198d3c4fb1b6b7afa08f818de800e5a">u16</a> _globalTimeOut=0xFFFFu)</td></tr>
+<tr class="memdesc:a7dcfbf6b1073af347ef017373c256641"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repeatedly tests all functions wrapped in <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8bbe39125888ba012ec0c63773210e52" title="The vector of the function wrappers to profile multiple times.">repetitionTests</a> for as long as allowed by the time out parameters and reports only about the best performance.  <br /></td></tr>
+<tr class="separator:a7dcfbf6b1073af347ef017373c256641"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cf144bd3fb0742c6ad6d481fe530418"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a3cf144bd3fb0742c6ad6d481fe530418">FixedCountRepetitionTesting</a> (<a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _repetitionCount, bool _reset=true, bool _clear=false)</td></tr>
+<tr class="memdesc:a3cf144bd3fb0742c6ad6d481fe530418"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repeatedly tests all functions wrapped in <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8bbe39125888ba012ec0c63773210e52" title="The vector of the function wrappers to profile multiple times.">repetitionTests</a> and consecutively reports the profiling statistics.  <br /></td></tr>
+<tr class="separator:a3cf144bd3fb0742c6ad6d481fe530418"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56083d005c00247b60a6d3bf899da848"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a56083d005c00247b60a6d3bf899da848">Report</a> (<a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _repetitionCount) noexcept</td></tr>
 <tr class="memdesc:a56083d005c00247b60a6d3bf899da848"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints the results of the repeated profiling.  <br /></td></tr>
 <tr class="separator:a56083d005c00247b60a6d3bf899da848"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -207,6 +222,12 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a174154e8227a280b44bf960fc1dacb89"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a174154e8227a280b44bf960fc1dacb89">MinAssign</a> (<a class="el" href="../../d8/d02/namespaceProfile.html#a8378a56ce15d4d016e83cc4fe43a7e17">f64</a> &amp;_a, <a class="el" href="../../d8/d02/namespaceProfile.html#a8378a56ce15d4d016e83cc4fe43a7e17">f64</a> &amp;_b) noexcept</td></tr>
 <tr class="memdesc:a174154e8227a280b44bf960fc1dacb89"><td class="mdescLeft">&#160;</td><td class="mdescRight">An overloaded function to assign the minimum of two values to the first one.  <br /></td></tr>
 <tr class="separator:a174154e8227a280b44bf960fc1dacb89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a8bbe39125888ba012ec0c63773210e52"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d5/d06/structProfile_1_1RepetitionTest.html">RepetitionTest</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8bbe39125888ba012ec0c63773210e52">repetitionTests</a></td></tr>
+<tr class="memdesc:a8bbe39125888ba012ec0c63773210e52"><td class="mdescLeft">&#160;</td><td class="mdescRight">The vector of the function wrappers to profile multiple times.  <br /></td></tr>
+<tr class="separator:a8bbe39125888ba012ec0c63773210e52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A wrapper to test the performance of a function by running it a number of times. </p>
@@ -237,6 +258,57 @@ Private Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a7dcfbf6b1073af347ef017373c256641" name="a7dcfbf6b1073af347ef017373c256641"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dcfbf6b1073af347ef017373c256641">&#9670;&#160;</a></span>BestPerfSearchRepetitionTesting()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d8/d02/namespaceProfile.html#a1198d3c4fb1b6b7afa08f818de800e5a">u16</a>&#160;</td>
+          <td class="paramname"><em>_repetitionTestTimeOut</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_reset</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_clear</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d8/d02/namespaceProfile.html#a1198d3c4fb1b6b7afa08f818de800e5a">u16</a>&#160;</td>
+          <td class="paramname"><em>_globalTimeOut</em> = <code>0xFFFFu</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Repeatedly tests all functions wrapped in <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8bbe39125888ba012ec0c63773210e52" title="The vector of the function wrappers to profile multiple times.">repetitionTests</a> for as long as allowed by the time out parameters and reports only about the best performance. </p>
+<p>The function will keep running until the <code>_globalTimeOut</code> is reached. We garentee that all functions will be tested at least once. In particular, in case there is a user mistake and <code>_globalTimeOut</code> is shorter than <code>_repetitionTestTimeOut</code>, the latter will be used such that at least one test is done for each function. When a new best performance is found, the time out is reset by <code>_repetitionTestTimeOut</code>. The best profiling results of each function will be stored in the <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html" title="A mirror of the Profiler struct to store all the statistics of a profiler and the tracks it contains ...">ProfilerResults</a> pointed by <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a01ff1b156c1e19093bfbd76351a2ce58" title="The pointer to the ProfilerResults storing the results of the repeated profiling.">ptr_repetitionResults</a>. In this case, <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a01ff1b156c1e19093bfbd76351a2ce58" title="The pointer to the ProfilerResults storing the results of the repeated profiling.">ptr_repetitionResults</a> must be set before calling this function and must be an array of at least of the size of <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8bbe39125888ba012ec0c63773210e52" title="The vector of the function wrappers to profile multiple times.">repetitionTests</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_repetitionTestTimeOut</td><td>The time out in seconds for each repetition test. </td></tr>
+    <tr><td class="paramname">_reset</td><td>Whether to reset the results before testing. Default is false. See <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#abd4475cd127d281ec0fee5500d8dfa22" title="Resets all the stored and computed results of the repeated profiling.">Reset</a>, <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a6cabfd8770cb20dc8dc7c02370291c99" title="Resets the profiler&#39;s values as well as all its initialized tracks.">Profiler::Reset</a>, and <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a3ed3027444e250180dc77cac08c01dce" title="Resets the values of all blocks in all tracks that have a name.">Profiler::ResetTracks</a>. </td></tr>
+    <tr><td class="paramname">_clear</td><td>Whether to clear the results before testing. Default is true. See <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#ac82df469a2185a75ed69a64f71f7a3ef" title="Clears all the stored and computed results of the repeated profiling.">Clear</a>, <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a6d295224cabb61e468023e92fd93d08f" title="Clears the profiler&#39;s values as well as all its initialized tracks.">Profiler::Clear</a>, and <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#ab99e1f3d110e3e6293e9d033f4975b41" title="Clears all used blocks of all used tracks in the profiler.">Profiler::ClearTracks</a>. </td></tr>
+    <tr><td class="paramname">_globalTimeOut</td><td>The time out in seconds for the whole testing. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ac82df469a2185a75ed69a64f71f7a3ef" name="ac82df469a2185a75ed69a64f71f7a3ef"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac82df469a2185a75ed69a64f71f7a3ef">&#9670;&#160;</a></span>Clear()</h2>
 
@@ -262,7 +334,7 @@ Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Clears all the stored and computed results of the repeated profiling. </p>
-<p>The function will clear the values of <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#adf1fe54996d2d8f3999c2f612d728d7a" title="A result structure to store the average of the repeated profiling.">averageResults</a>, <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#ac80c5c05ab6a1a493c7198a6feb36bd3" title="A result structure to store the variance of the repeated profiling.">varianceResults</a>, ::cumulatedResults, <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a14d3bff5678f35723ec04a19e4ac7104" title="A result structure to store the maximum of the repeated profiling.">maxResults</a>, and <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a57f71d8b89be621176520f4c94aea899" title="A result structure to store the minimum of the repeated profiling.">minResults</a>. It also clears everything in the <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html" title="A mirror of the Profiler struct to store all the statistics of a profiler and the tracks it contains ...">ProfilerResults</a> pointed by <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a01ff1b156c1e19093bfbd76351a2ce58" title="The pointer to the ProfilerResults storing the results of the repeated profiling.">ptr_repetitionResults</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>The function will clear the values of <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#adf1fe54996d2d8f3999c2f612d728d7a" title="A result structure to store the average of the repeated profiling.">averageResults</a>, <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#ac80c5c05ab6a1a493c7198a6feb36bd3" title="A result structure to store the variance of the repeated profiling.">varianceResults</a>, <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a14d3bff5678f35723ec04a19e4ac7104" title="A result structure to store the maximum of the repeated profiling.">maxResults</a>, and <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a57f71d8b89be621176520f4c94aea899" title="A result structure to store the minimum of the repeated profiling.">minResults</a>. It also clears everything in the <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html" title="A mirror of the Profiler struct to store all the statistics of a profiler and the tracks it contains ...">ProfilerResults</a> pointed by <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a01ff1b156c1e19093bfbd76351a2ce58" title="The pointer to the ProfilerResults storing the results of the repeated profiling.">ptr_repetitionResults</a>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">_repetitionCount</td><td>The number of repetitions. </td></tr>
   </table>
@@ -270,6 +342,33 @@ Private Member Functions</h2></td></tr>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#a21de62f170465a2e7536d1ea71cfe128" title="Clears the values of member variables of this struct and up to trackCount Profile::ProfileTrackResult...">Profile::ProfilerResults::Clear</a> </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>If you don't want to clear the names of all the data concerned by the repeated profiling, you can use <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#abd4475cd127d281ec0fee5500d8dfa22" title="Resets all the stored and computed results of the repeated profiling.">Reset</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a9f2fdc663783c10c9ad264b66af4058b" name="a9f2fdc663783c10c9ad264b66af4058b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f2fdc663783c10c9ad264b66af4058b">&#9670;&#160;</a></span>ClearRepetitionTests()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void Profile::RepetitionProfiler::ClearRepetitionTests </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clears all function wrappers in <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8bbe39125888ba012ec0c63773210e52" title="The vector of the function wrappers to profile multiple times.">repetitionTests</a>. </p>
 
 </div>
 </div>
@@ -412,8 +511,8 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="afa67b7865f229b8cbffc336208b94e17" name="afa67b7865f229b8cbffc336208b94e17"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa67b7865f229b8cbffc336208b94e17">&#9670;&#160;</a></span>FixedCountRepetitionTesting()</h2>
+<a id="a3cf144bd3fb0742c6ad6d481fe530418" name="a3cf144bd3fb0742c6ad6d481fe530418"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cf144bd3fb0742c6ad6d481fe530418">&#9670;&#160;</a></span>FixedCountRepetitionTesting()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -423,12 +522,6 @@ Private Member Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a>&#160;</td>
           <td class="paramname"><em>_repetitionCount</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d5/d06/structProfile_1_1RepetitionTest.html">RepetitionTest</a> &amp;&#160;</td>
-          <td class="paramname"><em>_repetitionTest</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -450,11 +543,10 @@ Private Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Repeatedly tests a function and stores the profiling statistics. </p>
+<p>Repeatedly tests all functions wrapped in <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8bbe39125888ba012ec0c63773210e52" title="The vector of the function wrappers to profile multiple times.">repetitionTests</a> and consecutively reports the profiling statistics. </p>
 <p>The function will be called <code>_repetitionCount</code> times. The profiling statistics of each repetition will be stored in the <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html" title="A mirror of the Profiler struct to store all the statistics of a profiler and the tracks it contains ...">ProfilerResults</a> pointed by <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a01ff1b156c1e19093bfbd76351a2ce58" title="The pointer to the ProfilerResults storing the results of the repeated profiling.">ptr_repetitionResults</a>. In this case, <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a01ff1b156c1e19093bfbd76351a2ce58" title="The pointer to the ProfilerResults storing the results of the repeated profiling.">ptr_repetitionResults</a> must be set before calling this function and must be an array of at least of size <code>_repetitionCount</code>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">_repetitionCount</td><td>The number of repetitions. </td></tr>
-    <tr><td class="paramname">_repetitionTest</td><td>The wrapper to the function to test. </td></tr>
     <tr><td class="paramname">_reset</td><td>Whether to reset the results before testing. Default is true. See <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#abd4475cd127d281ec0fee5500d8dfa22" title="Resets all the stored and computed results of the repeated profiling.">Reset</a>, <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a6cabfd8770cb20dc8dc7c02370291c99" title="Resets the profiler&#39;s values as well as all its initialized tracks.">Profiler::Reset</a>, and <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a3ed3027444e250180dc77cac08c01dce" title="Resets the values of all blocks in all tracks that have a name.">Profiler::ResetTracks</a>. </td></tr>
     <tr><td class="paramname">_clear</td><td>Whether to clear the results before testing. Default is false. See <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#ac82df469a2185a75ed69a64f71f7a3ef" title="Clears all the stored and computed results of the repeated profiling.">Clear</a>, <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a6d295224cabb61e468023e92fd93d08f" title="Clears the profiler&#39;s values as well as all its initialized tracks.">Profiler::Clear</a>, and <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#ab99e1f3d110e3e6293e9d033f4975b41" title="Clears all used blocks of all used tracks in the profiler.">Profiler::ClearTracks</a>. </td></tr>
   </table>
@@ -733,6 +825,87 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a8b61d4af11f66a1bdf60f8c71edd705a" name="a8b61d4af11f66a1bdf60f8c71edd705a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b61d4af11f66a1bdf60f8c71edd705a">&#9670;&#160;</a></span>PopBackRepetitionTest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void Profile::RepetitionProfiler::PopBackRepetitionTest </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Removes the function wrapper at the back of <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8bbe39125888ba012ec0c63773210e52" title="The vector of the function wrappers to profile multiple times.">repetitionTests</a>. </p>
+
+</div>
+</div>
+<a id="a2cb7bc9da2a8b968416b8c68e7c7f11c" name="a2cb7bc9da2a8b968416b8c68e7c7f11c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cb7bc9da2a8b968416b8c68e7c7f11c">&#9670;&#160;</a></span>PushBackRepetitionTest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void Profile::RepetitionProfiler::PushBackRepetitionTest </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d5/d06/structProfile_1_1RepetitionTest.html">RepetitionTest</a> *&#160;</td>
+          <td class="paramname"><em>_repetitionTest</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pushes back a wrapper of a function to profile multiple times to <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8bbe39125888ba012ec0c63773210e52" title="The vector of the function wrappers to profile multiple times.">repetitionTests</a>. </p>
+
+</div>
+</div>
+<a id="a95d637bc9452c6d5bc4d7f6e9a12a2ad" name="a95d637bc9452c6d5bc4d7f6e9a12a2ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95d637bc9452c6d5bc4d7f6e9a12a2ad">&#9670;&#160;</a></span>RemoveRepetitionTest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void Profile::RepetitionProfiler::RemoveRepetitionTest </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d8/d02/namespaceProfile.html#a1198d3c4fb1b6b7afa08f818de800e5a">u16</a>&#160;</td>
+          <td class="paramname"><em>_index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a56083d005c00247b60a6d3bf899da848" name="a56083d005c00247b60a6d3bf899da848"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a56083d005c00247b60a6d3bf899da848">&#9670;&#160;</a></span>Report()</h2>
 
@@ -792,7 +965,7 @@ Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Resets all the stored and computed results of the repeated profiling. </p>
-<p>The function will reset the values of <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#adf1fe54996d2d8f3999c2f612d728d7a" title="A result structure to store the average of the repeated profiling.">averageResults</a>, <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#ac80c5c05ab6a1a493c7198a6feb36bd3" title="A result structure to store the variance of the repeated profiling.">varianceResults</a>, ::cumulatedResults, <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a14d3bff5678f35723ec04a19e4ac7104" title="A result structure to store the maximum of the repeated profiling.">maxResults</a>, and <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a57f71d8b89be621176520f4c94aea899" title="A result structure to store the minimum of the repeated profiling.">minResults</a>. It also resets everything in the <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html" title="A mirror of the Profiler struct to store all the statistics of a profiler and the tracks it contains ...">ProfilerResults</a> pointed by <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a01ff1b156c1e19093bfbd76351a2ce58" title="The pointer to the ProfilerResults storing the results of the repeated profiling.">ptr_repetitionResults</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>The function will reset the values of <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#adf1fe54996d2d8f3999c2f612d728d7a" title="A result structure to store the average of the repeated profiling.">averageResults</a>, <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#ac80c5c05ab6a1a493c7198a6feb36bd3" title="A result structure to store the variance of the repeated profiling.">varianceResults</a>, <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a14d3bff5678f35723ec04a19e4ac7104" title="A result structure to store the maximum of the repeated profiling.">maxResults</a>, and <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a57f71d8b89be621176520f4c94aea899" title="A result structure to store the minimum of the repeated profiling.">minResults</a>. It also resets everything in the <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html" title="A mirror of the Profiler struct to store all the statistics of a profiler and the tracks it contains ...">ProfilerResults</a> pointed by <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a01ff1b156c1e19093bfbd76351a2ce58" title="The pointer to the ProfilerResults storing the results of the repeated profiling.">ptr_repetitionResults</a>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">_repetitionCount</td><td>The number of repetitions. </td></tr>
   </table>
@@ -898,6 +1071,31 @@ Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The pointer to the <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html" title="A mirror of the Profiler struct to store all the statistics of a profiler and the tracks it contains ...">ProfilerResults</a> storing the results of the repeated profiling. </p>
+
+</div>
+</div>
+<a id="a8bbe39125888ba012ec0c63773210e52" name="a8bbe39125888ba012ec0c63773210e52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8bbe39125888ba012ec0c63773210e52">&#9670;&#160;</a></span>repetitionTests</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="../../d5/d06/structProfile_1_1RepetitionTest.html">RepetitionTest</a>*&gt; Profile::RepetitionProfiler::repetitionTests</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The vector of the function wrappers to profile multiple times. </p>
+<p>The functions will be profiled in the order they were added. It will be used in <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a3cf144bd3fb0742c6ad6d481fe530418" title="Repeatedly tests all functions wrapped in repetitionTests and consecutively reports the profiling sta...">FixedCountRepetitionTesting</a>, and <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a7dcfbf6b1073af347ef017373c256641" title="Repeatedly tests all functions wrapped in repetitionTests for as long as allowed by the time out para...">BestPerfSearchRepetitionTesting</a> </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a2cb7bc9da2a8b968416b8c68e7c7f11c" title="Pushes back a wrapper of a function to profile multiple times to repetitionTests.">PushBackRepetitionTest</a>, <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a9f2fdc663783c10c9ad264b66af4058b" title="Clears all function wrappers in repetitionTests.">ClearRepetitionTests</a>, <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a95d637bc9452c6d5bc4d7f6e9a12a2ad">RemoveRepetitionTest</a>, <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8b61d4af11f66a1bdf60f8c71edd705a" title="Removes the function wrapper at the back of repetitionTests.">PopBackRepetitionTest</a> </dd></dl>
 
 </div>
 </div>

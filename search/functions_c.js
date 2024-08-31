@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['_7eprofileblock_0',['~ProfileBlock',['../d6/d04/structProfile_1_1ProfileBlock.html#af0c8765d1b3d8efa91c3dc6dd2918427',1,'Profile::ProfileBlock']]],
-  ['_7erepetitiontest_1',['~RepetitionTest',['../d5/d06/structProfile_1_1RepetitionTest.html#aee3034f5ed37c11d14ba31b049695cf7',1,'Profile::RepetitionTest']]]
+  ['testfunction_5fbandwidth_0',['TestFunction_Bandwidth',['../df/d02/main_8cpp.html#aea60d4a32af2d8b1928dba828d076c49',1,'main.cpp']]],
+  ['testfunction_5fbestperfsearch_1',['TestFunction_BestPerfSearch',['../df/d02/main_8cpp.html#a80939e62a8d05cd3d27f044aa154f3c8',1,'main.cpp']]],
+  ['testfunction_5ffixedrepetitiontesting_2',['TestFunction_FixedRepetitionTesting',['../df/d02/main_8cpp.html#a9e10844ad18074f28c94e375c6141dd3',1,'main.cpp']]],
+  ['testfunction_5fprofileblock_3',['TestFunction_ProfileBlock',['../df/d02/main_8cpp.html#af689fe32fa34e2742fcf2f46da9b621a',1,'main.cpp']]],
+  ['testfunction_5fprofilefunction_4',['TestFunction_ProfileFunction',['../df/d02/main_8cpp.html#a0a8c1ed403c169a9829493aa57a408e1',1,'main.cpp']]],
+  ['testfunction_5ftrack2_5',['TestFunction_Track2',['../df/d02/main_8cpp.html#afc8c3a41895eb64128a2951e1da4089b',1,'main.cpp']]]
 ];

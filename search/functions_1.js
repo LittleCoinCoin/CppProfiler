@@ -1,5 +1,12 @@
 var searchData=
 [
-  ['end_0',['End',['../d4/d00/structProfile_1_1Profiler.html#a6102368e85652ed4424a9de18043c159',1,'Profile::Profiler']]],
-  ['estimatecpufreq_1',['EstimateCPUFreq',['../d1/d04/structProfile_1_1Timer.html#a8becdf4271ecd66ab5bf96dd74dd11a7',1,'Profile::Timer']]]
+  ['capture_0',['Capture',['../d0/d07/structProfile_1_1ProfileTrackResult.html#a00bea23bcaf0abdf597ff22c9deb6818',1,'Profile::ProfileTrackResult::Capture()'],['../d2/d02/structProfile_1_1ProfilerResults.html#a6b18c973d35855345c455471ed7a78d7',1,'Profile::ProfilerResults::Capture()'],['../db/d06/structProfile_1_1ProfileBlockResult.html#ae70fa3f95cabc888ecf81cebd549498c',1,'Profile::ProfileBlockResult::Capture()']]],
+  ['clear_1',['Clear',['../de/d05/structProfile_1_1RepetitionProfiler.html#ac82df469a2185a75ed69a64f71f7a3ef',1,'Profile::RepetitionProfiler::Clear()'],['../d2/d02/structProfile_1_1ProfilerResults.html#a21de62f170465a2e7536d1ea71cfe128',1,'Profile::ProfilerResults::Clear()'],['../d4/d00/structProfile_1_1Profiler.html#a6d295224cabb61e468023e92fd93d08f',1,'Profile::Profiler::Clear()'],['../d0/d07/structProfile_1_1ProfileTrackResult.html#ad8a3eb80fcff5daa7f477590b07890a8',1,'Profile::ProfileTrackResult::Clear()'],['../dd/d06/structProfile_1_1ProfileTrack.html#abf3da9c09913a44c6290743daca0318a',1,'Profile::ProfileTrack::Clear()'],['../db/d06/structProfile_1_1ProfileBlockResult.html#a71310c5a6bc97a25c135ae19c69ae038',1,'Profile::ProfileBlockResult::Clear()'],['../dd/d01/structProfile_1_1ProfileBlockRecorder.html#ac085a6ef57fcc4f93f8aa07b34232987',1,'Profile::ProfileBlockRecorder::Clear()']]],
+  ['clearrepetitiontests_2',['ClearRepetitionTests',['../de/d05/structProfile_1_1RepetitionProfiler.html#a9f2fdc663783c10c9ad264b66af4058b',1,'Profile::RepetitionProfiler']]],
+  ['cleartimings_3',['ClearTimings',['../dd/d06/structProfile_1_1ProfileTrack.html#aabcbf251873704992ff820ede4b7b1a2',1,'Profile::ProfileTrack']]],
+  ['cleartracks_4',['ClearTracks',['../d4/d00/structProfile_1_1Profiler.html#ab99e1f3d110e3e6293e9d033f4975b41',1,'Profile::Profiler']]],
+  ['close_5',['Close',['../dd/d01/structProfile_1_1ProfileBlockRecorder.html#af01d5a042beee984eb1d37ed3bf10961',1,'Profile::ProfileBlockRecorder']]],
+  ['closeblock_6',['CloseBlock',['../dd/d06/structProfile_1_1ProfileTrack.html#a65c9a2c78502d1fc7c797524d14da74c',1,'Profile::ProfileTrack::CloseBlock()'],['../d4/d00/structProfile_1_1Profiler.html#ac34d80550cef4d0741ece5b88a7ea3b8',1,'Profile::Profiler::CloseBlock()']]],
+  ['computeaverageresults_7',['ComputeAverageResults',['../de/d05/structProfile_1_1RepetitionProfiler.html#a1bb7e0d94d95756030ea26a218e51b02',1,'Profile::RepetitionProfiler']]],
+  ['computevarianceresults_8',['ComputeVarianceResults',['../de/d05/structProfile_1_1RepetitionProfiler.html#aacaaf50cbf91a6606b562d33864163b8',1,'Profile::RepetitionProfiler']]]
 ];

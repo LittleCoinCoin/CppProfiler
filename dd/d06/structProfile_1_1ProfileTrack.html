@@ -54,7 +54,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.4.22.94</span>
+   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.5.27.111</span>
    </div>
    <div id="projectbrief">A custom c++ profiler.</div>
   </td>
@@ -158,9 +158,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:afebbe879f77a81ad3e5612fed26e8b68"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html#afebbe879f77a81ad3e5612fed26e8b68">hasBlock</a> = false</td></tr>
 <tr class="memdesc:afebbe879f77a81ad3e5612fed26e8b68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the track is used for at least one block.  <br /></td></tr>
 <tr class="separator:afebbe879f77a81ad3e5612fed26e8b68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac62b06739bf6fb409e5f31da5df716d7"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html#ac62b06739bf6fb409e5f31da5df716d7">name</a> = nullptr</td></tr>
-<tr class="memdesc:ac62b06739bf6fb409e5f31da5df716d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the track.  <br /></td></tr>
-<tr class="separator:ac62b06739bf6fb409e5f31da5df716d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a461c2c6f8645cb1702792a3d1e59593e"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html#a461c2c6f8645cb1702792a3d1e59593e">name</a> [32] = {0}</td></tr>
+<tr class="memdesc:a461c2c6f8645cb1702792a3d1e59593e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the track.  <br /></td></tr>
+<tr class="separator:a461c2c6f8645cb1702792a3d1e59593e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8435876176a3cb2ea24b77c47f9bfb3a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html#a8435876176a3cb2ea24b77c47f9bfb3a">elapsed</a> = 0</td></tr>
 <tr class="memdesc:a8435876176a3cb2ea24b77c47f9bfb3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The accumulated time from all blocks in the track.  <br /></td></tr>
 <tr class="separator:a8435876176a3cb2ea24b77c47f9bfb3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -301,6 +301,7 @@ Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">_profileBlockRecorderIdx</td><td>The index of the block timing in the track. </td></tr>
+    <tr><td class="paramname">_blockName</td><td>The name given to the block being profiled. </td></tr>
     <tr><td class="paramname">_byteCount</td><td>The number of bytes processed by the block. </td></tr>
   </table>
   </dd>
@@ -427,14 +428,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac62b06739bf6fb409e5f31da5df716d7" name="ac62b06739bf6fb409e5f31da5df716d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac62b06739bf6fb409e5f31da5df716d7">&#9670;&#160;</a></span>name</h2>
+<a id="a461c2c6f8645cb1702792a3d1e59593e" name="a461c2c6f8645cb1702792a3d1e59593e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a461c2c6f8645cb1702792a3d1e59593e">&#9670;&#160;</a></span>name</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* Profile::ProfileTrack::name = nullptr</td>
+          <td class="memname">char Profile::ProfileTrack::name[32] = {0}</td>
         </tr>
       </table>
 </div><div class="memdoc">

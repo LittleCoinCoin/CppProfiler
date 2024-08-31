@@ -1,4 +1,4 @@
 <map id="RepetitionTest_TestFunction_ProfileFunction" name="RepetitionTest_TestFunction_ProfileFunction">
 <area shape="rect" id="node1" title="A wrapper around the TestFunction_ProfileFunction when it will be used TestFunction_FixedRepetitionTe..." alt="" coords="5,79,194,120"/>
-<area shape="rect" id="node2" href="$d5/d06/structProfile_1_1RepetitionTest.html" title="A functor to wrap around code that will be profiled multiple times via the ::RepetitionProfiler." alt="" coords="26,5,173,31"/>
+<area shape="rect" id="node2" href="$d5/d06/structProfile_1_1RepetitionTest.html" title="A functor to wrap around code that will be profiled multiple times via the Profile::RepetitionProfile..." alt="" coords="26,5,173,31"/>
 </map>
