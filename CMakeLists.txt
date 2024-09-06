@@ -7,6 +7,8 @@ project ("CppProfiler")
 # In this project, we are setting the number of timings and tracks to a default value
 add_compile_definitions(NB_TIMINGS=256)
 add_compile_definitions(NB_TRACKS=8)
+add_compile_definitions(PROFILE_TRACK_NAME_LENGTH=64)
+add_compile_definitions(PROFILER_NAME_LENGTH=64)
 
 #In this project, by default we want to build the tests
 option(BUILD_PROFILER_TESTS "Tests that the profiler can build in all configurations including 
