@@ -7,7 +7,7 @@ add_executable(${TargetName}
 "../../main.cpp"
 
 "../../../Profile/Profiler.cpp"
-"../../../Profile/Timing.cpp"
+"../../../Profile/OSStatistics.cpp"
 
 )
 

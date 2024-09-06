@@ -12,7 +12,7 @@ add_compile_definitions(PROFILER_ENABLED=1)
 set(LibraryName ProfilerEnabled)
 add_library (${LibraryName} SHARED
 "../../../../Profile/Profiler.cpp"
-"../../../../Profile/Timing.cpp"
+"../../../../Profile/OSStatistics.cpp"
 )
 
 set_property(TARGET ${LibraryName} PROPERTY CXX_STANDARD 20)

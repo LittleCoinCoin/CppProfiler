@@ -1,4 +1,4 @@
-#include "Profile/Timing.hpp"
+#include "Profile/OSStatistics.hpp"
 
 Profile::u64 Profile::Timer::GetOSTimerFreq(void)
 {

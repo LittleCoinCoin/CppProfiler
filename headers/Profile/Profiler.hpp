@@ -7,7 +7,7 @@
 #include <type_traits> // for std::conditional_t in U_SIZE_ADAPTER
 
 //#include "Export.hpp"
-#include "Timing.hpp" // also includes Types.hpp and Export.hpp
+#include "OSStatistics.hpp" // also includes Types.hpp and Export.hpp
 //#include "Types.hpp"
 
 namespace Profile
