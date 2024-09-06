@@ -298,18 +298,32 @@ void Profile::Profiler::ClearTracks() noexcept
 void Profile::Profiler::End() noexcept
 {
 	elapsed = Timer::GetCPUTimer() - start;
+	pageFaults -= Surveyor::ReadOSPageFaultCount();
 }
 
 void Profile::Profiler::Initialize() noexcept
 {
+	Surveyor::InitializeOSMetrics();
 	start = Timer::GetCPUTimer();
+	pageFaults = Surveyor::ReadOSPageFaultCount();
 }
 
 void Profile::Profiler::Report() noexcept
 {
 #if PROFILER_ENABLED
 	printf("\n---- Estimated CPU Frequency: %llu ----\n", Timer::GetEstimatedCPUFreq());
-	printf("---- Profiler Report: %s (%fms) ----\n", name, 1000 * (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
+	printf("---- Profiler Report: %s (%fms) ", name, 1000 * (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
+	
+	if (pageFaults > 0)
+	{
+		printf("| %.4f page faults ----\n", pageFaults);
+	}
+	else
+	{
+		printf("----\n");
+	}
+
+
 	for (ProfileTrack& track : tracks)
 	{
 		if (track.hasBlock)

@@ -526,6 +526,8 @@ struct Profiler
 	*/
 	u64 elapsed = 0;
 
+	u64 pageFaults = 0;
+
 	/*!
 	@brief The tracks in the profiler.
 	*/

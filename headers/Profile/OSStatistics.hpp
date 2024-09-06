@@ -3,6 +3,7 @@
 #if _WIN32
 #include <intrin.h> //for __rdtsc
 #include <windows.h> //for QueryPerformanceCounter
+#include <psapi.h> //for GetProcessMemoryInfo
 #elif __ARM_ARCH // aimed at arm MacOs, but should work on any arm linux
 #include <time.h> //for clock_gettime
 #else // non-arm linux
@@ -15,6 +16,22 @@
 
 namespace Profile
 {
+
+	struct Surveyor
+	{
+		struct os_metrics
+		{
+			b32 Initialized;
+			HANDLE ProcessHandle;
+		};
+		
+		static os_metrics GlobalMetrics;
+
+		PROFILE_API static u64 ReadOSPageFaultCount();
+
+		PROFILE_API static void InitializeOSMetrics();
+	};
+
 	/*!
 	@brief A struct to give access to the OS and CPU timers
 			and frequencies.
