@@ -69,7 +69,7 @@ namespace Profile
 */
 #define PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount)                                        \
 	static NB_TIMINGS_TYPE profileBlockRecorder_##profileBlockRecorderIdx = Profile::Profiler::GetProfileBlockRecorderIndex(trackIdx, __FILE__, __LINE__, blockName); \
-	Profile::ProfileBlock ProfiledBlock_##profileBlockRecorderIdx(trackIdx, blockName, profileBlockRecorder_##profileBlockRecorderIdx, byteCount)
+	Profile::ProfileBlock ProfiledBlock_##profileBlockRecorderIdx(trackIdx, profileBlockRecorder_##profileBlockRecorderIdx, byteCount)
 
 /*!
 @brief DO NOT USE in code. Prefer using PROFILE_BLOCK_TIME_BANDWIDTH, PROFILE_FUNCTION_TIME_BANDWIDTH,
@@ -162,7 +162,7 @@ struct PROFILE_API ProfileBlock
 	*/
 	NB_TIMINGS_TYPE profileBlockRecorderIdx = 0;
 
-	ProfileBlock(NB_TRACKS_TYPE _trackIdx, const char* _blockName, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount);
+	ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount);
 
 	~ProfileBlock();
 };
@@ -199,9 +199,8 @@ struct ProfileBlockRecorder
 
 	/*!
 	@brief Clears the values of the block.
-	@remarks This resets even the ::blockName.
-			 If you are looking to reset the values without changing the name,
-			 use ::Reset.
+	@remarks There is no difference between this and ::Reset. We are keeping
+			 both for consistency with the other structs.
 	*/
 	PROFILE_API void Clear() noexcept;
 
@@ -218,12 +217,10 @@ struct ProfileBlockRecorder
 
 	/*!
 	@brief Update the profiling statistics of the block upon execution.
-	@param _blockName The name given to this block.
 	@param _byteCount The number of bytes processed by the block.
 	*/
-	inline void Open(const char* _blockName, u64 _byteCount)
+	inline void Open(u64 _byteCount)
 	{
-		blockName = _blockName;
 		start = Timer::GetCPUTimer();
 		hitCount++;
 		processedByteCount += _byteCount;
@@ -231,7 +228,8 @@ struct ProfileBlockRecorder
 
 	/*!
 	@brief Resets the values of the block.
-	@details Resetting do not change the ::blockName.
+	@remarks There is no difference between this and ::Clear. We are keeping
+			 both for consistency with the other structs.
 	*/
 	PROFILE_API void Reset() noexcept;
 };
@@ -391,13 +389,12 @@ struct ProfileTrack
 	/*!
 	@brief Opens a block of the track.
 	@param _profileBlockRecorderIdx The index of the block timing in the track.
-	@param _blockName The name given to the block being profiled.
 	@param _byteCount The number of bytes processed by the block.
 	@see Profile::ProfileBlockRecorder::Open(Profile::u64 _byteCount)
 	*/
-	PROFILE_API inline void OpenBlock(NB_TIMINGS_TYPE _profileBlockRecorderIdx, const char* _blockName, u64 _byteCount)
+	PROFILE_API inline void OpenBlock(NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount)
 	{
-		timings[_profileBlockRecorderIdx].Open(_blockName, _byteCount);
+		timings[_profileBlockRecorderIdx].Open(_byteCount);
 	}
 
 	/*!
@@ -614,18 +611,17 @@ struct Profiler
 	/*!
 	@brief Opens a block.
 	@param _trackIdx The index of the track the block belongs to.
-	@param _blockName The name given to the block being profiled.
 	@param _profileBlockRecorderIdx The index of the profile result.
 	@param _byteCount The number of bytes processed by the block.
 	*/
-	PROFILE_API inline void OpenBlock(NB_TRACKS_TYPE _trackIdx, const char* _blockName, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount)
+	PROFILE_API inline void OpenBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount)
 	{
 		//The track is used if a block is added.
 		//This is used to avoid outputting the track's statistics, or reseting its data if it has none.
 		//But it is a WRITE operation wasted for every time that is not the first time.
 		tracks[_trackIdx].hasBlock = true;
 
-		tracks[_trackIdx].OpenBlock(_profileBlockRecorderIdx, _blockName, _byteCount);
+		tracks[_trackIdx].OpenBlock(_profileBlockRecorderIdx, _byteCount);
 	}
 
 	/*!

@@ -14,10 +14,10 @@ Profile::Profiler* Profile::GetProfiler()
 	return s_Profiler;
 }
 
-Profile::ProfileBlock::ProfileBlock(NB_TRACKS_TYPE _trackIdx, const char* _blockName, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount) :
+Profile::ProfileBlock::ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount) :
 	trackIdx(_trackIdx), profileBlockRecorderIdx(_profileBlockRecorderIdx)
 {
-	s_Profiler->OpenBlock(trackIdx, _blockName, profileBlockRecorderIdx, _byteCount);
+	s_Profiler->OpenBlock(trackIdx, profileBlockRecorderIdx, _byteCount);
 }
 
 Profile::ProfileBlock::~ProfileBlock()
@@ -27,7 +27,6 @@ Profile::ProfileBlock::~ProfileBlock()
 
 void Profile::ProfileBlockRecorder::Clear() noexcept
 {
-	blockName = nullptr;
 	start = 0;
 	elapsed = 0;
 	hitCount = 0;
@@ -61,7 +60,6 @@ void Profile::ProfileBlockResult::Clear() noexcept
 {
 	trackIdx = 0;
 	profileBlockRecorderIdx = 0;
-	blockName = nullptr;
 	elapsed = 0;
 	elapsedSec = 0.0;
 	hitCount = 0;
@@ -103,7 +101,7 @@ void Profile::ProfileTrackResult::Capture(ProfileTrack& _track, u64 _trackIdx, u
 	NB_TIMINGS_TYPE _profileBlockRecorderIdx = 0;
 	for (ProfileBlockRecorder record : _track.timings)
 	{
-		if (record.blockName != nullptr)
+		if (record.hitCount)
 		{
 			timings[blockCount].Capture(record, _trackIdx, _profileBlockRecorderIdx, _track.elapsed, _totalElapsedReference);
 			blockCount++;
@@ -136,7 +134,7 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 
 	for (ProfileBlockRecorder& record : timings)
 	{
-		if (record.blockName != nullptr)
+		if (record.hitCount)
 		{
 			printf("%s[%llu]: %llu (%.2f%% of track; %.2f%% of total",
 				record.blockName, record.hitCount, record.elapsed, elapsed == 0 ? 0 : 100.0f * (f64)record.elapsed / (f64)elapsed,
@@ -180,7 +178,7 @@ void Profile::ProfileTrack::ResetTimings() noexcept
 {
 	for (ProfileBlockRecorder& record : timings)
 	{
-		if (record.blockName != nullptr)
+		if (record.hitCount)
 		{
 			record.Reset();
 		}
@@ -192,7 +190,7 @@ void Profile::ProfileTrackResult::Report() noexcept
 	printf("---- Profile Track Results: %s (%fms; %.2f%% of total) ----\n", name, 1000 * elapsedSec, proportionInTotal);
 	for (ProfileBlockResult& record : timings)
 	{
-		if (record.blockName != nullptr)
+		if (record.hitCount)
 		{
 			record.Report();
 		}
@@ -219,7 +217,7 @@ NB_TIMINGS_TYPE Profile::Profiler::GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _
 	ProfileBlockRecorder* profileBlockRecorder = &s_Profiler->tracks[_trackIdx].timings[profileBlockRecorderIndex];
 	ProfileBlockRecorder* InitialprofileBlockRecorder = profileBlockRecorder;
 
-	while (profileBlockRecorder->blockName)
+	while (profileBlockRecorder->hitCount)
 	{
 		profileBlockRecorderIndex = (profileBlockRecorderIndex + 1) % NB_TIMINGS;
 		profileBlockRecorder = &s_Profiler->tracks[_trackIdx].timings[profileBlockRecorderIndex];
@@ -228,6 +226,7 @@ NB_TIMINGS_TYPE Profile::Profiler::GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _
 		// than debug records we are putting in source code! Increase MAX_DEBUG_RECORD_COUNT!
 		//Assert(profileBlockRecorder != InitialprofileBlockRecorder);
 	}
+	profileBlockRecorder->blockName = _blockName;
 
 	return profileBlockRecorderIndex;
 }
