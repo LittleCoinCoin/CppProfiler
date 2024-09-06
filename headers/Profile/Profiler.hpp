@@ -20,6 +20,14 @@ namespace Profile
 	#define NB_TRACKS 2
 #endif // !NB_TRACKS
 
+#ifndef PROFILE_TRACK_NAME_LENGTH //Possibly defined as compilation variable
+	#define PROFILE_TRACK_NAME_LENGTH 32
+#endif // !PROFILE_TRACK_NAME_LENGTH
+
+#ifndef PROFILER_NAME_LENGTH //Possibly defined as compilation variable
+	#define PROFILER_NAME_LENGTH 32
+#endif // !PROFILER_NAME_LENGTH
+
 /*!
 @brief Expands to adapt the type of the unsigned integer to be
 		u8, u16, u32, or u64 depending on the value of @p x.
@@ -349,7 +357,7 @@ struct ProfileTrack
 	/*!
 	@brief The name of the track.
 	*/
-	char name[32] = {0};
+	char name[PROFILE_TRACK_NAME_LENGTH] = {0};
 
 	/*!
 	@brief The accumulated time from all blocks in the track.
@@ -504,7 +512,7 @@ struct Profiler
 	/*!
 	@brief The name of the profiler.
 	*/
-	char name[64] = { 0 };
+	char name[PROFILER_NAME_LENGTH] = { 0 };
 
 	/*!
 	@brief The time when the profiler was initialized (when ::Initialize
