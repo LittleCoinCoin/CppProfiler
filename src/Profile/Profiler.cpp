@@ -30,6 +30,8 @@ void Profile::ProfileBlockRecorder::Clear() noexcept
 	start = 0;
 	elapsed = 0;
 	hitCount = 0;
+	pageFaultCountStart = 0;
+	pageFaultCountTotal = 0;
 	processedByteCount = 0;
 }
 
@@ -38,6 +40,8 @@ void Profile::ProfileBlockRecorder::Reset() noexcept
 	start = 0;
 	elapsed = 0;
 	hitCount = 0;
+	pageFaultCountStart = 0;
+	pageFaultCountTotal = 0;
 	processedByteCount = 0;
 }
 
@@ -50,6 +54,7 @@ void Profile::ProfileBlockResult::Capture(ProfileBlockRecorder& _record, NB_TRAC
 	elapsed = _record.elapsed;
 	elapsedSec = (f64)_record.elapsed / (f64)Timer::GetEstimatedCPUFreq();
 	hitCount = _record.hitCount;
+	pageFaultCountTotal = _record.pageFaultCountTotal;
 	processedByteCount = _record.processedByteCount;
 	proportionInTrack = _trackElapsedReference == 0 ? 0 : 100.0f * (f64)_record.elapsed / (f64)_trackElapsedReference;
 	proportionInTotal = _totalElapsedReference == 0 ? 0 : 100.0f * (f64)_record.elapsed / (f64)_totalElapsedReference;
@@ -63,6 +68,7 @@ void Profile::ProfileBlockResult::Clear() noexcept
 	elapsed = 0;
 	elapsedSec = 0.0;
 	hitCount = 0;
+	pageFaultCountTotal = 0;
 	processedByteCount = 0;
 	proportionInTrack = 0.f;
 	proportionInTotal = 0.f;
@@ -77,6 +83,12 @@ void Profile::ProfileBlockResult::Report() noexcept
 	{
 		printf("; %lluMB at %.2fMB/s | %.2fGB/s", processedByteCount / (1<<20), bandwidthInB / (1<<20), bandwidthInB / (1<<30));
 	}
+
+	if(pageFaultCountTotal > 0)
+	{
+		printf("; %llu PF (%0.4fKB/fault); Page size is %llu bytes", pageFaultCountTotal, (f64)processedByteCount / ((f64)pageFaultCountTotal * 1024.0), Surveyor::GetOSPageSize());
+	}
+
 	printf(")\n");
 }
 
@@ -144,6 +156,12 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 				f64 bandwidth = (f64)record.processedByteCount / (((f64)record.elapsed / (f64)elapsed) * elapsedSec);
 				printf("; %.2fMB at %.2fMB/s | %.2fGB/s", (f64)record.processedByteCount / megaByte, bandwidth / megaByte, bandwidth / gigaByte);
 			}
+
+			if(record.pageFaultCountTotal > 0)
+			{
+				printf("; %llu PF (%0.4fKB/fault); Page size is %llu bytes", record.pageFaultCountTotal, (f64)record.processedByteCount / ((f64)record.pageFaultCountTotal * 1024.0), Surveyor::GetOSPageSize());
+			}
+
 			printf(")\n");
 		}
 	}
@@ -302,6 +320,7 @@ void Profile::Profiler::End() noexcept
 
 void Profile::Profiler::Initialize() noexcept
 {
+	Surveyor::InitializeOSMetrics();
 	start = Timer::GetCPUTimer();
 }
 
@@ -310,6 +329,7 @@ void Profile::Profiler::Report() noexcept
 #if PROFILER_ENABLED
 	printf("\n---- Estimated CPU Frequency: %llu ----\n", Timer::GetEstimatedCPUFreq());
 	printf("---- Profiler Report: %s (%fms) ----\n", name, 1000 * (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
+
 	for (ProfileTrack& track : tracks)
 	{
 		if (track.hasBlock)
@@ -425,6 +445,7 @@ void Profile::RepetitionProfiler::ComputeAverageResults(u64 _repetitionCount) no
 				averageResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
 				averageResults.tracks[j].timings[k].elapsed += ptr_repetitionResults[i].tracks[j].timings[k].elapsed;
 				averageResults.tracks[j].timings[k].hitCount += ptr_repetitionResults[i].tracks[j].timings[k].hitCount;
+				averageResults.tracks[j].timings[k].pageFaultCountTotal += ptr_repetitionResults[i].tracks[j].timings[k].pageFaultCountTotal;
 				averageResults.tracks[j].timings[k].processedByteCount += ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount;
 				averageResults.tracks[j].timings[k].proportionInTrack += ptr_repetitionResults[i].tracks[j].timings[k].proportionInTrack;
 				averageResults.tracks[j].timings[k].proportionInTotal += ptr_repetitionResults[i].tracks[j].timings[k].proportionInTotal;
@@ -447,6 +468,7 @@ void Profile::RepetitionProfiler::ComputeAverageResults(u64 _repetitionCount) no
 			// finish the average calculation for the current block
 			averageResults.tracks[j].timings[k].elapsed /= _repetitionCount;
 			averageResults.tracks[j].timings[k].hitCount /= _repetitionCount;
+			averageResults.tracks[j].timings[k].pageFaultCountTotal /= _repetitionCount;
 			averageResults.tracks[j].timings[k].processedByteCount /= _repetitionCount;
 			averageResults.tracks[j].timings[k].proportionInTrack /= _repetitionCount;
 			averageResults.tracks[j].timings[k].proportionInTotal /= _repetitionCount;
@@ -478,6 +500,7 @@ void Profile::RepetitionProfiler::ComputeVarianceResults(u64 _repetitionCount) n
 				varianceResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
 				varianceResults.tracks[j].timings[k].elapsed += (ptr_repetitionResults[i].tracks[j].timings[k].elapsed - averageResults.tracks[j].timings[k].elapsed) * (ptr_repetitionResults[i].tracks[j].timings[k].elapsed - averageResults.tracks[j].timings[k].elapsed);
 				varianceResults.tracks[j].timings[k].hitCount += (ptr_repetitionResults[i].tracks[j].timings[k].hitCount - averageResults.tracks[j].timings[k].hitCount) * (ptr_repetitionResults[i].tracks[j].timings[k].hitCount - averageResults.tracks[j].timings[k].hitCount);
+				varianceResults.tracks[j].timings[k].pageFaultCountTotal += (ptr_repetitionResults[i].tracks[j].timings[k].pageFaultCountTotal - averageResults.tracks[j].timings[k].pageFaultCountTotal) * (ptr_repetitionResults[i].tracks[j].timings[k].pageFaultCountTotal - averageResults.tracks[j].timings[k].pageFaultCountTotal);
 				varianceResults.tracks[j].timings[k].processedByteCount += (ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount - averageResults.tracks[j].timings[k].processedByteCount) * (ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount - averageResults.tracks[j].timings[k].processedByteCount);
 				varianceResults.tracks[j].timings[k].proportionInTrack += (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTrack - averageResults.tracks[j].timings[k].proportionInTrack) * (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTrack - averageResults.tracks[j].timings[k].proportionInTrack);
 				varianceResults.tracks[j].timings[k].proportionInTotal += (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTotal - averageResults.tracks[j].timings[k].proportionInTotal) * (ptr_repetitionResults[i].tracks[j].timings[k].proportionInTotal - averageResults.tracks[j].timings[k].proportionInTotal);
@@ -500,6 +523,7 @@ void Profile::RepetitionProfiler::ComputeVarianceResults(u64 _repetitionCount) n
 			// finish the standard deviation calculation for the current block
 			varianceResults.tracks[j].timings[k].elapsed = varianceResults.tracks[j].timings[k].elapsed / _repetitionCount;
 			varianceResults.tracks[j].timings[k].hitCount = varianceResults.tracks[j].timings[k].hitCount / _repetitionCount;
+			varianceResults.tracks[j].timings[k].pageFaultCountTotal = varianceResults.tracks[j].timings[k].pageFaultCountTotal / _repetitionCount;
 			varianceResults.tracks[j].timings[k].processedByteCount = varianceResults.tracks[j].timings[k].processedByteCount / _repetitionCount;
 			varianceResults.tracks[j].timings[k].proportionInTrack = varianceResults.tracks[j].timings[k].proportionInTrack / _repetitionCount;
 			varianceResults.tracks[j].timings[k].proportionInTotal = varianceResults.tracks[j].timings[k].proportionInTotal / _repetitionCount;
@@ -529,6 +553,7 @@ void Profile::RepetitionProfiler::FindMaxResults(u64 _repetitionCount) noexcept
 				maxResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
 				MaxAssign(maxResults.tracks[j].timings[k].elapsed, ptr_repetitionResults[i].tracks[j].timings[k].elapsed);
 				MaxAssign(maxResults.tracks[j].timings[k].hitCount, ptr_repetitionResults[i].tracks[j].timings[k].hitCount);
+				MaxAssign(maxResults.tracks[j].timings[k].pageFaultCountTotal, ptr_repetitionResults[i].tracks[j].timings[k].pageFaultCountTotal);
 				MaxAssign(maxResults.tracks[j].timings[k].processedByteCount, ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount);
 				MaxAssign(maxResults.tracks[j].timings[k].proportionInTrack, ptr_repetitionResults[i].tracks[j].timings[k].proportionInTrack);
 				MaxAssign(maxResults.tracks[j].timings[k].proportionInTotal, ptr_repetitionResults[i].tracks[j].timings[k].proportionInTotal);
@@ -559,6 +584,7 @@ void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
 				minResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
 				MinAssign(minResults.tracks[j].timings[k].elapsed, ptr_repetitionResults[i].tracks[j].timings[k].elapsed);
 				MinAssign(minResults.tracks[j].timings[k].hitCount, ptr_repetitionResults[i].tracks[j].timings[k].hitCount);
+				MinAssign(minResults.tracks[j].timings[k].pageFaultCountTotal, ptr_repetitionResults[i].tracks[j].timings[k].pageFaultCountTotal);
 				MinAssign(minResults.tracks[j].timings[k].processedByteCount, ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount);
 				MinAssign(minResults.tracks[j].timings[k].proportionInTrack, ptr_repetitionResults[i].tracks[j].timings[k].proportionInTrack);
 				MinAssign(minResults.tracks[j].timings[k].proportionInTotal, ptr_repetitionResults[i].tracks[j].timings[k].proportionInTotal);
@@ -733,7 +759,7 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 
 			for (IT_TIMINGS_TYPE j = 0; j < averageResults.tracks[i].blockCount; ++j)
 			{
-				if (averageResults.tracks[i].timings[j].blockName != nullptr)
+				if (averageResults.tracks[i].timings[j].hitCount > 0)
 				{
 					printf("%s[{%llu, %llu(+/-)%f, %llu}]: {%llu, %llu(+/-)%f, %llu} ({%.2f, %.2f(+/-)%.2f, %.2f}%% of track; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total",
 						averageResults.tracks[i].timings[j].blockName,
@@ -747,6 +773,13 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 							(f32)minResults.tracks[i].timings[j].processedByteCount / (1 << 20), (f32)averageResults.tracks[i].timings[j].processedByteCount / (1 << 20), std::sqrt(varianceResults.tracks[i].timings[j].processedByteCount) / (1 << 20), (f32)maxResults.tracks[i].timings[j].processedByteCount / (1 << 20),
 							minResults.tracks[i].timings[j].bandwidthInB / (1 << 20), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 20),	std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / (1 << 20), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 20),
 							minResults.tracks[i].timings[j].bandwidthInB / (1 << 30), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 30),	std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / (1 << 30), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 30));
+					}
+					if ((f64)averageResults.tracks[i].timings[j].pageFaultCountTotal > 0.0)
+					{
+						printf("; {%.llu, %.llu(+/-)%.f, %.llu}PF ({%0.4f, %0.4f(+/-)%0.4f, %0.4f}KB/fault); Page size is %llu bytes",
+							minResults.tracks[i].timings[j].pageFaultCountTotal, averageResults.tracks[i].timings[j].pageFaultCountTotal, std::sqrt(varianceResults.tracks[i].timings[j].pageFaultCountTotal), maxResults.tracks[i].timings[j].pageFaultCountTotal,
+							(f64)minResults.tracks[i].timings[j].processedByteCount / ((f64)minResults.tracks[i].timings[j].pageFaultCountTotal * 1024.0), (f64)averageResults.tracks[i].timings[j].processedByteCount / ((f64)averageResults.tracks[i].timings[j].pageFaultCountTotal * 1024.0), varianceResults.tracks[i].timings[j].pageFaultCountTotal == 0 ? 0.0 :std::sqrt((f64)varianceResults.tracks[i].timings[j].processedByteCount / ((f64)varianceResults.tracks[i].timings[j].pageFaultCountTotal * 1024.0)), (f64)maxResults.tracks[i].timings[j].processedByteCount / ((f64)maxResults.tracks[i].timings[j].pageFaultCountTotal * 1024.0),
+							Surveyor::GetOSPageSize());
 					}
 					printf(")\n");
 				}

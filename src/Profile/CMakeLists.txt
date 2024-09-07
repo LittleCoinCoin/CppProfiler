@@ -5,7 +5,7 @@ add_compile_definitions(BUILD_PROFILER_LIB)
 add_library (Profile SHARED
 
 "./Profiler.cpp"
-"./Timing.cpp"
+"./OSStatistics.cpp"
 
 )
 
