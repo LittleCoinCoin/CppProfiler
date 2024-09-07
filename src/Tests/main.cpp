@@ -33,7 +33,7 @@ void TestFunction_ProfileBlock(Profile::u64 _arr[], Profile::u64 _count)
 }
 
 /*!
-@brief A wrapper around the TestFunction_ProfileFunction when it will be used TestFunction_FixedRepetitionTesting.
+@brief A wrapper around the TestFunction_ProfileFunction when it will be used in repetition tester.
 */
 struct RepetitionTest_TestFunction_ProfileFunction : public Profile::RepetitionTest
 {
@@ -49,7 +49,7 @@ struct RepetitionTest_TestFunction_ProfileFunction : public Profile::RepetitionT
 };
 
 /*!
-@brief A wrapper around the TestFunction_ProfileBlock when it will be used TestFunction_FixedRepetitionTesting.
+@brief A wrapper around the TestFunction_ProfileBlock when it will be used in repetition tester.
 */
 struct RepetitionTest_TestFunction_ProfileBlock : public Profile::RepetitionTest
 {
@@ -82,6 +82,25 @@ void TestFunction_Bandwidth(Profile::u64 _arr[], Profile::u64 _count)
 }
 
 /*!
+@brief A wrapper around the TestFunction_Bandwidth when it will be used in repetition tester.
+@details In this one we are consistently reallocating a new array of 1MB at the
+		 beginning to trigger page faults and see them in the repetition profiling report.
+*/
+struct RepetitionTest_TestFunction_Bandwidth : public Profile::RepetitionTest
+{
+	RepetitionTest_TestFunction_Bandwidth() = default;
+	RepetitionTest_TestFunction_Bandwidth(const char* _name) : RepetitionTest(_name) {}
+
+	inline void operator()() override
+	{
+		Profile::u64 arraySize = 1024 * 1024;
+		Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * arraySize);
+		TestFunction_Bandwidth(arr, arraySize);
+		free(arr);
+	}
+};
+
+/*!
 @brief Tests the macro time profiling macro on track 1: PROFILE_FUNCTION_TIME(1).
 @details Fills an array with the index of the element.
 @param _arr The array to fill.
@@ -104,7 +123,7 @@ void TestFunction_Track2(Profile::u64 _arr[], Profile::u64 _count)
 */
 void TestFunction_PageFaultCounter()
 {
-	Profile::u64 arraySize = 1024 * 1024 * 1024;
+	Profile::u64 arraySize = 1024 * 1024;
 	Profile::u8* arr = (Profile::u8*)malloc(sizeof(Profile::u8) * arraySize);
 
 	PROFILE_FUNCTION_TIME_BANDWIDTH(0, sizeof(Profile::u8) * arraySize);
@@ -158,7 +177,9 @@ void TestFunction_FixedRepetitionTesting()
 	Profile::RepetitionProfiler* repetitionProfiler = (Profile::RepetitionProfiler*)calloc(1, sizeof(Profile::RepetitionProfiler));
 	
 	RepetitionTest_TestFunction_ProfileFunction repetitiontest(arr, 8192);
+	RepetitionTest_TestFunction_Bandwidth repetitionTest2("Page fault triggering");
 	repetitionProfiler->PushBackRepetitionTest(&repetitiontest);
+	repetitionProfiler->PushBackRepetitionTest(&repetitionTest2);
 
 	repetitionProfiler->SetRepetitionResults(results);
 	repetitionProfiler->FixedCountRepetitionTesting(repetitionCount);
@@ -209,14 +230,14 @@ int main()
 	profiler->Report();
 	profiler->ClearTracks();
 
-	//TestFunction_FixedRepetitionTesting();
+	TestFunction_FixedRepetitionTesting();
 
 	// Run the repetition profiling a second time to check that the internal 
 	// reset works appropriately. The profiling results should be close to the
 	// first run.
-	//TestFunction_FixedRepetitionTesting();
+	TestFunction_FixedRepetitionTesting();
 
-	//TestFunction_BestPerfSearch();
+	TestFunction_BestPerfSearch();
 
 	
 	free(arr);

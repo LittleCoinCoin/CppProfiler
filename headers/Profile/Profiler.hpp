@@ -297,8 +297,14 @@ struct ProfileBlockResult
 	u64 hitCount = 0;
 
 	/*!
+	@brief The total number of page faults over all executions of the block.
+	@details Mirrors ProfileBlockRecorder::pageFaultCountTotal.
+	*/
+	u64 pageFaultCountTotal = 0;
+
+	/*!
 	@brief The number of bytes processed by the block.
-	@details No equivalent in ProfileBlockRecorder.
+	@details Mirrors ProfileBlockRecorder::processedByteCount.
 	*/
 	u64 processedByteCount = 0;
 
