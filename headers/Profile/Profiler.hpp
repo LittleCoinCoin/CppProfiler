@@ -201,6 +201,16 @@ struct ProfileBlockRecorder
 	u64 hitCount = 0;
 
 	/*!
+	@brief The number of page faults at the start of the block.
+	*/
+	u64 pageFaultCountStart = 0;
+
+	/*
+	@brief The total number of page faults over all executions of the block.
+	*/
+	u64 pageFaultCountTotal = 0;
+
+	/*!
 	@brief The number of bytes processed by the block.
 	*/
 	u64 processedByteCount = 0;
@@ -220,6 +230,7 @@ struct ProfileBlockRecorder
 	{
 		u64 increment = Timer::GetCPUTimer() - start;
 		elapsed += increment;
+		pageFaultCountTotal += (Surveyor::GetOSPageFaultCount() - pageFaultCountStart);
 		return increment;
 	}
 
@@ -230,6 +241,7 @@ struct ProfileBlockRecorder
 	inline void Open(u64 _byteCount)
 	{
 		start = Timer::GetCPUTimer();
+		pageFaultCountStart = Surveyor::GetOSPageFaultCount();
 		hitCount++;
 		processedByteCount += _byteCount;
 	}
@@ -525,8 +537,6 @@ struct Profiler
 	@details This is updated only when ::End is called.
 	*/
 	u64 elapsed = 0;
-
-	u64 pageFaults = 0;
 
 	/*!
 	@brief The tracks in the profiler.

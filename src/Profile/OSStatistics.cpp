@@ -2,7 +2,7 @@
 
 Profile::Surveyor::os_metrics Profile::Surveyor::GlobalMetrics = {};
 
-Profile::u64 Profile::Surveyor::ReadOSPageFaultCount(void)
+Profile::u64 Profile::Surveyor::GetOSPageFaultCount(void)
 {
 #if _WIN32
 	PROCESS_MEMORY_COUNTERS_EX MemoryCounters = {};
@@ -17,6 +17,18 @@ Profile::u64 Profile::Surveyor::ReadOSPageFaultCount(void)
     getrusage(RUSAGE_SELF, &Usage);
     int Result = Usage.ru_minflt + Usage.ru_majflt;
     return Result;
+#endif
+}
+
+Profile::u64 Profile::Surveyor::GetOSPageSize()
+{
+#if _WIN32
+	PERFORMANCE_INFORMATION PerformanceInformation = {};
+	PerformanceInformation.cb = sizeof(PerformanceInformation);
+	GetPerformanceInfo(&PerformanceInformation, sizeof(PerformanceInformation));
+	return PerformanceInformation.PageSize;
+#else
+	return getpagesize();
 #endif
 }
 

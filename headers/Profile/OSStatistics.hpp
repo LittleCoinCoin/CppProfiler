@@ -9,6 +9,8 @@
 #else // non-arm linux
 #include <x86intrin.h> //for __rdtsc
 #include <sys/time.h> //for gettimeofday
+#include <sys/resource.h> //for getrusage
+#include <unistd.h> //for getpagesize
 #endif
 
 #include "Export.hpp"
@@ -16,19 +18,42 @@
 
 namespace Profile
 {
-
+	/*!
+	@brief A struct to give access to internal statistics such memory or
+			performance related
+	*/
 	struct Surveyor
 	{
+		/*!
+		@brief Utility struct to manipulate OS memory statistics.
+		*/
 		struct os_metrics
 		{
 			b32 Initialized;
 			HANDLE ProcessHandle;
 		};
 		
+		/*!
+		@brief An instance of os_metrics to store required handle information to
+				query memory statistics.
+		*/
 		static os_metrics GlobalMetrics;
 
-		PROFILE_API static u64 ReadOSPageFaultCount();
+		/*!
+		@brief Gets the number of page faults that have occurred since the start
+				of the process.
+		*/
+		PROFILE_API static u64 GetOSPageFaultCount();
+		
+		/*!
+		@brief Gets the size of a page in the OS.
+		*/
+		PROFILE_API static u64 GetOSPageSize();
 
+		/*!
+		@brief On windows, it initializes the process handle to query memory statistics
+			   (see ::GlobalMetrics::ProcessHandle). On linux or mac, it does nothing.
+		*/
 		PROFILE_API static void InitializeOSMetrics();
 	};
 

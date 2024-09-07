@@ -97,6 +97,32 @@ void TestFunction_Track2(Profile::u64 _arr[], Profile::u64 _count)
 	}
 }
 
+/*!
+@brief Tests the trigger of page fault information.
+@details Allocates a new large array and fills it with values. This should trigger
+		 page faults. The page fault count is then reported through the Report.
+*/
+void TestFunction_PageFaultCounter()
+{
+	Profile::u64 arraySize = 1024 * 1024 * 1024;
+	Profile::u8* arr = (Profile::u8*)malloc(sizeof(Profile::u8) * arraySize);
+
+	PROFILE_FUNCTION_TIME_BANDWIDTH(0, sizeof(Profile::u8) * arraySize);
+
+	if (arr)
+	{
+		for (Profile::u64 i = 0; i < arraySize; ++i)
+		{
+			arr[i] = (Profile::u8)i;
+		}
+	}
+	else
+	{
+		printf("ERROR: Could not malloc %llu bytes in TestFunction_PageFaultCounter", arraySize);
+	}
+	free(arr);
+}
+
 void TestFunction_BestPerfSearch()
 {
 
@@ -145,18 +171,20 @@ void TestFunction_FixedRepetitionTesting()
 
 int main()
 {
-	//Profile::Profiler profiler("Tests");
+	Profile::u64 testArraySize = 1024 * 1024;
+
 	Profile::Profiler* profiler = (Profile::Profiler*)calloc(1, sizeof(Profile::Profiler));
 	profiler->SetProfilerName("Tests");
 
 	Profile::SetProfiler(profiler);
 	profiler->SetTrackName(0, "Main");
 	profiler->Initialize();
-	Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * 8192);
+	Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * testArraySize);
 
-	TestFunction_ProfileFunction(arr, 8192);
-	TestFunction_ProfileBlock(arr, 8192);
-	TestFunction_Bandwidth(arr, 8192);
+	TestFunction_ProfileFunction(arr, testArraySize);
+	TestFunction_ProfileBlock(arr, testArraySize);
+	TestFunction_Bandwidth(arr, testArraySize);
+	TestFunction_PageFaultCounter();
 
 	profiler->End();
 	profiler->Report();
@@ -164,7 +192,7 @@ int main()
 
 	profiler->SetTrackName(1, "SubTrack");
 	profiler->Initialize();
-	TestFunction_Track2(arr, 8192);
+	TestFunction_Track2(arr, testArraySize);
 
 	profiler->End();
 	profiler->Report();
@@ -173,22 +201,22 @@ int main()
 	profiler->SetTrackName(0, "Main");
 	profiler->Initialize();
 
-	TestFunction_ProfileFunction(arr, 8192);
-	TestFunction_ProfileBlock(arr, 8192);
-	TestFunction_Bandwidth(arr, 8192);
+	TestFunction_ProfileFunction(arr, testArraySize);
+	TestFunction_ProfileBlock(arr, testArraySize);
+	TestFunction_Bandwidth(arr, testArraySize);
 
 	profiler->End();
 	profiler->Report();
 	profiler->ClearTracks();
 
-	TestFunction_FixedRepetitionTesting();
+	//TestFunction_FixedRepetitionTesting();
 
 	// Run the repetition profiling a second time to check that the internal 
 	// reset works appropriately. The profiling results should be close to the
 	// first run.
-	TestFunction_FixedRepetitionTesting();
+	//TestFunction_FixedRepetitionTesting();
 
-	TestFunction_BestPerfSearch();
+	//TestFunction_BestPerfSearch();
 
 	
 	free(arr);

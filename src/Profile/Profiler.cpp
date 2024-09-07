@@ -30,6 +30,8 @@ void Profile::ProfileBlockRecorder::Clear() noexcept
 	start = 0;
 	elapsed = 0;
 	hitCount = 0;
+	pageFaultCountStart = 0;
+	pageFaultCountTotal = 0;
 	processedByteCount = 0;
 }
 
@@ -38,6 +40,8 @@ void Profile::ProfileBlockRecorder::Reset() noexcept
 	start = 0;
 	elapsed = 0;
 	hitCount = 0;
+	pageFaultCountStart = 0;
+	pageFaultCountTotal = 0;
 	processedByteCount = 0;
 }
 
@@ -144,6 +148,12 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 				f64 bandwidth = (f64)record.processedByteCount / (((f64)record.elapsed / (f64)elapsed) * elapsedSec);
 				printf("; %.2fMB at %.2fMB/s | %.2fGB/s", (f64)record.processedByteCount / megaByte, bandwidth / megaByte, bandwidth / gigaByte);
 			}
+
+			if(record.pageFaultCountTotal > 0)
+			{
+				printf("; %llu PF (%0.4fKB/fault); PageSize=%llu bytes", record.pageFaultCountTotal, (f64)record.processedByteCount / ((f64)record.pageFaultCountTotal * 1024.0), Surveyor::GetOSPageSize());
+			}
+
 			printf(")\n");
 		}
 	}
@@ -298,31 +308,19 @@ void Profile::Profiler::ClearTracks() noexcept
 void Profile::Profiler::End() noexcept
 {
 	elapsed = Timer::GetCPUTimer() - start;
-	pageFaults -= Surveyor::ReadOSPageFaultCount();
 }
 
 void Profile::Profiler::Initialize() noexcept
 {
 	Surveyor::InitializeOSMetrics();
 	start = Timer::GetCPUTimer();
-	pageFaults = Surveyor::ReadOSPageFaultCount();
 }
 
 void Profile::Profiler::Report() noexcept
 {
 #if PROFILER_ENABLED
 	printf("\n---- Estimated CPU Frequency: %llu ----\n", Timer::GetEstimatedCPUFreq());
-	printf("---- Profiler Report: %s (%fms) ", name, 1000 * (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
-	
-	if (pageFaults > 0)
-	{
-		printf("| %.4f page faults ----\n", pageFaults);
-	}
-	else
-	{
-		printf("----\n");
-	}
-
+	printf("---- Profiler Report: %s (%fms) ----\n", name, 1000 * (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
 
 	for (ProfileTrack& track : tracks)
 	{
