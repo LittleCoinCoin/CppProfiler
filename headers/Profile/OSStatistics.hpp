@@ -25,12 +25,14 @@ namespace Profile
 	struct Surveyor
 	{
 		/*!
-		@brief Utility struct to manipulate OS memory statistics.
+		@brief On windows, utility struct to manipulate OS memory statistics.
 		*/
 		struct os_metrics
 		{
+		#if _WIN32
 			b32 Initialized;
 			HANDLE ProcessHandle;
+		#endif
 		};
 		
 		/*!
