@@ -6,6 +6,8 @@
 #include <psapi.h> //for GetProcessMemoryInfo
 #elif __ARM_ARCH // aimed at arm MacOs, but should work on any arm linux
 #include <time.h> //for clock_gettime
+#include <sys/resource.h> //for getrusage
+#include <unistd.h> //for getpagesize
 #else // non-arm linux
 #include <x86intrin.h> //for __rdtsc
 #include <sys/time.h> //for gettimeofday
