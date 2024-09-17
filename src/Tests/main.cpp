@@ -1,3 +1,4 @@
+#include <filesystem>
 #include "Profile/Profiler.hpp"
 
 /*!
@@ -183,7 +184,27 @@ void TestFunction_FixedRepetitionTesting()
 
 	repetitionProfiler->SetRepetitionResults(results);
 	repetitionProfiler->FixedCountRepetitionTesting(repetitionCount);
-	
+
+	//Test exporting as CSV
+	//Create file directory ./ProfileResults/Summary and ./ProfileResults/Repetitions
+	if (std::filesystem::create_directories("./ProfileResults/Summary"))
+	{
+		printf("\nCreating directory ./ProfileResults/Summary\n");
+	}
+	else
+	{
+		printf("\nDirectory ./ProfileResults/Summary already exists\n");
+	}
+
+	if (std::filesystem::create_directories("./ProfileResults/Repetitions"))
+	{
+		printf("\nCreating directory ./ProfileResults/Repetitions\n");
+	}
+	else
+	{
+		printf("\nDirectory ./ProfileResults/Repetitions already exists\n");
+	}
+	repetitionProfiler->ExportToCSV("./ProfileResults", repetitionCount);
 
 	free(results);
 	free(repetitionProfiler);
@@ -228,6 +249,21 @@ int main()
 
 	profiler->End();
 	profiler->Report();
+
+	//Test exporting as CSV
+	//Create file directory ./ProfileResults/TestResults.csv
+	if (std::filesystem::create_directories("./ProfileResults"))
+	{
+		printf("\nCreating directory ./ProfileResults\n");
+	}
+	else
+	{
+		printf("\nDirectory ./ProfileResults already exists\n");
+	}
+
+	//Export
+	profiler->ExportToCSV("./ProfileResults/TestResults.csv");
+
 	profiler->ClearTracks();
 
 	TestFunction_FixedRepetitionTesting();

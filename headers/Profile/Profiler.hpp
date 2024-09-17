@@ -628,6 +628,20 @@ struct Profiler
 	*/
 	PROFILE_API void End() noexcept;
 
+	
+	/*!
+	@brief Exports the profiling statistics of the profiler to a CSV file.
+	@details The logic to create the directories where the file is stored MUST be handled outside
+			 before calling this function. The file will be overwritten if it already exists.
+			 The file starts with two lines giving the headers for statistics of the profiler
+			 followed by the associated numbers. Then, a line defines new headers for the
+			 statistics of the blocks in the tracks. The following lines give the statistics
+			 of the blocks in the tracks. The statistics of the blocks are ordered by the
+			 order of the tracks in the profiler, and then by the order of the blocks in the tracks.
+	@param _path The path of the CSV file.
+	*/
+	PROFILE_API void ExportToCSV(const char* _path) noexcept;
+
 	/*!
 	@brief Starts the profiler.
 	@details Sets ::start to the current time.
@@ -744,6 +758,21 @@ struct ProfilerResults
 			 use ::Reset.
 	*/
 	PROFILE_API void Clear() noexcept;
+
+	/*!
+	@brief Exports the profiling statistics of the profiler to a CSV file.
+	@details The logic to create the directories where the file is stored MUST be handled outside
+			 before calling this function. The file will be overwritten if it already exists.
+			 The file starts with two lines giving the headers for statistics of the profiler
+			 followed by the associated numbers. Then, a line defines new headers for the
+			 statistics of the blocks in the tracks. The following lines give the statistics
+			 of the blocks in the tracks. The statistics of the blocks are ordered by the
+			 order of the tracks in the profiler, and then by the order of the blocks in the tracks.
+	@param _path The path of the CSV file.
+	@remarks This is equivalent to calling ::ExportToCSV on the profiler if you have captured
+			 the statistics with ::Capture.
+	*/
+	PROFILE_API void ExportToCSV(const char* _path) noexcept;
 
 	/*!
 	@brief Outputs the profiling statistics of the profiler.
@@ -1043,6 +1072,22 @@ public:
 	@param _globalTimeOut The time out in seconds for the whole testing.
 	*/
 	PROFILE_API void BestPerfSearchRepetitionTesting(u16 _repetitionTestTimeOut, bool _reset = false, bool _clear = true, u16 _globalTimeOut = 0xFFFFu);
+
+	/*!
+	@brief Exports the profiling statistics of the repeated profiling to a CSV file.
+	@details Different from ::Profiler::ExportToCSV, the @p _path must be a directory
+			 where the files will be stored and not directly the name of a file.
+			 The files will be named after the nature of the profiling statistics
+			 they contain. Namely, the files will be named "Average.csv", "Variance.csv",
+			 "Max.csv", and "Min.csv". The individual profiling statistics of each
+			 repetition will also be exported to CSV files named after the repetition
+			 number. The summary statistics will be in the directory "_path/Summary"
+			 and the individual statistics in the directory "_path/Repetitions".
+	@param _path The path of the directory where the CSV files will be stored.
+	@param _repetitionCount The number of repetitions to export. It cannot be greater
+			than the size of ::ptr_repetitionResults.
+	*/
+	PROFILE_API void ExportToCSV(const char* _path, u64 _repetitionCount) noexcept;
 
 	/*!
 	@brief Repeatedly tests all functions wrapped in ::repetitionTests and consecutively
