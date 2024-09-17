@@ -440,15 +440,12 @@ void Profile::ProfilerResults::ExportToCSV(const char* _path) noexcept
         fprintf(file, "Track Name,Track Elapsed,Track Elapsed in Seconds,Track Proportion in Total,Block Name,Block Hit Count,Block Elapsed,Block Elapsed in Seconds,Block Proportion in Track,Block Proportion in Total,Block Associated Page Faults Count,Block Processed Byte Count,Block Bandwidth In Bytes\n");
         for (IT_TRACKS_TYPE i = 0; i < trackCount; ++i)
         {
-            for (ProfileBlockResult& blockRes : tracks[i].timings)
+            for (IT_TIMINGS_TYPE j = 0; j < tracks[i].blockCount; ++j)
             {
-                if (blockRes.hitCount)
-                {
-                    fprintf(file, "%s,%llu,%f,%f,%s,%llu,%llu,%f,%f,%llu,%llu,%f\n",
-						tracks[i].name, tracks[i].elapsed, (f64)tracks[i].elapsed / (f64)Timer::GetEstimatedCPUFreq(), (f64)tracks[i].elapsed / (f64)elapsed,
-						blockRes.blockName, blockRes.hitCount, blockRes.elapsed, (f64)blockRes.elapsed / (f64)Timer::GetEstimatedCPUFreq(),
-						(f64)blockRes.elapsed / (f64)elapsed, blockRes.pageFaultCountTotal, blockRes.processedByteCount, (f64)blockRes.processedByteCount / (((f64)blockRes.elapsed / (f64)tracks[i].elapsed) * ((f64)tracks[i].elapsed / (f64)Timer::GetEstimatedCPUFreq())));
-                }
+                fprintf(file, "%s,%llu,%f,%f,%s,%llu,%llu,%f,%f,%llu,%llu,%f\n",
+					tracks[i].name, tracks[i].elapsed, (f64)tracks[i].elapsed / (f64)Timer::GetEstimatedCPUFreq(), (f64)tracks[i].elapsed / (f64)elapsed,
+					tracks[i].timings[j].blockName, tracks[i].timings[j].hitCount, tracks[i].timings[j].elapsed, (f64)tracks[i].timings[j].elapsed / (f64)Timer::GetEstimatedCPUFreq(),
+					(f64)tracks[i].timings[j].elapsed / (f64)elapsed, tracks[i].timings[j].pageFaultCountTotal, tracks[i].timings[j].processedByteCount, (f64)tracks[i].timings[j].processedByteCount / (((f64)tracks[i].timings[j].elapsed / (f64)tracks[i].elapsed) * ((f64)tracks[i].elapsed / (f64)Timer::GetEstimatedCPUFreq())));
             }
         }
         fclose(file);
@@ -582,24 +579,24 @@ void Profile::RepetitionProfiler::ComputeVarianceResults(u64 _repetitionCount) n
 	}
 
 	// finish the standard deviation calculation for the whole profiler
-	varianceResults.elapsed = varianceResults.elapsed / _repetitionCount;
-	varianceResults.elapsedSec = varianceResults.elapsedSec / _repetitionCount;
+	varianceResults.elapsed /= _repetitionCount;
+	varianceResults.elapsedSec /= _repetitionCount;
 	for (IT_TRACKS_TYPE j = 0; j < varianceResults.trackCount; ++j)
 	{
 		// finish the standard deviation calculation for the current track
-		varianceResults.tracks[j].elapsed = varianceResults.tracks[j].elapsed / _repetitionCount;
-		varianceResults.tracks[j].elapsedSec = varianceResults.tracks[j].elapsedSec / _repetitionCount;
-		varianceResults.tracks[j].proportionInTotal = varianceResults.tracks[j].proportionInTotal / _repetitionCount;
+		varianceResults.tracks[j].elapsed /= _repetitionCount;
+		varianceResults.tracks[j].elapsedSec /= _repetitionCount;
+		varianceResults.tracks[j].proportionInTotal /= _repetitionCount;
 		for (IT_TIMINGS_TYPE k = 0; k < varianceResults.tracks[j].blockCount; ++k)
 		{
 			// finish the standard deviation calculation for the current block
-			varianceResults.tracks[j].timings[k].elapsed = varianceResults.tracks[j].timings[k].elapsed / _repetitionCount;
-			varianceResults.tracks[j].timings[k].hitCount = varianceResults.tracks[j].timings[k].hitCount / _repetitionCount;
-			varianceResults.tracks[j].timings[k].pageFaultCountTotal = varianceResults.tracks[j].timings[k].pageFaultCountTotal / _repetitionCount;
-			varianceResults.tracks[j].timings[k].processedByteCount = varianceResults.tracks[j].timings[k].processedByteCount / _repetitionCount;
-			varianceResults.tracks[j].timings[k].proportionInTrack = varianceResults.tracks[j].timings[k].proportionInTrack / _repetitionCount;
-			varianceResults.tracks[j].timings[k].proportionInTotal = varianceResults.tracks[j].timings[k].proportionInTotal / _repetitionCount;
-			varianceResults.tracks[j].timings[k].bandwidthInB = varianceResults.tracks[j].timings[k].bandwidthInB / _repetitionCount;
+			varianceResults.tracks[j].timings[k].elapsed /= _repetitionCount;
+			varianceResults.tracks[j].timings[k].hitCount /= _repetitionCount;
+			varianceResults.tracks[j].timings[k].pageFaultCountTotal /= _repetitionCount;
+			varianceResults.tracks[j].timings[k].processedByteCount /= _repetitionCount;
+			varianceResults.tracks[j].timings[k].proportionInTrack /= _repetitionCount;
+			varianceResults.tracks[j].timings[k].proportionInTotal /= _repetitionCount;
+			varianceResults.tracks[j].timings[k].bandwidthInB /= _repetitionCount;
 		}
 	}
 }
