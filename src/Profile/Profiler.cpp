@@ -1,5 +1,6 @@
 #include <cmath> //for std::sqrt
 #include <cstring> //for strlen
+#include <stdio.h> //for FILE
 #include "Profile/Profiler.hpp"
 
 static Profile::Profiler* s_Profiler = nullptr;
@@ -311,6 +312,43 @@ void Profile::Profiler::ClearTracks() noexcept
 			track.Clear();
 		}
 	}
+}
+
+void Profile::Profiler::ExportAsCSV(const char* _fileName) noexcept
+{
+#if PROFILER_ENABLED
+	FILE* file = fopen(_fileName, "w");
+	if (file)
+	{
+		printf("Exporting profiler results to %s\n", _fileName);
+		fprintf(file, "Estimated CPU Frequency,Profiler Name,Total Time in Seconds\n");
+		fprintf(file, "%llu,%s,%f\n", Timer::GetEstimatedCPUFreq(), name, (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
+		fprintf(file, "Track Name,Track Elapsed,Track Elapsed in Secconds,Track Proportion in Total,Block Name,Block Hit Count,Block Elapsed,Block Elapsed in Seconds,Block Proportion in Track,Block Proportion in Total,Block Associated Page Faults Count,Block Processed Byte Count,Block Bandwidth In Bytes\n");
+		for (ProfileTrack& track : tracks)
+		{
+			if (track.hasBlock)
+			{
+				for (ProfileBlockRecorder& record : track.timings)
+				{
+					if (record.hitCount)
+					{
+						fprintf(file, "%s,%llu,%f,%f,%s,%llu,%llu,%f,%f,%llu,%llu,%f\n",
+							track.name, track.elapsed, (f64)track.elapsed / (f64)Timer::GetEstimatedCPUFreq(), 100.0f * (f64)track.elapsed / (f64)elapsed,
+							record.blockName, record.hitCount, record.elapsed, (f64)record.elapsed / (f64)Timer::GetEstimatedCPUFreq(), 100.0 * (f64)record.elapsed / (f64)track.elapsed,
+							record.pageFaultCountTotal, record.processedByteCount, record.processedByteCount / (((f64)record.elapsed / (f64)track.elapsed) * (f64)track.elapsed / (f64)Timer::GetEstimatedCPUFreq()));
+					}
+				}
+			}
+		}
+		fclose(file);
+	}
+	else
+	{
+		printf("Error: Could not open file %s for writing.\n", _fileName);
+	}
+#else
+	printf("Profiler export as CSV was called but it is disabled. The profiler is therefore empty and the export will be skipped.\nThe profiler can be enabled by defining _PROFILER_ENABLED in the compiler options.\n");
+#endif
 }
 
 void Profile::Profiler::End() noexcept
@@ -680,7 +718,6 @@ void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(u16 _repetitio
 	free(bestPerfs);
 
 }
-
 
 void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, bool _reset, bool _clear)
 {

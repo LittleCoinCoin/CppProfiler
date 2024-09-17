@@ -1,3 +1,4 @@
+#include <filesystem>
 #include "Profile/Profiler.hpp"
 
 /*!
@@ -228,6 +229,22 @@ int main()
 
 	profiler->End();
 	profiler->Report();
+
+	//Test exporting as CSV
+	//Create file directory ./ProfileResults/TestResults.csv
+	if (std::filesystem::create_directories("./ProfileResults"))
+	{
+		printf("\nCreating directory ./ProfileResults\n");
+	}
+	else
+	{
+		printf("\nDirectory ./ProfileResults already exists\n");
+	}
+
+	//Export
+	profiler->ExportAsCSV("./ProfileResults/TestResults.csv");
+
+
 	profiler->ClearTracks();
 
 	TestFunction_FixedRepetitionTesting();

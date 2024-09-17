@@ -628,6 +628,20 @@ struct Profiler
 	*/
 	PROFILE_API void End() noexcept;
 
+	
+	/*!
+	@brief Exports the profiling statistics of the profiler to a CSV file.
+	@details The logic to create the directories where the file is stored MUST be handled outside
+			 before calling this function. The file will be overwritten if it already exists.
+			 The file starts with two lines giving the headers for statistics of the profiler
+			 followed by the associated numbers. Then, a line defines new headers for the
+			 statistics of the blocks in the tracks. The following lines give the statistics
+			 of the blocks in the tracks. The statistics of the blocks are ordered by the
+			 order of the tracks in the profiler, and then by the order of the blocks in the tracks.
+	@param _path The path of the CSV file.
+	*/
+	PROFILE_API void ExportAsCSV(const char* _path) noexcept;
+
 	/*!
 	@brief Starts the profiler.
 	@details Sets ::start to the current time.
