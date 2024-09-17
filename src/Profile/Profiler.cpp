@@ -314,7 +314,7 @@ void Profile::Profiler::ClearTracks() noexcept
 	}
 }
 
-void Profile::Profiler::ExportAsCSV(const char* _fileName) noexcept
+void Profile::Profiler::ExportToCSV(const char* _fileName) noexcept
 {
 #if PROFILER_ENABLED
 	FILE* file = fopen(_fileName, "w");
@@ -426,6 +426,40 @@ void Profile::ProfilerResults::Clear() noexcept
 		tracks[i].Clear();
 	}
 	trackCount = 0;
+}
+
+void Profile::ProfilerResults::ExportToCSV(const char* _path) noexcept
+{
+#if PROFILER_ENABLED
+    FILE* file = fopen(_path, "w");
+    if (file)
+    {
+        printf("Exporting profiler results to %s\n", _path);
+        fprintf(file, "Estimated CPU Frequency,Profiler Name,Total Time in Seconds\n");
+        fprintf(file, "%llu,%s,%f\n", Timer::GetEstimatedCPUFreq(), name, (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
+        fprintf(file, "Track Name,Track Elapsed,Track Elapsed in Seconds,Track Proportion in Total,Block Name,Block Hit Count,Block Elapsed,Block Elapsed in Seconds,Block Proportion in Track,Block Proportion in Total,Block Associated Page Faults Count,Block Processed Byte Count,Block Bandwidth In Bytes\n");
+        for (IT_TRACKS_TYPE i = 0; i < trackCount; ++i)
+        {
+            for (ProfileBlockResult& blockRes : tracks[i].timings)
+            {
+                if (blockRes.hitCount)
+                {
+                    fprintf(file, "%s,%llu,%f,%f,%s,%llu,%llu,%f,%f,%llu,%llu,%f\n",
+						tracks[i].name, tracks[i].elapsed, (f64)tracks[i].elapsed / (f64)Timer::GetEstimatedCPUFreq(), (f64)tracks[i].elapsed / (f64)elapsed,
+						blockRes.blockName, blockRes.hitCount, blockRes.elapsed, (f64)blockRes.elapsed / (f64)Timer::GetEstimatedCPUFreq(),
+						(f64)blockRes.elapsed / (f64)elapsed, blockRes.pageFaultCountTotal, blockRes.processedByteCount, (f64)blockRes.processedByteCount / (((f64)blockRes.elapsed / (f64)tracks[i].elapsed) * ((f64)tracks[i].elapsed / (f64)Timer::GetEstimatedCPUFreq())));
+                }
+            }
+        }
+        fclose(file);
+    }
+	else
+	{
+		printf("Error: Could not open file %s for writing.\n", _path);
+	}
+#else
+	printf("Profiler export as CSV was called but the profiler is disabled. The profiler results are therefore empty and the export will be skipped.\nThe profiler can be enabled by defining _PROFILER_ENABLED in the compiler options.\n");
+#endif
 }
 
 void Profile::ProfilerResults::Report() noexcept
@@ -717,6 +751,34 @@ void Profile::RepetitionProfiler::BestPerfSearchRepetitionTesting(u16 _repetitio
 
 	free(bestPerfs);
 
+}
+
+void Profile::RepetitionProfiler::ExportToCSV(const char* _path, u64 _repetitionCount) noexcept
+{
+	// Export the average results to a CSV file
+	// Make the file name
+	char path[256];
+	sprintf(path, "%s/Summary/Average.csv", _path);
+	averageResults.ExportToCSV(path);
+
+	// Export the max results to a CSV file
+	sprintf(path, "%s/Summary/Max.csv", _path);
+	maxResults.ExportToCSV(path);
+
+	// Export the min results to a CSV file
+	sprintf(path, "%s/Summary/Min.csv", _path);
+	minResults.ExportToCSV(path);
+
+	// Export the variance results to a CSV file
+	sprintf(path, "%s/Summary/Variance.csv", _path);
+	varianceResults.ExportToCSV(path);
+
+	// Export the repetition results to a CSV file
+	for (u64 i = 0; i < _repetitionCount; ++i)
+	{
+		sprintf(path, "%s/Repetitions/%llu.csv", _path, i);
+		ptr_repetitionResults[i].ExportToCSV(path);
+	}
 }
 
 void Profile::RepetitionProfiler::FixedCountRepetitionTesting(u64 _repetitionCount, bool _reset, bool _clear)
