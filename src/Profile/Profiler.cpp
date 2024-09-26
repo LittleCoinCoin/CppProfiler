@@ -322,7 +322,11 @@ void Profile::Profiler::ExportToCSV(const char* _fileName) noexcept
 	{
 		printf("Exporting profiler results to %s\n", _fileName);
 		fprintf(file, "Estimated CPU Frequency,Profiler Name,Total Time in Seconds\n");
-		fprintf(file, "%llu,%s,%f\n", Timer::GetEstimatedCPUFreq(), name, (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
+		fprintf(file, "%llu,%s,%f\n",
+		Timer::GetEstimatedCPUFreq(), //Estimated CPU Frequency
+		name, //Profiler Name
+		(f64)elapsed / (f64)Timer::GetEstimatedCPUFreq() //Total Time in Seconds
+		);
 		fprintf(file, "Track Name,Track Elapsed,Track Elapsed in Secconds,Track Proportion in Total,Block Name,Block Hit Count,Block Elapsed,Block Elapsed in Seconds,Block Proportion in Track,Block Proportion in Total,Block Associated Page Faults Count,Block Processed Byte Count,Block Bandwidth In Bytes\n");
 		for (ProfileTrack& track : tracks)
 		{
@@ -332,10 +336,21 @@ void Profile::Profiler::ExportToCSV(const char* _fileName) noexcept
 				{
 					if (record.hitCount)
 					{
-						fprintf(file, "%s,%llu,%f,%f,%s,%llu,%llu,%f,%f,%llu,%llu,%f\n",
-							track.name, track.elapsed, (f64)track.elapsed / (f64)Timer::GetEstimatedCPUFreq(), 100.0f * (f64)track.elapsed / (f64)elapsed,
-							record.blockName, record.hitCount, record.elapsed, (f64)record.elapsed / (f64)Timer::GetEstimatedCPUFreq(), 100.0 * (f64)record.elapsed / (f64)track.elapsed,
-							record.pageFaultCountTotal, record.processedByteCount, record.processedByteCount / (((f64)record.elapsed / (f64)track.elapsed) * (f64)track.elapsed / (f64)Timer::GetEstimatedCPUFreq()));
+						fprintf(file, "%s,%llu,%f,%f,%s,%llu,%llu,%f,%f,%f,%llu,%llu,%f\n",
+							track.name, //Track Name
+							track.elapsed, //Track Elapsed
+							(f64)track.elapsed / (f64)Timer::GetEstimatedCPUFreq(), //Track Elapsed in Seconds
+							100.0f * (f64)track.elapsed / (f64)elapsed, //Track Proportion in Total
+							record.blockName, //Block Name
+							record.hitCount, //Block Hit Count
+							record.elapsed, //Block Elapsed
+							(f64)record.elapsed / (f64)Timer::GetEstimatedCPUFreq(), //Block Elapsed in Seconds
+							100.0 * (f64)record.elapsed / (f64)track.elapsed, //Block Proportion in Track
+							100.0 * (f64)record.elapsed / (f64)elapsed, //Block Proportion in Total
+							record.pageFaultCountTotal, //Block Associated Page Faults Count
+							record.processedByteCount, //Block Processed Byte Count
+							record.processedByteCount / (((f64)record.elapsed / (f64)track.elapsed) * (f64)track.elapsed / (f64)Timer::GetEstimatedCPUFreq()) //Block Bandwidth In Bytes
+							);
 					}
 				}
 			}
@@ -436,16 +451,31 @@ void Profile::ProfilerResults::ExportToCSV(const char* _path) noexcept
     {
         printf("Exporting profiler results to %s\n", _path);
         fprintf(file, "Estimated CPU Frequency,Profiler Name,Total Time in Seconds\n");
-        fprintf(file, "%llu,%s,%f\n", Timer::GetEstimatedCPUFreq(), name, (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
+        fprintf(file, "%llu,%s,%f\n",
+		Timer::GetEstimatedCPUFreq(), //Estimated CPU Frequency
+		name, //Profiler Name
+		(f64)elapsed / (f64)Timer::GetEstimatedCPUFreq() //Total Time in Seconds
+		);
         fprintf(file, "Track Name,Track Elapsed,Track Elapsed in Seconds,Track Proportion in Total,Block Name,Block Hit Count,Block Elapsed,Block Elapsed in Seconds,Block Proportion in Track,Block Proportion in Total,Block Associated Page Faults Count,Block Processed Byte Count,Block Bandwidth In Bytes\n");
         for (IT_TRACKS_TYPE i = 0; i < trackCount; ++i)
         {
             for (IT_TIMINGS_TYPE j = 0; j < tracks[i].blockCount; ++j)
             {
-                fprintf(file, "%s,%llu,%f,%f,%s,%llu,%llu,%f,%f,%llu,%llu,%f\n",
-					tracks[i].name, tracks[i].elapsed, (f64)tracks[i].elapsed / (f64)Timer::GetEstimatedCPUFreq(), (f64)tracks[i].elapsed / (f64)elapsed,
-					tracks[i].timings[j].blockName, tracks[i].timings[j].hitCount, tracks[i].timings[j].elapsed, (f64)tracks[i].timings[j].elapsed / (f64)Timer::GetEstimatedCPUFreq(),
-					(f64)tracks[i].timings[j].elapsed / (f64)elapsed, tracks[i].timings[j].pageFaultCountTotal, tracks[i].timings[j].processedByteCount, (f64)tracks[i].timings[j].processedByteCount / (((f64)tracks[i].timings[j].elapsed / (f64)tracks[i].elapsed) * ((f64)tracks[i].elapsed / (f64)Timer::GetEstimatedCPUFreq())));
+                fprintf(file, "%s,%llu,%f,%f,%s,%llu,%llu,%f,%f,%f,%llu,%llu,%f\n",
+					tracks[i].name, //Track Name
+					tracks[i].elapsed, //Track Elapsed
+					(f64)tracks[i].elapsed / (f64)Timer::GetEstimatedCPUFreq(), //Track Elapsed in Seconds
+					(f64)tracks[i].elapsed / (f64)elapsed, //Track Proportion in Total
+					tracks[i].timings[j].blockName, //Block Name
+					tracks[i].timings[j].hitCount, //Block Hit Count
+					tracks[i].timings[j].elapsed, //Block Elapsed
+					(f64)tracks[i].timings[j].elapsed / (f64)Timer::GetEstimatedCPUFreq(), //Block Elapsed in Seconds
+					100.0 * (f64)tracks[i].timings[j].elapsed / (f64)tracks[i].elapsed, //Block Proportion in Track
+					100.0 * (f64)tracks[i].timings[j].elapsed / (f64)elapsed, //Block Proportion in Total
+					tracks[i].timings[j].pageFaultCountTotal, //Block Associated Page Faults Count
+					tracks[i].timings[j].processedByteCount, //Block Processed Byte Count
+					(f64)tracks[i].timings[j].processedByteCount / (((f64)tracks[i].timings[j].elapsed / (f64)tracks[i].elapsed) * ((f64)tracks[i].elapsed / (f64)Timer::GetEstimatedCPUFreq())) //Block Bandwidth In Bytes
+					);
             }
         }
         fclose(file);
