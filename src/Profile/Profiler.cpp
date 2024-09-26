@@ -321,10 +321,11 @@ void Profile::Profiler::ExportToCSV(const char* _fileName) noexcept
 	if (file)
 	{
 		printf("Exporting profiler results to %s\n", _fileName);
-		fprintf(file, "Estimated CPU Frequency,Profiler Name,Total Time in Seconds\n");
-		fprintf(file, "%llu,%s,%f\n",
+		fprintf(file, "Estimated CPU Frequency,Profiler Name,Total Elapsed,Total Time in Seconds\n");
+		fprintf(file, "%llu,%s,%llu,%f\n",
 		Timer::GetEstimatedCPUFreq(), //Estimated CPU Frequency
 		name, //Profiler Name
+		elapsed, //Total Elapsed
 		(f64)elapsed / (f64)Timer::GetEstimatedCPUFreq() //Total Time in Seconds
 		);
 		fprintf(file, "Track Name,Track Elapsed,Track Elapsed in Secconds,Track Proportion in Total,Block Name,Block Hit Count,Block Elapsed,Block Elapsed in Seconds,Block Proportion in Track,Block Proportion in Total,Block Associated Page Faults Count,Block Processed Byte Count,Block Bandwidth In Bytes\n");
@@ -450,11 +451,12 @@ void Profile::ProfilerResults::ExportToCSV(const char* _path) noexcept
     if (file)
     {
         printf("Exporting profiler results to %s\n", _path);
-        fprintf(file, "Estimated CPU Frequency,Profiler Name,Total Time in Seconds\n");
-        fprintf(file, "%llu,%s,%f\n",
+        fprintf(file, "Estimated CPU Frequency,Profiler Name,Total Elapsed,Total Time in Seconds\n");
+        fprintf(file, "%llu,%s,%llu,%f\n",
 		Timer::GetEstimatedCPUFreq(), //Estimated CPU Frequency
 		name, //Profiler Name
-		(f64)elapsed / (f64)Timer::GetEstimatedCPUFreq() //Total Time in Seconds
+		elapsed, //Total Elapsed
+		elapsedSec //Total Time in Seconds
 		);
         fprintf(file, "Track Name,Track Elapsed,Track Elapsed in Seconds,Track Proportion in Total,Block Name,Block Hit Count,Block Elapsed,Block Elapsed in Seconds,Block Proportion in Track,Block Proportion in Total,Block Associated Page Faults Count,Block Processed Byte Count,Block Bandwidth In Bytes\n");
         for (IT_TRACKS_TYPE i = 0; i < trackCount; ++i)
@@ -464,12 +466,12 @@ void Profile::ProfilerResults::ExportToCSV(const char* _path) noexcept
                 fprintf(file, "%s,%llu,%f,%f,%s,%llu,%llu,%f,%f,%f,%llu,%llu,%f\n",
 					tracks[i].name, //Track Name
 					tracks[i].elapsed, //Track Elapsed
-					(f64)tracks[i].elapsed / (f64)Timer::GetEstimatedCPUFreq(), //Track Elapsed in Seconds
-					(f64)tracks[i].elapsed / (f64)elapsed, //Track Proportion in Total
+					tracks[i].elapsedSec, //Track Elapsed in Seconds
+					100.0 * (f64)tracks[i].elapsed / (f64)elapsed, //Track Proportion in Total
 					tracks[i].timings[j].blockName, //Block Name
 					tracks[i].timings[j].hitCount, //Block Hit Count
 					tracks[i].timings[j].elapsed, //Block Elapsed
-					(f64)tracks[i].timings[j].elapsed / (f64)Timer::GetEstimatedCPUFreq(), //Block Elapsed in Seconds
+					tracks[i].timings[j].elapsedSec, //Block Elapsed in Seconds
 					100.0 * (f64)tracks[i].timings[j].elapsed / (f64)tracks[i].elapsed, //Block Proportion in Track
 					100.0 * (f64)tracks[i].timings[j].elapsed / (f64)elapsed, //Block Proportion in Total
 					tracks[i].timings[j].pageFaultCountTotal, //Block Associated Page Faults Count
@@ -543,6 +545,7 @@ void Profile::RepetitionProfiler::ComputeAverageResults(u64 _repetitionCount) no
 			{
 				averageResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
 				averageResults.tracks[j].timings[k].elapsed += ptr_repetitionResults[i].tracks[j].timings[k].elapsed;
+				averageResults.tracks[j].timings[k].elapsedSec += ptr_repetitionResults[i].tracks[j].timings[k].elapsedSec;
 				averageResults.tracks[j].timings[k].hitCount += ptr_repetitionResults[i].tracks[j].timings[k].hitCount;
 				averageResults.tracks[j].timings[k].pageFaultCountTotal += ptr_repetitionResults[i].tracks[j].timings[k].pageFaultCountTotal;
 				averageResults.tracks[j].timings[k].processedByteCount += ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount;
@@ -566,6 +569,7 @@ void Profile::RepetitionProfiler::ComputeAverageResults(u64 _repetitionCount) no
 		{
 			// finish the average calculation for the current block
 			averageResults.tracks[j].timings[k].elapsed /= _repetitionCount;
+			averageResults.tracks[j].timings[k].elapsedSec /= _repetitionCount;
 			averageResults.tracks[j].timings[k].hitCount /= _repetitionCount;
 			averageResults.tracks[j].timings[k].pageFaultCountTotal /= _repetitionCount;
 			averageResults.tracks[j].timings[k].processedByteCount /= _repetitionCount;
@@ -598,6 +602,7 @@ void Profile::RepetitionProfiler::ComputeVarianceResults(u64 _repetitionCount) n
 			{
 				varianceResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
 				varianceResults.tracks[j].timings[k].elapsed += (ptr_repetitionResults[i].tracks[j].timings[k].elapsed - averageResults.tracks[j].timings[k].elapsed) * (ptr_repetitionResults[i].tracks[j].timings[k].elapsed - averageResults.tracks[j].timings[k].elapsed);
+				varianceResults.tracks[j].timings[k].elapsedSec += (ptr_repetitionResults[i].tracks[j].timings[k].elapsedSec - averageResults.tracks[j].timings[k].elapsedSec) * (ptr_repetitionResults[i].tracks[j].timings[k].elapsedSec - averageResults.tracks[j].timings[k].elapsedSec);
 				varianceResults.tracks[j].timings[k].hitCount += (ptr_repetitionResults[i].tracks[j].timings[k].hitCount - averageResults.tracks[j].timings[k].hitCount) * (ptr_repetitionResults[i].tracks[j].timings[k].hitCount - averageResults.tracks[j].timings[k].hitCount);
 				varianceResults.tracks[j].timings[k].pageFaultCountTotal += (ptr_repetitionResults[i].tracks[j].timings[k].pageFaultCountTotal - averageResults.tracks[j].timings[k].pageFaultCountTotal) * (ptr_repetitionResults[i].tracks[j].timings[k].pageFaultCountTotal - averageResults.tracks[j].timings[k].pageFaultCountTotal);
 				varianceResults.tracks[j].timings[k].processedByteCount += (ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount - averageResults.tracks[j].timings[k].processedByteCount) * (ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount - averageResults.tracks[j].timings[k].processedByteCount);
@@ -621,6 +626,7 @@ void Profile::RepetitionProfiler::ComputeVarianceResults(u64 _repetitionCount) n
 		{
 			// finish the standard deviation calculation for the current block
 			varianceResults.tracks[j].timings[k].elapsed /= _repetitionCount;
+			varianceResults.tracks[j].timings[k].elapsedSec /= _repetitionCount;
 			varianceResults.tracks[j].timings[k].hitCount /= _repetitionCount;
 			varianceResults.tracks[j].timings[k].pageFaultCountTotal /= _repetitionCount;
 			varianceResults.tracks[j].timings[k].processedByteCount /= _repetitionCount;
@@ -651,6 +657,7 @@ void Profile::RepetitionProfiler::FindMaxResults(u64 _repetitionCount) noexcept
 			{
 				maxResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
 				MaxAssign(maxResults.tracks[j].timings[k].elapsed, ptr_repetitionResults[i].tracks[j].timings[k].elapsed);
+				MaxAssign(maxResults.tracks[j].timings[k].elapsedSec, ptr_repetitionResults[i].tracks[j].timings[k].elapsedSec);
 				MaxAssign(maxResults.tracks[j].timings[k].hitCount, ptr_repetitionResults[i].tracks[j].timings[k].hitCount);
 				MaxAssign(maxResults.tracks[j].timings[k].pageFaultCountTotal, ptr_repetitionResults[i].tracks[j].timings[k].pageFaultCountTotal);
 				MaxAssign(maxResults.tracks[j].timings[k].processedByteCount, ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount);
@@ -682,6 +689,7 @@ void Profile::RepetitionProfiler::FindMinResults(u64 _repetitionCount) noexcept
 			{
 				minResults.tracks[j].timings[k].blockName = ptr_repetitionResults[i].tracks[j].timings[k].blockName;
 				MinAssign(minResults.tracks[j].timings[k].elapsed, ptr_repetitionResults[i].tracks[j].timings[k].elapsed);
+				MinAssign(minResults.tracks[j].timings[k].elapsedSec, ptr_repetitionResults[i].tracks[j].timings[k].elapsedSec);
 				MinAssign(minResults.tracks[j].timings[k].hitCount, ptr_repetitionResults[i].tracks[j].timings[k].hitCount);
 				MinAssign(minResults.tracks[j].timings[k].pageFaultCountTotal, ptr_repetitionResults[i].tracks[j].timings[k].pageFaultCountTotal);
 				MinAssign(minResults.tracks[j].timings[k].processedByteCount, ptr_repetitionResults[i].tracks[j].timings[k].processedByteCount);
