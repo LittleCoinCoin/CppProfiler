@@ -52,3 +52,12 @@ if (BUILD_PROFILER_LIB)
 	message("Building profiler as a library")
 	add_subdirectory ("src/Profile")
 endif()
+
+option(BUILD_PYTHON_BINDINGS "Build the python bindings of the profiler" ON)
+
+if (BUILD_PYTHON_BINDINGS)
+	message("Building python bindings")
+	add_subdirectory("ext/pybind11")
+	add_subdirectory("src/Bindings")
+	
+endif()
