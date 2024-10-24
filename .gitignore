@@ -5,6 +5,19 @@ build
 # Ignore Visual Studio
 .vs
 
+# Ignore VS Code
+.vscode
+
+# Ignore Python builds
+__pycache__
+*.pyc
+*.pyd
+*.pyo
+*.pyz
+*.pywz
+*.exp
+*.lib
+
 # Cmake gitignore template
 CMakeLists.txt.user
 CMakeCache.txt
