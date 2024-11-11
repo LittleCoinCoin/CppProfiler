@@ -54,10 +54,17 @@ if (BUILD_PROFILER_LIB)
 endif()
 
 option(BUILD_PYTHON_BINDINGS "Build the python bindings of the profiler" ON)
+option(RUNTIME_PYTHON_PROFILER_TESTS "Has an effect only if BUILD_PYTHON_BINDINGS is ON. In this case,
+runs the python tests" ON)
 
 if (BUILD_PYTHON_BINDINGS)
 	message("Building python bindings")
 	add_subdirectory("ext/pybind11")
 	add_subdirectory("src/Bindings")
+	if (RUNTIME_PYTHON_PROFILER_TESTS)
+		message("Adding PYTHON runtime tests.")
+		enable_testing()
+		add_subdirectory("src/Tests/Bindings")
+	endif()
 	
 endif()
