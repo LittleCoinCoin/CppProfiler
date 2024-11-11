@@ -1,13 +1,13 @@
 #include "pybind11/pybind11.h"
+#include "Profile/Profiler.hpp"
 
-int add(int i, int j)
-{
-    return i + j;
-}
 
 PYBIND11_MODULE(PyProfile, m)
 {
-    m.doc() = "pybind11 example plugin"; // optional module docstring
+    m.doc() = "Python binding module to the a profiling library on C++";
 
-    m.def("add", &add, "A function that adds two numbers");
+
+    //Add the bindings to the Profile::Profiler class
+    pybind11::class_<Profile::Profiler>(m, "Profiler")
+        .def(pybind11::init<>());
 }
