@@ -146,9 +146,9 @@ void TestFunction_PageFaultCounter()
 void TestFunction_BestPerfSearch()
 {
 
-	Profile::ProfilerResults* results = (Profile::ProfilerResults*)calloc(2, sizeof(Profile::ProfilerResults));
+	Profile::ProfilerResults* results = new Profile::ProfilerResults[2];
 	
-	Profile::RepetitionProfiler* repetitionProfiler = (Profile::RepetitionProfiler*)calloc(1, sizeof(Profile::RepetitionProfiler));
+	Profile::RepetitionProfiler* repetitionProfiler = new Profile::RepetitionProfiler();
 	
 	Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * 8192);
 	RepetitionTest_TestFunction_ProfileBlock repetitiontest("TestFunction_ProfileBlock", arr, 8192);
@@ -160,8 +160,8 @@ void TestFunction_BestPerfSearch()
 	repetitionProfiler->BestPerfSearchRepetitionTesting(3, false, true, 10);
 
 	free(arr);
-	free(results);
-	free(repetitionProfiler);
+	delete[] results;
+	delete repetitionProfiler;
 }
 
 
@@ -174,8 +174,8 @@ void TestFunction_FixedRepetitionTesting()
 	Profile::u64* arr = (Profile::u64*)malloc(sizeof(Profile::u64) * 8192);
 
 	Profile::u16 repetitionCount = 10;
-	Profile::ProfilerResults* results = (Profile::ProfilerResults*)calloc(repetitionCount, sizeof(Profile::ProfilerResults));
-	Profile::RepetitionProfiler* repetitionProfiler = (Profile::RepetitionProfiler*)calloc(1, sizeof(Profile::RepetitionProfiler));
+	Profile::ProfilerResults* results = new Profile::ProfilerResults[repetitionCount];
+	Profile::RepetitionProfiler* repetitionProfiler = new Profile::RepetitionProfiler();
 	
 	RepetitionTest_TestFunction_ProfileFunction repetitiontest(arr, 8192);
 	RepetitionTest_TestFunction_Bandwidth repetitionTest2("Page fault triggering");
@@ -206,8 +206,8 @@ void TestFunction_FixedRepetitionTesting()
 	}
 	repetitionProfiler->ExportToCSV("./ProfileResults", repetitionCount);
 
-	free(results);
-	free(repetitionProfiler);
+	delete[] results;
+	delete repetitionProfiler;
 	free(arr);
 }
 
@@ -215,7 +215,7 @@ int main()
 {
 	Profile::u64 testArraySize = 1024 * 1024;
 
-	Profile::Profiler* profiler = (Profile::Profiler*)calloc(1, sizeof(Profile::Profiler));
+	Profile::Profiler* profiler = new Profile::Profiler();
 	profiler->SetProfilerName("Tests");
 
 	Profile::SetProfiler(profiler);
@@ -277,7 +277,7 @@ int main()
 
 	
 	free(arr);
-	free(profiler);
+	delete profiler;
 
 	return 0;
 }
