@@ -1,5 +1,7 @@
 # ~/src/Bindings/CMakeList.txt
 
+add_compile_definitions(PROFILER_ENABLED=1)
+
 set(targetName "PyProfile")
 pybind11_add_module(${targetName} "./Python.cpp")
 
