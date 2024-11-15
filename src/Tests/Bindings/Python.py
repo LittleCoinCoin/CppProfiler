@@ -8,3 +8,11 @@ if __name__ == "__main__":
 
     profiler = PyProfile.Profiler()
     print(f"Profiler: {profiler}")
+
+    # Test Profiler.name
+    ## Default name
+    print(f"Profiler.name: {profiler.name}")
+    ## Set name
+    profiler.name = "Test"
+    print(f"New Profiler.name: {profiler.name}")
+    

@@ -11,6 +11,9 @@ PYBIND11_MODULE(PyProfile, m)
 
 
     //Add the bindings to the Profile::Profiler class
-    pybind11::class_<Profile::Profiler>(m, "Profiler")
-        .def(pybind11::init<>());
+	pybind11::class_<Profile::Profiler>(m, "Profiler")
+		.def_property("name",
+			[](Profile::Profiler& _self) { return _self.name; },
+			&Profile::Profiler::SetProfilerName)
+		.def(pybind11::init<>());
 }
