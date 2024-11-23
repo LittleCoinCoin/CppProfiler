@@ -75,17 +75,18 @@ namespace Profile
 		The final macro expanding to generate the unique profile block index
 		as well as the profile block opbject itself. 
 */
-#define PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount)                                        \
-	static NB_TIMINGS_TYPE profileBlockRecorder_##profileBlockRecorderIdx = Profile::Profiler::GetProfileBlockRecorderIndex(trackIdx, __FILE__, __LINE__, blockName); \
+#define PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount, file, line)\
+	static NB_TIMINGS_TYPE profileBlockRecorder_##profileBlockRecorderIdx = Profile::Profiler::GetProfileBlockRecorderIndex(trackIdx, file, line, blockName); \
 	Profile::ProfileBlock ProfiledBlock_##profileBlockRecorderIdx(trackIdx, profileBlockRecorder_##profileBlockRecorderIdx, byteCount)
 
 /*!
 @brief DO NOT USE in code. Prefer using PROFILE_BLOCK_TIME_BANDWIDTH, PROFILE_FUNCTION_TIME_BANDWIDTH,
 		PROFILE_BLOCK_TIME, or PROFILE_FUNCTION_TIME depending on your situation.
 		The intermediate macro expanding PROFILE_BLOCK_TIME_BANDWIDTH__. Used to handle
-		the VA_ARGS and the profileBlockRecorderIdx parameters.
+		the VA_ARGS and the profileBlockRecorderIdx parameters and to pass values of __FILE__ and __LINE__
+		by default.
 */
-#define PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, profileBlockRecorderIdx, byteCount) PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount)
+#define PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, profileBlockRecorderIdx, byteCount) PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount, __FILE__, __LINE__)
 
 /*!
 @brief USE in code. The macro to profile an arbitrary block of code with a name
@@ -587,7 +588,7 @@ struct Profiler
 		}
 	}
 	
-    /*!
+	/*!
 	@brief Sets the name of a track with a format string.
 	@param _trackIdx The index of the track.
 	@param _fmt The format string of the name of the track.
