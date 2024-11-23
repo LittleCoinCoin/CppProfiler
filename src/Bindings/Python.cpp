@@ -1,7 +1,31 @@
 #include "pybind11/pybind11.h"
 #include "Profile/Profiler.hpp"
 
+#include <pybind11/functional.h>
+
 using namespace pybind11::literals;
+
+struct LineAndFile
+{
+	std::string file;
+	int line;
+};
+
+LineAndFile getLineAndFile()
+{
+	pybind11::object inspect = pybind11::module::import("inspect");
+	pybind11::object frameInfo = inspect.attr("getframeinfo")(inspect.attr("currentframe")());
+	return LineAndFile{
+		frameInfo.attr("filename").cast<std::string>(),
+		frameInfo.attr("lineno").cast<int>() };
+}
+
+
+void ProfileBlockTimeBandwidth__(std::string _blockName, int _trackIdx, int _profileBlockRecorderIdx, int _byteCount)
+{
+	static LineAndFile lineAndFile = getLineAndFile();
+	PROFILE_BLOCK_TIME_BANDWIDTH__(_blockName.c_str(), _trackIdx, _profileBlockRecorderIdx, _byteCount, lineAndFile.file.c_str(), lineAndFile.line);
+}
 
 PYBIND11_MODULE(PyProfile, m)
 {
@@ -10,8 +34,16 @@ PYBIND11_MODULE(PyProfile, m)
 	m.attr("__nbTimings__") = NB_TIMINGS;
 	m.attr("__nbTracks__") = NB_TRACKS;
 
+	m.def("SetProfiler", &Profile::SetProfiler, "Sets the profiler to be used.", "_profiler"_a);
+	m.def("GetProfiler", &Profile::GetProfiler, "Returns the profiler being used.");
+	m.def("ProfileBlockTimeBandwidth__", &ProfileBlockTimeBandwidth__, "Profiles a block of code in terms of time and bandwidth.", "_blockName"_a, "_trackIdx"_a, "_profileBlockRecorderIdx"_a, "_byteCount"_a);
 
-    //Add the bindings to the Profile::Profiler class
+	m.def("GetLineAndFile", &getLineAndFile, "Returns the line number of the caller.");
+	pybind11::class_<LineAndFile>(m, "LineAndFile")
+		.def_readonly("file", &LineAndFile::file)
+		.def_readonly("line", &LineAndFile::line);
+    
+	//Add the bindings to the Profile::Profiler class
 	pybind11::class_<Profile::Profiler>(m, "Profiler")
 
 		//Add the fields and properties to the class
