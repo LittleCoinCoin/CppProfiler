@@ -24,6 +24,7 @@ if __name__ == "__main__":
     profiler.name = "NEW NAME"
     print(f"New Profiler.name: {profiler.name}")
     
+    profiler.SetTrackName(0, "PythonTestTrack")
     ## Try profile a block of code
     for i in range(0, 10):
         PyProfile.ProfileBlockTimeBandwidth__("TestBlock", 0, 26, 0)
