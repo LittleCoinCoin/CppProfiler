@@ -5,26 +5,28 @@
 
 using namespace pybind11::literals;
 
-struct LineAndFile
+struct RestrictedPythonFrameInfo
 {
 	std::string file;
 	int line;
+	std::string function;
 };
 
-LineAndFile getLineAndFile()
+RestrictedPythonFrameInfo getRestrictedPythonFrameInfo()
 {
 	pybind11::object inspect = pybind11::module::import("inspect");
 	pybind11::object frameInfo = inspect.attr("getframeinfo")(inspect.attr("currentframe")());
-	return LineAndFile{
+	return RestrictedPythonFrameInfo{
 		frameInfo.attr("filename").cast<std::string>(),
-		frameInfo.attr("lineno").cast<int>() };
+		frameInfo.attr("lineno").cast<int>(),
+		frameInfo.attr("function").cast<std::string>()
+	};
 }
-
 
 void ProfileBlockTimeBandwidth__(std::string _blockName, int _trackIdx, int _profileBlockRecorderIdx, int _byteCount)
 {
-	static LineAndFile lineAndFile = getLineAndFile();
-	PROFILE_BLOCK_TIME_BANDWIDTH__(_blockName.c_str(), _trackIdx, _profileBlockRecorderIdx, _byteCount, lineAndFile.file.c_str(), lineAndFile.line);
+	static RestrictedPythonFrameInfo frameInfo = getRestrictedPythonFrameInfo();
+	PROFILE_BLOCK_TIME_BANDWIDTH__(_blockName.c_str(), _trackIdx, _profileBlockRecorderIdx, _byteCount, frameInfo.file.c_str(), frameInfo.line);
 }
 
 PYBIND11_MODULE(PyProfile, m)
