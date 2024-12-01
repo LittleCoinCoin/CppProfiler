@@ -26,6 +26,27 @@ Profile::ProfileBlock::~ProfileBlock()
 	s_Profiler->CloseBlock(trackIdx, profileBlockRecorderIdx);
 }
 
+void Profile::ProfileBlockRecorder::SetBlockNameFmt(const char* _fmt, ...)
+{
+	//for security, check if the _fmt and the arguments is not bigger than the track name
+	std::va_list args;
+	va_start(args, _fmt);
+	int length = std::vsnprintf(nullptr, 0, _fmt, args);
+	va_end(args);
+
+	if (length > sizeof(blockName))
+	{
+		printf("Warning: Tried to a blockName for the profiler that is too long for the buffer. The blockName will be truncated.\n");
+	}
+
+	if (length > 0)
+	{
+		va_start(args, _fmt);
+		std::vsnprintf(blockName, sizeof(blockName), _fmt, args);
+		va_end(args);
+	}
+}
+
 void Profile::ProfileBlockRecorder::Clear() noexcept
 {
 	start = 0;
@@ -245,7 +266,7 @@ NB_TIMINGS_TYPE Profile::Profiler::GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _
 		// than debug records we are putting in source code! Increase MAX_DEBUG_RECORD_COUNT!
 		//Assert(profileBlockRecorder != InitialprofileBlockRecorder);
 	}
-	profileBlockRecorder->blockName = _blockName;
+	profileBlockRecorder->SetBlockName(_blockName);
 
 	return profileBlockRecorderIndex;
 }

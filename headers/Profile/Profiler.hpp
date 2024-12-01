@@ -20,6 +20,10 @@ namespace Profile
 	#define NB_TRACKS 2
 #endif // !NB_TRACKS
 
+#ifndef PROFILE_BLOCK_NAME_LENGTH //Possibly defined as compilation variable
+#define PROFILE_BLOCK_NAME_LENGTH 32
+#endif // !PROFILE_BLOCK_NAME_LENGTH
+
 #ifndef PROFILE_TRACK_NAME_LENGTH //Possibly defined as compilation variable
 	#define PROFILE_TRACK_NAME_LENGTH 32
 #endif // !PROFILE_TRACK_NAME_LENGTH
@@ -184,7 +188,7 @@ struct ProfileBlockRecorder
 	/*!
 	@brief The name of the block.
 	*/
-	const char* blockName = nullptr;
+	char blockName[PROFILE_BLOCK_NAME_LENGTH] = { 0 };
 
 	/*!
 	@brief The start time of the block.
@@ -215,6 +219,28 @@ struct ProfileBlockRecorder
 	@brief The number of bytes processed by the block.
 	*/
 	u64 processedByteCount = 0;
+
+	/*!
+	@brief Sets the name of the block (i.e., ::blockName).
+	@param _name The new name of the block.
+	@see ::SetBlockNameFmt
+	@remarks The name will be truncated if it is longer than PROFILE_BLOCK_NAME_LENGTH
+			 characters.
+	*/
+	PROFILE_API inline void SetBlockName(const char* _name) noexcept
+	{
+		SetBlockNameFmt(_name);
+	}
+
+	/*!
+	@brief Sets the name of the block with a format string.
+	@param _fmt The format string of the name of the block.
+	@param ... The arguments to the format string.
+	@see ::SetBlockName
+	@remarks The name will be truncated if it is longer than PROFILE_BLOCK_NAME_LENGTH
+			 characters.
+	*/
+	PROFILE_API void SetBlockNameFmt(const char* _fmt, ...);
 
 	/*!
 	@brief Clears the values of the block.
@@ -566,19 +592,32 @@ struct Profiler
 	/*!
 	@brief Sets the name of the profiler.
 	@param _name The name of the profiler.
+	@see ::SetProfilerNameFmt
+	@remarks The name will be truncated if it is longer than PROFILER_NAME_LENGTH
+			 characters.
 	*/
 	PROFILE_API inline void SetProfilerName(const char* _name) noexcept
 	{
 		SetProfilerNameFmt(_name);
 	}
 
+	/*!
+	@brief Sets the name of the profiler with a format string.
+	@param _fmt The format string of the name of the profiler.
+	@param ... The arguments to the format string.
+	@see ::SetProfilerName
+	@remarks The name will be truncated if it is longer than PROFILER_NAME_LENGTH
+			 characters.
+	*/
 	PROFILE_API void SetProfilerNameFmt(const char* _fmt, ...);
 
 	/*!
 	@brief Sets the name of a track.
 	@param _trackIdx The index of the track.
 	@param _name The name of the track.
-	@remarks The name will be truncated if it is longer than 31 characters.
+	@see ::SetTrackNameFmt
+	@remarks The name will be truncated if it is longer than PROFILE_TRACK_NAME_LENGTH
+			 characters.
 	*/
 	PROFILE_API inline void SetTrackName(NB_TRACKS_TYPE _trackIdx, const char* _name) noexcept
 	{
@@ -593,7 +632,9 @@ struct Profiler
 	@param _trackIdx The index of the track.
 	@param _fmt The format string of the name of the track.
 	@param ... The arguments to the format string.
-	@remarks The name will be truncated if it is longer than 31 characters.
+	@see ::SetTrackName
+	@remarks The name will be truncated if it is longer than PROFILE_TRACK_NAME_LENGTH
+			 characters.
 	*/
 	PROFILE_API void SetTrackNameFmt(NB_TRACKS_TYPE _trackIdx, const char* _fmt, ...);
 
