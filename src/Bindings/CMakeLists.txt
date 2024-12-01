@@ -3,7 +3,13 @@
 add_compile_definitions(PROFILER_ENABLED=1)
 
 set(targetName "PyProfile")
-pybind11_add_module(${targetName} "./Python.cpp")
+pybind11_add_module(${targetName} 
+
+"../Profile/Profiler.cpp"
+"../Profile/OSStatistics.cpp"
+
+"./Python.cpp"
+)
 
 target_include_directories(${targetName} PRIVATE ../../headers)
 
