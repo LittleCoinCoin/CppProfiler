@@ -23,10 +23,52 @@ RestrictedPythonFrameInfo getRestrictedPythonFrameInfo()
 	};
 }
 
-void ProfileBlockTimeBandwidth__(std::string _blockName, int _trackIdx, int _profileBlockRecorderIdx, int _byteCount)
+/*!
+@brief Profiles a block of code in terms of time and bandwidth. Emulates the macro PROFILE_BLOCK_TIME_BANDWIDTH.
+@param _blockName The name of the block to profile.
+@param _trackIdx The index of the track to profile.
+@param _byteCount The number of bytes to profile.
+*/
+void ProfileBlockTimeBandwidth(std::string _blockName, int _trackIdx, int _byteCount)
 {
 	static RestrictedPythonFrameInfo frameInfo = getRestrictedPythonFrameInfo();
-	PROFILE_BLOCK_TIME_BANDWIDTH__(_blockName.c_str(), _trackIdx, _profileBlockRecorderIdx, _byteCount, frameInfo.file.c_str(), frameInfo.line);
+	int _line = frameInfo.line;
+	PROFILE_BLOCK_TIME_BANDWIDTH__(_blockName.c_str(), _trackIdx, _line, _byteCount, frameInfo.file.c_str(), frameInfo.line);
+}
+
+/*!
+@brief Profiles a block of code in terms of time. Emulates the macro PROFILE_BLOCK_TIME.
+@param _blockName The name of the block to profile.
+@param _trackIdx The index of the track to profile.
+*/
+void ProfileBlockTime(std::string _blockName, int _trackIdx)
+{
+	static RestrictedPythonFrameInfo frameInfo = getRestrictedPythonFrameInfo();
+	int _line = frameInfo.line;
+	PROFILE_BLOCK_TIME_BANDWIDTH__(_blockName.c_str(), _trackIdx, _line, 0, frameInfo.file.c_str(), frameInfo.line);
+}
+
+/*!
+@brief Profiles a function in terms of time and bandwidth. Emulates the macro PROFILE_FUNCTION_TIME_BANDWIDTH.
+@brief _trackIdx The index of the track to profile.
+@brief _byteCount The number of bytes to profile.
+*/
+void ProfileFunctionTimeBandwidth(int _trackIdx, int _byteCount)
+{
+	static RestrictedPythonFrameInfo frameInfo = getRestrictedPythonFrameInfo();
+	int _line = frameInfo.line;
+	PROFILE_BLOCK_TIME_BANDWIDTH__(frameInfo.function.c_str(), _trackIdx, _line, _byteCount, frameInfo.file.c_str(), frameInfo.line);
+}
+
+/*!
+@brief Profiles a function in terms of time. Emulates the macro PROFILE_FUNCTION_TIME.
+@param _trackIdx The index of the track to profile.
+*/
+void ProfileFunctionTime(int _trackIdx)
+{
+	static RestrictedPythonFrameInfo frameInfo = getRestrictedPythonFrameInfo();
+	int _line = frameInfo.line;
+	PROFILE_BLOCK_TIME_BANDWIDTH__(frameInfo.function.c_str(), _trackIdx, _line, 0, frameInfo.file.c_str(), frameInfo.line);
 }
 
 PYBIND11_MODULE(PyProfile, m)
@@ -38,8 +80,11 @@ PYBIND11_MODULE(PyProfile, m)
 
 	m.def("SetProfiler", &Profile::SetProfiler, "Sets the profiler to be used.", "_profiler"_a);
 	m.def("GetProfiler", &Profile::GetProfiler, "Returns the profiler being used.");
-	m.def("ProfileBlockTimeBandwidth__", &ProfileBlockTimeBandwidth__, "Profiles a block of code in terms of time and bandwidth.", "_blockName"_a, "_trackIdx"_a, "_profileBlockRecorderIdx"_a, "_byteCount"_a);
-    
+	m.def("ProfileBlockTimeBandwidth", &ProfileBlockTimeBandwidth, "Profiles a block of code in terms of time and bandwidth.", "_blockName"_a, "_trackIdx"_a, "_byteCount"_a);
+	m.def("ProfileBlockTime", &ProfileBlockTime, "Profiles a block of code in terms of time.", "_blockName"_a, "_trackIdx"_a);
+	m.def("ProfileFunctionTimeBandwidth", &ProfileFunctionTimeBandwidth, "Profiles a function in terms of time and bandwidth.", "_trackIdx"_a, "_byteCount"_a);
+	m.def("ProfileFunctionTime", &ProfileFunctionTime, "Profiles a function in terms of time.", "_trackIdx"_a);
+
 	//Add the bindings to the Profile::Profiler class
 	pybind11::class_<Profile::Profiler>(m, "Profiler")
 
