@@ -37,11 +37,6 @@ PYBIND11_MODULE(PyProfile, m)
 	m.def("SetProfiler", &Profile::SetProfiler, "Sets the profiler to be used.", "_profiler"_a);
 	m.def("GetProfiler", &Profile::GetProfiler, "Returns the profiler being used.");
 	m.def("ProfileBlockTimeBandwidth__", &ProfileBlockTimeBandwidth__, "Profiles a block of code in terms of time and bandwidth.", "_blockName"_a, "_trackIdx"_a, "_profileBlockRecorderIdx"_a, "_byteCount"_a);
-
-	m.def("GetLineAndFile", &getLineAndFile, "Returns the line number of the caller.");
-	pybind11::class_<LineAndFile>(m, "LineAndFile")
-		.def_readonly("file", &LineAndFile::file)
-		.def_readonly("line", &LineAndFile::line);
     
 	//Add the bindings to the Profile::Profiler class
 	pybind11::class_<Profile::Profiler>(m, "Profiler")

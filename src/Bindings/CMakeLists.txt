@@ -9,9 +9,6 @@ pybind11_add_module(${targetName}
 "../Profile/OSStatistics.cpp"
 
 "./Python.cpp"
-
-
-
 )
 
 target_include_directories(${targetName} PRIVATE ../../headers)
