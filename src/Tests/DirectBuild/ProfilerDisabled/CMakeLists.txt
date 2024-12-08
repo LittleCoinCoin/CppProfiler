@@ -1,17 +1,27 @@
-# ~/src/Tests/DirectInclude/ProfilerDisabled/CMakeLists.txt
+# ~/src/Tests/DirectBuild/ProfilerDisabled/CMakeLists.txt
 
-add_compile_definitions(PROFILER_ENABLED=0)
+msg("Configure Test: DirectBuild - ProfilerDisabled")
+
 set(TargetName CppProfiler_Tests_DirectBuild_ProfilerDisabled)
 add_executable(${TargetName}
 
 "../../main.cpp"
 
 "../../../Profile/Profiler.cpp"
-"../../../Profile/Timing.cpp"
+"../../../Profile/OSStatistics.cpp"
 
 )
 
-set_property(TARGET ${TargetName} PROPERTY CXX_STANDARD 20)
+target_compile_features(${TargetName} PUBLIC cxx_std_20)
+target_compile_definitions(${TargetName} PRIVATE 
+
+PROFILER_ENABLED=FALSE
+PROFILER_NAME_LENGTH=${PROFILER_NAME_LENGTH}
+NB_TRACKS=${NB_TRACKS}
+PROFILE_TRACK_NAME_LENGTH=${PROFILE_TRACK_NAME_LENGTH}
+NB_TIMINGS=${NB_TIMINGS}
+
+)
 
 target_include_directories(${TargetName} PRIVATE
 	"../../../../headers"

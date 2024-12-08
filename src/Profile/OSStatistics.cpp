@@ -1,4 +1,47 @@
-#include "Profile/Timing.hpp"
+#include "Profile/OSStatistics.hpp"
+
+Profile::Surveyor::os_metrics Profile::Surveyor::GlobalMetrics = {};
+
+Profile::u64 Profile::Surveyor::GetOSPageFaultCount(void)
+{
+#if _WIN32
+	PROCESS_MEMORY_COUNTERS_EX MemoryCounters = {};
+	MemoryCounters.cb = sizeof(MemoryCounters);
+	GetProcessMemoryInfo(GlobalMetrics.ProcessHandle, (PROCESS_MEMORY_COUNTERS *)&MemoryCounters, sizeof(MemoryCounters));
+	u64 Result = MemoryCounters.PageFaultCount;
+	return Result;
+#else
+	// NOTE: ru_minflt  the number of page faults serviced without any I/O activity.
+    //       ru_majflt  the number of page faults serviced that required I/O activity.
+    struct rusage Usage = {};
+    getrusage(RUSAGE_SELF, &Usage);
+    int Result = Usage.ru_minflt + Usage.ru_majflt;
+    return Result;
+#endif
+}
+
+Profile::u64 Profile::Surveyor::GetOSPageSize()
+{
+#if _WIN32
+	PERFORMANCE_INFORMATION PerformanceInformation = {};
+	PerformanceInformation.cb = sizeof(PerformanceInformation);
+	GetPerformanceInfo(&PerformanceInformation, sizeof(PerformanceInformation));
+	return PerformanceInformation.PageSize;
+#else
+	return getpagesize();
+#endif
+}
+
+void Profile::Surveyor::InitializeOSMetrics(void)
+{
+#if _WIN32
+	if(!GlobalMetrics.Initialized)
+	{
+		GlobalMetrics.Initialized = true;
+		GlobalMetrics.ProcessHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, GetCurrentProcessId());
+	}
+#endif
+}
 
 Profile::u64 Profile::Timer::GetOSTimerFreq(void)
 {

@@ -3,11 +3,16 @@
 #if _WIN32
 #include <intrin.h> //for __rdtsc
 #include <windows.h> //for QueryPerformanceCounter
+#include <psapi.h> //for GetProcessMemoryInfo
 #elif __ARM_ARCH // aimed at arm MacOs, but should work on any arm linux
 #include <time.h> //for clock_gettime
+#include <sys/resource.h> //for getrusage
+#include <unistd.h> //for getpagesize
 #else // non-arm linux
 #include <x86intrin.h> //for __rdtsc
 #include <sys/time.h> //for gettimeofday
+#include <sys/resource.h> //for getrusage
+#include <unistd.h> //for getpagesize
 #endif
 
 #include "Export.hpp"
@@ -15,6 +20,47 @@
 
 namespace Profile
 {
+	/*!
+	@brief A struct to give access to internal statistics such memory or
+			performance related
+	*/
+	struct Surveyor
+	{
+		/*!
+		@brief On windows, utility struct to manipulate OS memory statistics.
+		*/
+		struct os_metrics
+		{
+		#if _WIN32
+			b32 Initialized;
+			HANDLE ProcessHandle;
+		#endif
+		};
+		
+		/*!
+		@brief An instance of os_metrics to store required handle information to
+				query memory statistics.
+		*/
+		static os_metrics GlobalMetrics;
+
+		/*!
+		@brief Gets the number of page faults that have occurred since the start
+				of the process.
+		*/
+		PROFILE_API static u64 GetOSPageFaultCount();
+		
+		/*!
+		@brief Gets the size of a page in the OS.
+		*/
+		PROFILE_API static u64 GetOSPageSize();
+
+		/*!
+		@brief On windows, it initializes the process handle to query memory statistics
+			   (see ::GlobalMetrics::ProcessHandle). On linux or mac, it does nothing.
+		*/
+		PROFILE_API static void InitializeOSMetrics();
+	};
+
 	/*!
 	@brief A struct to give access to the OS and CPU timers
 			and frequencies.

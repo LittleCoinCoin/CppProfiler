@@ -7,7 +7,7 @@
 #include <type_traits> // for std::conditional_t in U_SIZE_ADAPTER
 
 //#include "Export.hpp"
-#include "Timing.hpp" // also includes Types.hpp and Export.hpp
+#include "OSStatistics.hpp" // also includes Types.hpp and Export.hpp
 //#include "Types.hpp"
 
 namespace Profile
@@ -19,6 +19,14 @@ namespace Profile
 #ifndef NB_TRACKS //Possibly defined as compilation variable
 	#define NB_TRACKS 2
 #endif // !NB_TRACKS
+
+#ifndef PROFILE_TRACK_NAME_LENGTH //Possibly defined as compilation variable
+	#define PROFILE_TRACK_NAME_LENGTH 32
+#endif // !PROFILE_TRACK_NAME_LENGTH
+
+#ifndef PROFILER_NAME_LENGTH //Possibly defined as compilation variable
+	#define PROFILER_NAME_LENGTH 32
+#endif // !PROFILER_NAME_LENGTH
 
 /*!
 @brief Expands to adapt the type of the unsigned integer to be
@@ -67,17 +75,18 @@ namespace Profile
 		The final macro expanding to generate the unique profile block index
 		as well as the profile block opbject itself. 
 */
-#define PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount)                                        \
-	static NB_TIMINGS_TYPE profileBlockRecorder_##profileBlockRecorderIdx = Profile::Profiler::GetProfileBlockRecorderIndex(trackIdx, __FILE__, __LINE__, blockName); \
-	Profile::ProfileBlock ProfiledBlock_##profileBlockRecorderIdx(trackIdx, blockName, profileBlockRecorder_##profileBlockRecorderIdx, byteCount)
+#define PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount, file, line)\
+	static NB_TIMINGS_TYPE profileBlockRecorder_##profileBlockRecorderIdx = Profile::Profiler::GetProfileBlockRecorderIndex(trackIdx, file, line, blockName); \
+	Profile::ProfileBlock ProfiledBlock_##profileBlockRecorderIdx(trackIdx, profileBlockRecorder_##profileBlockRecorderIdx, byteCount)
 
 /*!
 @brief DO NOT USE in code. Prefer using PROFILE_BLOCK_TIME_BANDWIDTH, PROFILE_FUNCTION_TIME_BANDWIDTH,
 		PROFILE_BLOCK_TIME, or PROFILE_FUNCTION_TIME depending on your situation.
 		The intermediate macro expanding PROFILE_BLOCK_TIME_BANDWIDTH__. Used to handle
-		the VA_ARGS and the profileBlockRecorderIdx parameters.
+		the VA_ARGS and the profileBlockRecorderIdx parameters and to pass values of __FILE__ and __LINE__
+		by default.
 */
-#define PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, profileBlockRecorderIdx, byteCount) PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount)
+#define PROFILE_BLOCK_TIME_BANDWIDTH_(blockName, trackIdx, profileBlockRecorderIdx, byteCount) PROFILE_BLOCK_TIME_BANDWIDTH__(blockName, trackIdx, profileBlockRecorderIdx, byteCount, __FILE__, __LINE__)
 
 /*!
 @brief USE in code. The macro to profile an arbitrary block of code with a name
@@ -162,7 +171,7 @@ struct PROFILE_API ProfileBlock
 	*/
 	NB_TIMINGS_TYPE profileBlockRecorderIdx = 0;
 
-	ProfileBlock(NB_TRACKS_TYPE _trackIdx, const char* _blockName, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount);
+	ProfileBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount);
 
 	~ProfileBlock();
 };
@@ -193,15 +202,24 @@ struct ProfileBlockRecorder
 	u64 hitCount = 0;
 
 	/*!
+	@brief The number of page faults at the start of the block.
+	*/
+	u64 pageFaultCountStart = 0;
+
+	/*
+	@brief The total number of page faults over all executions of the block.
+	*/
+	u64 pageFaultCountTotal = 0;
+
+	/*!
 	@brief The number of bytes processed by the block.
 	*/
 	u64 processedByteCount = 0;
 
 	/*!
 	@brief Clears the values of the block.
-	@remarks This resets even the ::blockName.
-			 If you are looking to reset the values without changing the name,
-			 use ::Reset.
+	@remarks There is no difference between this and ::Reset. We are keeping
+			 both for consistency with the other structs.
 	*/
 	PROFILE_API void Clear() noexcept;
 
@@ -213,25 +231,26 @@ struct ProfileBlockRecorder
 	{
 		u64 increment = Timer::GetCPUTimer() - start;
 		elapsed += increment;
+		pageFaultCountTotal += (Surveyor::GetOSPageFaultCount() - pageFaultCountStart);
 		return increment;
 	}
 
 	/*!
 	@brief Update the profiling statistics of the block upon execution.
-	@param _blockName The name given to this block.
 	@param _byteCount The number of bytes processed by the block.
 	*/
-	inline void Open(const char* _blockName, u64 _byteCount)
+	inline void Open(u64 _byteCount)
 	{
-		blockName = _blockName;
 		start = Timer::GetCPUTimer();
+		pageFaultCountStart = Surveyor::GetOSPageFaultCount();
 		hitCount++;
 		processedByteCount += _byteCount;
 	}
 
 	/*!
 	@brief Resets the values of the block.
-	@details Resetting do not change the ::blockName.
+	@remarks There is no difference between this and ::Clear. We are keeping
+			 both for consistency with the other structs.
 	*/
 	PROFILE_API void Reset() noexcept;
 };
@@ -279,8 +298,14 @@ struct ProfileBlockResult
 	u64 hitCount = 0;
 
 	/*!
+	@brief The total number of page faults over all executions of the block.
+	@details Mirrors ProfileBlockRecorder::pageFaultCountTotal.
+	*/
+	u64 pageFaultCountTotal = 0;
+
+	/*!
 	@brief The number of bytes processed by the block.
-	@details No equivalent in ProfileBlockRecorder.
+	@details Mirrors ProfileBlockRecorder::processedByteCount.
 	*/
 	u64 processedByteCount = 0;
 
@@ -351,7 +376,7 @@ struct ProfileTrack
 	/*!
 	@brief The name of the track.
 	*/
-	char name[32] = {0};
+	char name[PROFILE_TRACK_NAME_LENGTH] = {0};
 
 	/*!
 	@brief The accumulated time from all blocks in the track.
@@ -391,13 +416,12 @@ struct ProfileTrack
 	/*!
 	@brief Opens a block of the track.
 	@param _profileBlockRecorderIdx The index of the block timing in the track.
-	@param _blockName The name given to the block being profiled.
 	@param _byteCount The number of bytes processed by the block.
 	@see Profile::ProfileBlockRecorder::Open(Profile::u64 _byteCount)
 	*/
-	PROFILE_API inline void OpenBlock(NB_TIMINGS_TYPE _profileBlockRecorderIdx, const char* _blockName, u64 _byteCount)
+	PROFILE_API inline void OpenBlock(NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount)
 	{
-		timings[_profileBlockRecorderIdx].Open(_blockName, _byteCount);
+		timings[_profileBlockRecorderIdx].Open(_byteCount);
 	}
 
 	/*!
@@ -507,7 +531,7 @@ struct Profiler
 	/*!
 	@brief The name of the profiler.
 	*/
-	char name[64] = { 0 };
+	char name[PROFILER_NAME_LENGTH] = { 0 };
 
 	/*!
 	@brief The time when the profiler was initialized (when ::Initialize
@@ -564,7 +588,7 @@ struct Profiler
 		}
 	}
 	
-    /*!
+	/*!
 	@brief Sets the name of a track with a format string.
 	@param _trackIdx The index of the track.
 	@param _fmt The format string of the name of the track.
@@ -605,6 +629,20 @@ struct Profiler
 	*/
 	PROFILE_API void End() noexcept;
 
+	
+	/*!
+	@brief Exports the profiling statistics of the profiler to a CSV file.
+	@details The logic to create the directories where the file is stored MUST be handled outside
+			 before calling this function. The file will be overwritten if it already exists.
+			 The file starts with two lines giving the headers for statistics of the profiler
+			 followed by the associated numbers. Then, a line defines new headers for the
+			 statistics of the blocks in the tracks. The following lines give the statistics
+			 of the blocks in the tracks. The statistics of the blocks are ordered by the
+			 order of the tracks in the profiler, and then by the order of the blocks in the tracks.
+	@param _path The path of the CSV file.
+	*/
+	PROFILE_API void ExportToCSV(const char* _path) noexcept;
+
 	/*!
 	@brief Starts the profiler.
 	@details Sets ::start to the current time.
@@ -614,18 +652,17 @@ struct Profiler
 	/*!
 	@brief Opens a block.
 	@param _trackIdx The index of the track the block belongs to.
-	@param _blockName The name given to the block being profiled.
 	@param _profileBlockRecorderIdx The index of the profile result.
 	@param _byteCount The number of bytes processed by the block.
 	*/
-	PROFILE_API inline void OpenBlock(NB_TRACKS_TYPE _trackIdx, const char* _blockName, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount)
+	PROFILE_API inline void OpenBlock(NB_TRACKS_TYPE _trackIdx, NB_TIMINGS_TYPE _profileBlockRecorderIdx, u64 _byteCount)
 	{
 		//The track is used if a block is added.
 		//This is used to avoid outputting the track's statistics, or reseting its data if it has none.
 		//But it is a WRITE operation wasted for every time that is not the first time.
 		tracks[_trackIdx].hasBlock = true;
 
-		tracks[_trackIdx].OpenBlock(_profileBlockRecorderIdx, _blockName, _byteCount);
+		tracks[_trackIdx].OpenBlock(_profileBlockRecorderIdx, _byteCount);
 	}
 
 	/*!
@@ -722,6 +759,21 @@ struct ProfilerResults
 			 use ::Reset.
 	*/
 	PROFILE_API void Clear() noexcept;
+
+	/*!
+	@brief Exports the profiling statistics of the profiler to a CSV file.
+	@details The logic to create the directories where the file is stored MUST be handled outside
+			 before calling this function. The file will be overwritten if it already exists.
+			 The file starts with two lines giving the headers for statistics of the profiler
+			 followed by the associated numbers. Then, a line defines new headers for the
+			 statistics of the blocks in the tracks. The following lines give the statistics
+			 of the blocks in the tracks. The statistics of the blocks are ordered by the
+			 order of the tracks in the profiler, and then by the order of the blocks in the tracks.
+	@param _path The path of the CSV file.
+	@remarks This is equivalent to calling ::ExportToCSV on the profiler if you have captured
+			 the statistics with ::Capture.
+	*/
+	PROFILE_API void ExportToCSV(const char* _path) noexcept;
 
 	/*!
 	@brief Outputs the profiling statistics of the profiler.
@@ -1021,6 +1073,22 @@ public:
 	@param _globalTimeOut The time out in seconds for the whole testing.
 	*/
 	PROFILE_API void BestPerfSearchRepetitionTesting(u16 _repetitionTestTimeOut, bool _reset = false, bool _clear = true, u16 _globalTimeOut = 0xFFFFu);
+
+	/*!
+	@brief Exports the profiling statistics of the repeated profiling to a CSV file.
+	@details Different from ::Profiler::ExportToCSV, the @p _path must be a directory
+			 where the files will be stored and not directly the name of a file.
+			 The files will be named after the nature of the profiling statistics
+			 they contain. Namely, the files will be named "Average.csv", "Variance.csv",
+			 "Max.csv", and "Min.csv". The individual profiling statistics of each
+			 repetition will also be exported to CSV files named after the repetition
+			 number. The summary statistics will be in the directory "_path/Summary"
+			 and the individual statistics in the directory "_path/Repetitions".
+	@param _path The path of the directory where the CSV files will be stored.
+	@param _repetitionCount The number of repetitions to export. It cannot be greater
+			than the size of ::ptr_repetitionResults.
+	*/
+	PROFILE_API void ExportToCSV(const char* _path, u64 _repetitionCount) noexcept;
 
 	/*!
 	@brief Repeatedly tests all functions wrapped in ::repetitionTests and consecutively
