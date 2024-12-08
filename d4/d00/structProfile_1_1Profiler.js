@@ -5,9 +5,10 @@ var structProfile_1_1Profiler =
     [ "ClearTracks", "d4/d00/structProfile_1_1Profiler.html#ab99e1f3d110e3e6293e9d033f4975b41", null ],
     [ "CloseBlock", "d4/d00/structProfile_1_1Profiler.html#ac34d80550cef4d0741ece5b88a7ea3b8", null ],
     [ "End", "d4/d00/structProfile_1_1Profiler.html#a6102368e85652ed4424a9de18043c159", null ],
+    [ "ExportToCSV", "d4/d00/structProfile_1_1Profiler.html#a0a393726a8276886802b226e1997758e", null ],
     [ "GetProfileBlockRecorderIndex", "d4/d00/structProfile_1_1Profiler.html#ac800b06ac7d67a119c959812847a87c1", null ],
     [ "Initialize", "d4/d00/structProfile_1_1Profiler.html#a717c76e9841bcd9c4ea1d11cb150d709", null ],
-    [ "OpenBlock", "d4/d00/structProfile_1_1Profiler.html#a0f683a64165f9aa16160f7191cf140e0", null ],
+    [ "OpenBlock", "d4/d00/structProfile_1_1Profiler.html#a578813ff15bfce6adeaece4e6271d17b", null ],
     [ "Report", "d4/d00/structProfile_1_1Profiler.html#a7032cab41162f73513d2bca37753a28f", null ],
     [ "Reset", "d4/d00/structProfile_1_1Profiler.html#a6cabfd8770cb20dc8dc7c02370291c99", null ],
     [ "ResetTracks", "d4/d00/structProfile_1_1Profiler.html#a3ed3027444e250180dc77cac08c01dce", null ],
@@ -16,7 +17,7 @@ var structProfile_1_1Profiler =
     [ "SetTrackName", "d4/d00/structProfile_1_1Profiler.html#a3749dde85d6f868fb92b0db10cea62d3", null ],
     [ "SetTrackNameFmt", "d4/d00/structProfile_1_1Profiler.html#a559f167d98b1cb0da6c8d64de6981e2b", null ],
     [ "elapsed", "d4/d00/structProfile_1_1Profiler.html#a2954def90c5f56a30fca5578ed08c188", null ],
-    [ "name", "d4/d00/structProfile_1_1Profiler.html#a84103e17358d965d52a7c756bdc0e504", null ],
+    [ "name", "d4/d00/structProfile_1_1Profiler.html#a71dbf1b4d11eb7b472483ede70dc2340", null ],
     [ "start", "d4/d00/structProfile_1_1Profiler.html#a81562afca52b894f8dd1796a27f41b1a", null ],
     [ "tracks", "d4/d00/structProfile_1_1Profiler.html#ab9d7f13dce6209317ad585b96ebdb727", null ]
 ];

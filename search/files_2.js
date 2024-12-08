@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['profiler_2ecpp_0',['Profiler.cpp',['../d3/d02/Profiler_8cpp.html',1,'']]],
-  ['profiler_2ehpp_1',['Profiler.hpp',['../dc/d04/Profiler_8hpp.html',1,'']]]
+  ['osstatistics_2ecpp_0',['OSStatistics.cpp',['../d7/d07/OSStatistics_8cpp.html',1,'']]],
+  ['osstatistics_2ehpp_1',['OSStatistics.hpp',['../dc/d03/OSStatistics_8hpp.html',1,'']]]
 ];

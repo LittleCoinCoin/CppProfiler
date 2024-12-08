@@ -54,7 +54,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.5.27.111</span>
+   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.6.35.133</span>
    </div>
    <div id="projectbrief">A custom c++ profiler.</div>
   </td>
@@ -141,6 +141,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a21de62f170465a2e7536d1ea71cfe128"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#a21de62f170465a2e7536d1ea71cfe128">Clear</a> () noexcept</td></tr>
 <tr class="memdesc:a21de62f170465a2e7536d1ea71cfe128"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the values of member variables of this struct and up to <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#ac0974baa4f749ac966ea2170301f1738" title="The number of tracks used in the profiler (i.e, which have at least one used block).">trackCount</a> Profile::ProfileTrackResults in the <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#ab0c16311578bfc7fad4a2d574545ecee" title="The array of mirrors to the Profile::ProfileTrack structs originally stored in the profiler.">tracks</a> array.  <br /></td></tr>
 <tr class="separator:a21de62f170465a2e7536d1ea71cfe128"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47ab30bf832a6a35cc1016f450d782ad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#a47ab30bf832a6a35cc1016f450d782ad">ExportToCSV</a> (const char *_path) noexcept</td></tr>
+<tr class="memdesc:a47ab30bf832a6a35cc1016f450d782ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exports the profiling statistics of the profiler to a CSV file.  <br /></td></tr>
+<tr class="separator:a47ab30bf832a6a35cc1016f450d782ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16f2394f3a2a71c1d678f95211469431"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#a16f2394f3a2a71c1d678f95211469431">Report</a> () noexcept</td></tr>
 <tr class="memdesc:a16f2394f3a2a71c1d678f95211469431"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outputs the profiling statistics of the profiler.  <br /></td></tr>
 <tr class="separator:a16f2394f3a2a71c1d678f95211469431"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -253,6 +256,41 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a47ab30bf832a6a35cc1016f450d782ad" name="a47ab30bf832a6a35cc1016f450d782ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47ab30bf832a6a35cc1016f450d782ad">&#9670;&#160;</a></span>ExportToCSV()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Profile::ProfilerResults::ExportToCSV </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>_path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Exports the profiling statistics of the profiler to a CSV file. </p>
+<p>The logic to create the directories where the file is stored MUST be handled outside before calling this function. The file will be overwritten if it already exists. The file starts with two lines giving the headers for statistics of the profiler followed by the associated numbers. Then, a line defines new headers for the statistics of the blocks in the tracks. The following lines give the statistics of the blocks in the tracks. The statistics of the blocks are ordered by the order of the tracks in the profiler, and then by the order of the blocks in the tracks. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_path</td><td>The path of the CSV file. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This is equivalent to calling <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#a47ab30bf832a6a35cc1016f450d782ad" title="Exports the profiling statistics of the profiler to a CSV file.">ExportToCSV</a> on the profiler if you have captured the statistics with <a class="el" href="../../d2/d02/structProfile_1_1ProfilerResults.html#a6b18c973d35855345c455471ed7a78d7" title="Captures the statistics of a Profile::Profiler.">Capture</a>. </dd></dl>
+
+</div>
+</div>
 <a id="a16f2394f3a2a71c1d678f95211469431" name="a16f2394f3a2a71c1d678f95211469431"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a16f2394f3a2a71c1d678f95211469431">&#9670;&#160;</a></span>Report()</h2>
 
@@ -356,7 +394,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The name of the profiler. </p>
-<p>Mirrors <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a84103e17358d965d52a7c756bdc0e504" title="The name of the profiler.">Profiler::name</a>. </p>
+<p>Mirrors <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a71dbf1b4d11eb7b472483ede70dc2340" title="The name of the profiler.">Profiler::name</a>. </p>
 
 </div>
 </div>

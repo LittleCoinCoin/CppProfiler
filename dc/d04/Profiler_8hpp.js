@@ -21,6 +21,8 @@ var Profiler_8hpp =
     [ "PROFILE_BLOCK_TIME_BANDWIDTH__", "dc/d04/Profiler_8hpp.html#ae7031a98e1e788f3f494723f50a3250a", null ],
     [ "PROFILE_FUNCTION_TIME", "dc/d04/Profiler_8hpp.html#acdfa04ef1291a8b5c73529c0c582f8e8", null ],
     [ "PROFILE_FUNCTION_TIME_BANDWIDTH", "dc/d04/Profiler_8hpp.html#adfa1d0b4aa452684f5e358e4bec6e660", null ],
+    [ "PROFILE_TRACK_NAME_LENGTH", "dc/d04/Profiler_8hpp.html#a1acd0ce5557b1164cbfe254350b08d36", null ],
+    [ "PROFILER_NAME_LENGTH", "dc/d04/Profiler_8hpp.html#ab9e071ca723297272223cc51dd510c3d", null ],
     [ "U_SIZE_ADAPTER", "dc/d04/Profiler_8hpp.html#aac5732a80012632a8305a8477810771a", null ],
     [ "GetProfiler", "dc/d04/Profiler_8hpp.html#abd0ae6661d46104da0fa0943656e363d", null ],
     [ "Hash", "dc/d04/Profiler_8hpp.html#a0801774ecfbf4fa3cc5fd11797b985c2", null ],

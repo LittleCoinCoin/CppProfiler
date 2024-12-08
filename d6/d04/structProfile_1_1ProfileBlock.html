@@ -54,7 +54,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.5.27.111</span>
+   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.6.35.133</span>
    </div>
    <div id="projectbrief">A custom c++ profiler.</div>
   </td>
@@ -133,8 +133,8 @@ $(document).ready(function(){initNavTree('d6/d04/structProfile_1_1ProfileBlock.h
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9b347f372cf781920df3d228369e8522"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d04/structProfile_1_1ProfileBlock.html#a9b347f372cf781920df3d228369e8522">ProfileBlock</a> (<a class="el" href="../../dc/d04/Profiler_8hpp.html#a72c7a450942c2e0d3ba106d9724f6d8a">NB_TRACKS_TYPE</a> _trackIdx, const char *_blockName, <a class="el" href="../../dc/d04/Profiler_8hpp.html#a93f3d95f612f54610359beb7dbcb0e3b">NB_TIMINGS_TYPE</a> _profileBlockRecorderIdx, <a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _byteCount)</td></tr>
-<tr class="separator:a9b347f372cf781920df3d228369e8522"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a978e696ce88cca2aff987f2eaee1a190"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d04/structProfile_1_1ProfileBlock.html#a978e696ce88cca2aff987f2eaee1a190">ProfileBlock</a> (<a class="el" href="../../dc/d04/Profiler_8hpp.html#a72c7a450942c2e0d3ba106d9724f6d8a">NB_TRACKS_TYPE</a> _trackIdx, <a class="el" href="../../dc/d04/Profiler_8hpp.html#a93f3d95f612f54610359beb7dbcb0e3b">NB_TIMINGS_TYPE</a> _profileBlockRecorderIdx, <a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _byteCount)</td></tr>
+<tr class="separator:a978e696ce88cca2aff987f2eaee1a190"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0c8765d1b3d8efa91c3dc6dd2918427"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d04/structProfile_1_1ProfileBlock.html#af0c8765d1b3d8efa91c3dc6dd2918427">~ProfileBlock</a> ()</td></tr>
 <tr class="separator:af0c8765d1b3d8efa91c3dc6dd2918427"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -151,8 +151,8 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>An object that will live and die within the scope of a target block of code to profile. </p>
 <p>The object will open the block upon construction and close it upon destruction. The result of the profiling will be forwarded to the profile track with the index <a class="el" href="../../d6/d04/structProfile_1_1ProfileBlock.html#a49393717418d5a3a704d273c021df9ee" title="The index of the profiling track this block belongs to.">trackIdx</a> in the profiler. The index in the track that will actually store the profiling statistics is <a class="el" href="../../d6/d04/structProfile_1_1ProfileBlock.html#a6bd7ac02c4fd9c319fb4404d807661a1" title="The index of this block in the profiling track.">profileBlockRecorderIdx</a>. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a9b347f372cf781920df3d228369e8522" name="a9b347f372cf781920df3d228369e8522"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b347f372cf781920df3d228369e8522">&#9670;&#160;</a></span>ProfileBlock()</h2>
+<a id="a978e696ce88cca2aff987f2eaee1a190" name="a978e696ce88cca2aff987f2eaee1a190"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a978e696ce88cca2aff987f2eaee1a190">&#9670;&#160;</a></span>ProfileBlock()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -162,12 +162,6 @@ Public Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="../../dc/d04/Profiler_8hpp.html#a72c7a450942c2e0d3ba106d9724f6d8a">NB_TRACKS_TYPE</a>&#160;</td>
           <td class="paramname"><em>_trackIdx</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>_blockName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

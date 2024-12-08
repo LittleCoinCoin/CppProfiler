@@ -1,7 +1,10 @@
 var searchData=
 [
-  ['repetitionprofiler_0',['RepetitionProfiler',['../de/d05/structProfile_1_1RepetitionProfiler.html',1,'Profile']]],
-  ['repetitiontest_1',['RepetitionTest',['../d5/d06/structProfile_1_1RepetitionTest.html',1,'Profile']]],
-  ['repetitiontest_5ftestfunction_5fprofileblock_2',['RepetitionTest_TestFunction_ProfileBlock',['../d5/d05/structRepetitionTest__TestFunction__ProfileBlock.html',1,'']]],
-  ['repetitiontest_5ftestfunction_5fprofilefunction_3',['RepetitionTest_TestFunction_ProfileFunction',['../df/d04/structRepetitionTest__TestFunction__ProfileFunction.html',1,'']]]
+  ['profileblock_0',['ProfileBlock',['../d6/d04/structProfile_1_1ProfileBlock.html',1,'Profile']]],
+  ['profileblockrecorder_1',['ProfileBlockRecorder',['../dd/d01/structProfile_1_1ProfileBlockRecorder.html',1,'Profile']]],
+  ['profileblockresult_2',['ProfileBlockResult',['../db/d06/structProfile_1_1ProfileBlockResult.html',1,'Profile']]],
+  ['profiler_3',['Profiler',['../d4/d00/structProfile_1_1Profiler.html',1,'Profile']]],
+  ['profilerresults_4',['ProfilerResults',['../d2/d02/structProfile_1_1ProfilerResults.html',1,'Profile']]],
+  ['profiletrack_5',['ProfileTrack',['../dd/d06/structProfile_1_1ProfileTrack.html',1,'Profile']]],
+  ['profiletrackresult_6',['ProfileTrackResult',['../d0/d07/structProfile_1_1ProfileTrackResult.html',1,'Profile']]]
 ];

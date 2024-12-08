@@ -54,7 +54,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.5.27.111</span>
+   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.6.35.133</span>
    </div>
    <div id="projectbrief">A custom c++ profiler.</div>
   </td>
@@ -140,9 +140,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a65c9a2c78502d1fc7c797524d14da74c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html#a65c9a2c78502d1fc7c797524d14da74c">CloseBlock</a> (<a class="el" href="../../dc/d04/Profiler_8hpp.html#a93f3d95f612f54610359beb7dbcb0e3b">NB_TIMINGS_TYPE</a> _profileBlockRecorderIdx)</td></tr>
 <tr class="memdesc:a65c9a2c78502d1fc7c797524d14da74c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closes a block and updates the track's elapsed time.  <br /></td></tr>
 <tr class="separator:a65c9a2c78502d1fc7c797524d14da74c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bd818155d061296e178eeb130fc2c40"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html#a8bd818155d061296e178eeb130fc2c40">OpenBlock</a> (<a class="el" href="../../dc/d04/Profiler_8hpp.html#a93f3d95f612f54610359beb7dbcb0e3b">NB_TIMINGS_TYPE</a> _profileBlockRecorderIdx, const char *_blockName, <a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _byteCount)</td></tr>
-<tr class="memdesc:a8bd818155d061296e178eeb130fc2c40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens a block of the track.  <br /></td></tr>
-<tr class="separator:a8bd818155d061296e178eeb130fc2c40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57a27b7054b7f2db59b9e6aa5f213516"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html#a57a27b7054b7f2db59b9e6aa5f213516">OpenBlock</a> (<a class="el" href="../../dc/d04/Profiler_8hpp.html#a93f3d95f612f54610359beb7dbcb0e3b">NB_TIMINGS_TYPE</a> _profileBlockRecorderIdx, <a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _byteCount)</td></tr>
+<tr class="memdesc:a57a27b7054b7f2db59b9e6aa5f213516"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens a block of the track.  <br /></td></tr>
+<tr class="separator:a57a27b7054b7f2db59b9e6aa5f213516"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91d567441cb5b1a4c9615646a3d41e66"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html#a91d567441cb5b1a4c9615646a3d41e66">Report</a> (<a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _totalElapsedReference) noexcept</td></tr>
 <tr class="memdesc:a91d567441cb5b1a4c9615646a3d41e66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outputs the profiling statistics of all blocks in the track.  <br /></td></tr>
 <tr class="separator:a91d567441cb5b1a4c9615646a3d41e66"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -158,9 +158,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:afebbe879f77a81ad3e5612fed26e8b68"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html#afebbe879f77a81ad3e5612fed26e8b68">hasBlock</a> = false</td></tr>
 <tr class="memdesc:afebbe879f77a81ad3e5612fed26e8b68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the track is used for at least one block.  <br /></td></tr>
 <tr class="separator:afebbe879f77a81ad3e5612fed26e8b68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a461c2c6f8645cb1702792a3d1e59593e"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html#a461c2c6f8645cb1702792a3d1e59593e">name</a> [32] = {0}</td></tr>
-<tr class="memdesc:a461c2c6f8645cb1702792a3d1e59593e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the track.  <br /></td></tr>
-<tr class="separator:a461c2c6f8645cb1702792a3d1e59593e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cdfebbced5ca595cbb3337afa886412"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html#a9cdfebbced5ca595cbb3337afa886412">name</a> [<a class="el" href="../../dc/d04/Profiler_8hpp.html#a1acd0ce5557b1164cbfe254350b08d36">PROFILE_TRACK_NAME_LENGTH</a>] = {0}</td></tr>
+<tr class="memdesc:a9cdfebbced5ca595cbb3337afa886412"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the track.  <br /></td></tr>
+<tr class="separator:a9cdfebbced5ca595cbb3337afa886412"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8435876176a3cb2ea24b77c47f9bfb3a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d06/structProfile_1_1ProfileTrack.html#a8435876176a3cb2ea24b77c47f9bfb3a">elapsed</a> = 0</td></tr>
 <tr class="memdesc:a8435876176a3cb2ea24b77c47f9bfb3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The accumulated time from all blocks in the track.  <br /></td></tr>
 <tr class="separator:a8435876176a3cb2ea24b77c47f9bfb3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -257,8 +257,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8bd818155d061296e178eeb130fc2c40" name="a8bd818155d061296e178eeb130fc2c40"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8bd818155d061296e178eeb130fc2c40">&#9670;&#160;</a></span>OpenBlock()</h2>
+<a id="a57a27b7054b7f2db59b9e6aa5f213516" name="a57a27b7054b7f2db59b9e6aa5f213516"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57a27b7054b7f2db59b9e6aa5f213516">&#9670;&#160;</a></span>OpenBlock()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -271,12 +271,6 @@ Public Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="../../dc/d04/Profiler_8hpp.html#a93f3d95f612f54610359beb7dbcb0e3b">NB_TIMINGS_TYPE</a>&#160;</td>
           <td class="paramname"><em>_profileBlockRecorderIdx</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>_blockName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -301,12 +295,11 @@ Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">_profileBlockRecorderIdx</td><td>The index of the block timing in the track. </td></tr>
-    <tr><td class="paramname">_blockName</td><td>The name given to the block being profiled. </td></tr>
     <tr><td class="paramname">_byteCount</td><td>The number of bytes processed by the block. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd>Profile::ProfileBlockRecorder::Open(Profile::u64 _byteCount) </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="../../dd/d01/structProfile_1_1ProfileBlockRecorder.html#a4d94bbcd2c6ed6aea4da134c46ff9373" title="Update the profiling statistics of the block upon execution.">Profile::ProfileBlockRecorder::Open(Profile::u64 _byteCount)</a> </dd></dl>
 
 </div>
 </div>
@@ -428,14 +421,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a461c2c6f8645cb1702792a3d1e59593e" name="a461c2c6f8645cb1702792a3d1e59593e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a461c2c6f8645cb1702792a3d1e59593e">&#9670;&#160;</a></span>name</h2>
+<a id="a9cdfebbced5ca595cbb3337afa886412" name="a9cdfebbced5ca595cbb3337afa886412"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cdfebbced5ca595cbb3337afa886412">&#9670;&#160;</a></span>name</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">char Profile::ProfileTrack::name[32] = {0}</td>
+          <td class="memname">char Profile::ProfileTrack::name[<a class="el" href="../../dc/d04/Profiler_8hpp.html#a1acd0ce5557b1164cbfe254350b08d36">PROFILE_TRACK_NAME_LENGTH</a>] = {0}</td>
         </tr>
       </table>
 </div><div class="memdoc">

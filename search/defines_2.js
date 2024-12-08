@@ -6,5 +6,7 @@ var searchData=
   ['profile_5fblock_5ftime_5fbandwidth_5f_3',['PROFILE_BLOCK_TIME_BANDWIDTH_',['../dc/d04/Profiler_8hpp.html#a74eb0947393ff69df3a7f5b023c0a4fc',1,'Profiler.hpp']]],
   ['profile_5fblock_5ftime_5fbandwidth_5f_5f_4',['PROFILE_BLOCK_TIME_BANDWIDTH__',['../dc/d04/Profiler_8hpp.html#ae7031a98e1e788f3f494723f50a3250a',1,'Profiler.hpp']]],
   ['profile_5ffunction_5ftime_5',['PROFILE_FUNCTION_TIME',['../dc/d04/Profiler_8hpp.html#acdfa04ef1291a8b5c73529c0c582f8e8',1,'Profiler.hpp']]],
-  ['profile_5ffunction_5ftime_5fbandwidth_6',['PROFILE_FUNCTION_TIME_BANDWIDTH',['../dc/d04/Profiler_8hpp.html#adfa1d0b4aa452684f5e358e4bec6e660',1,'Profiler.hpp']]]
+  ['profile_5ffunction_5ftime_5fbandwidth_6',['PROFILE_FUNCTION_TIME_BANDWIDTH',['../dc/d04/Profiler_8hpp.html#adfa1d0b4aa452684f5e358e4bec6e660',1,'Profiler.hpp']]],
+  ['profile_5ftrack_5fname_5flength_7',['PROFILE_TRACK_NAME_LENGTH',['../dc/d04/Profiler_8hpp.html#a1acd0ce5557b1164cbfe254350b08d36',1,'Profiler.hpp']]],
+  ['profiler_5fname_5flength_8',['PROFILER_NAME_LENGTH',['../dc/d04/Profiler_8hpp.html#ab9e071ca723297272223cc51dd510c3d',1,'Profiler.hpp']]]
 ];

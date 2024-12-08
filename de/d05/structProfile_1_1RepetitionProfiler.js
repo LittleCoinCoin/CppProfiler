@@ -6,6 +6,7 @@ var structProfile_1_1RepetitionProfiler =
     [ "ClearRepetitionTests", "de/d05/structProfile_1_1RepetitionProfiler.html#a9f2fdc663783c10c9ad264b66af4058b", null ],
     [ "ComputeAverageResults", "de/d05/structProfile_1_1RepetitionProfiler.html#a1bb7e0d94d95756030ea26a218e51b02", null ],
     [ "ComputeVarianceResults", "de/d05/structProfile_1_1RepetitionProfiler.html#aacaaf50cbf91a6606b562d33864163b8", null ],
+    [ "ExportToCSV", "de/d05/structProfile_1_1RepetitionProfiler.html#a8d2ffd650cabc0a70426e3629ea37ae6", null ],
     [ "FindMaxResults", "de/d05/structProfile_1_1RepetitionProfiler.html#a63fbf25ffd8f0228f513309b73e0c4e6", null ],
     [ "FindMinResults", "de/d05/structProfile_1_1RepetitionProfiler.html#a2fcec0e002e5366caf63da408ec8217a", null ],
     [ "FixedCountRepetitionTesting", "de/d05/structProfile_1_1RepetitionProfiler.html#a3cf144bd3fb0742c6ad6d481fe530418", null ],

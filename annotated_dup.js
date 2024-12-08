@@ -10,8 +10,10 @@ var annotated_dup =
       [ "ProfileTrackResult", "d0/d07/structProfile_1_1ProfileTrackResult.html", "d0/d07/structProfile_1_1ProfileTrackResult" ],
       [ "RepetitionProfiler", "de/d05/structProfile_1_1RepetitionProfiler.html", "de/d05/structProfile_1_1RepetitionProfiler" ],
       [ "RepetitionTest", "d5/d06/structProfile_1_1RepetitionTest.html", "d5/d06/structProfile_1_1RepetitionTest" ],
+      [ "Surveyor", "d1/d02/structProfile_1_1Surveyor.html", "d1/d02/structProfile_1_1Surveyor" ],
       [ "Timer", "d1/d04/structProfile_1_1Timer.html", "d1/d04/structProfile_1_1Timer" ]
     ] ],
+    [ "RepetitionTest_TestFunction_Bandwidth", "d3/d01/structRepetitionTest__TestFunction__Bandwidth.html", "d3/d01/structRepetitionTest__TestFunction__Bandwidth" ],
     [ "RepetitionTest_TestFunction_ProfileBlock", "d5/d05/structRepetitionTest__TestFunction__ProfileBlock.html", "d5/d05/structRepetitionTest__TestFunction__ProfileBlock" ],
     [ "RepetitionTest_TestFunction_ProfileFunction", "df/d04/structRepetitionTest__TestFunction__ProfileFunction.html", "df/d04/structRepetitionTest__TestFunction__ProfileFunction" ]
 ];

@@ -1,5 +1,6 @@
 var Types_8hpp =
 [
+    [ "b32", "d5/d04/Types_8hpp.html#aca61dab4f13c91e2bf9c8947bc124ddb", null ],
     [ "f32", "d5/d04/Types_8hpp.html#a50dd7445c5373d86f1d3af54f1e743ae", null ],
     [ "f64", "d5/d04/Types_8hpp.html#a8378a56ce15d4d016e83cc4fe43a7e17", null ],
     [ "s16", "d5/d04/Types_8hpp.html#aad71c4b4a34f64a4eff2cffe913909f9", null ],

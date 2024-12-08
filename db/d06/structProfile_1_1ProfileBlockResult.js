@@ -10,6 +10,7 @@ var structProfile_1_1ProfileBlockResult =
     [ "elapsed", "db/d06/structProfile_1_1ProfileBlockResult.html#a97466585a08f7e3c5874694da6a3c49a", null ],
     [ "elapsedSec", "db/d06/structProfile_1_1ProfileBlockResult.html#a3d58554dd8bc9954f3194d960c04d7f8", null ],
     [ "hitCount", "db/d06/structProfile_1_1ProfileBlockResult.html#af9d7ac43f5808dd61cfc93d8e48204a6", null ],
+    [ "pageFaultCountTotal", "db/d06/structProfile_1_1ProfileBlockResult.html#a7f2e4520fb9bca1b43e715e4cbbb9504", null ],
     [ "processedByteCount", "db/d06/structProfile_1_1ProfileBlockResult.html#a47f0792b21bc7ea1acf9778677645de4", null ],
     [ "profileBlockRecorderIdx", "db/d06/structProfile_1_1ProfileBlockResult.html#a4c81a358d92263c260b8a46c8fa4dcc1", null ],
     [ "proportionInTotal", "db/d06/structProfile_1_1ProfileBlockResult.html#a3043526ce760496dab0769cd092f6dbe", null ],

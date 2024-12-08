@@ -4,5 +4,6 @@ var searchData=
   ['elapsedsec_1',['elapsedSec',['../db/d06/structProfile_1_1ProfileBlockResult.html#a3d58554dd8bc9954f3194d960c04d7f8',1,'Profile::ProfileBlockResult::elapsedSec()'],['../d0/d07/structProfile_1_1ProfileTrackResult.html#a9a1ed05901edcc97eabae8cb6aafffed',1,'Profile::ProfileTrackResult::elapsedSec()'],['../d2/d02/structProfile_1_1ProfilerResults.html#acbe372b4d5f2ad41fd05b65f2ee4d8f5',1,'Profile::ProfilerResults::elapsedSec()']]],
   ['end_2',['End',['../d4/d00/structProfile_1_1Profiler.html#a6102368e85652ed4424a9de18043c159',1,'Profile::Profiler']]],
   ['estimatecpufreq_3',['EstimateCPUFreq',['../d1/d04/structProfile_1_1Timer.html#a8becdf4271ecd66ab5bf96dd74dd11a7',1,'Profile::Timer']]],
-  ['export_2ehpp_4',['Export.hpp',['../d8/d03/Export_8hpp.html',1,'']]]
+  ['export_2ehpp_4',['Export.hpp',['../d8/d03/Export_8hpp.html',1,'']]],
+  ['exporttocsv_5',['ExportToCSV',['../d4/d00/structProfile_1_1Profiler.html#a0a393726a8276886802b226e1997758e',1,'Profile::Profiler::ExportToCSV()'],['../d2/d02/structProfile_1_1ProfilerResults.html#a47ab30bf832a6a35cc1016f450d782ad',1,'Profile::ProfilerResults::ExportToCSV()'],['../de/d05/structProfile_1_1RepetitionProfiler.html#a8d2ffd650cabc0a70426e3629ea37ae6',1,'Profile::RepetitionProfiler::ExportToCSV()']]]
 ];

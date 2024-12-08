@@ -54,7 +54,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.5.27.111</span>
+   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.6.35.133</span>
    </div>
    <div id="projectbrief">A custom c++ profiler.</div>
   </td>
@@ -174,6 +174,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7dcfbf6b1073af347ef017373c256641"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a7dcfbf6b1073af347ef017373c256641">BestPerfSearchRepetitionTesting</a> (<a class="el" href="../../d8/d02/namespaceProfile.html#a1198d3c4fb1b6b7afa08f818de800e5a">u16</a> _repetitionTestTimeOut, bool _reset=false, bool _clear=true, <a class="el" href="../../d8/d02/namespaceProfile.html#a1198d3c4fb1b6b7afa08f818de800e5a">u16</a> _globalTimeOut=0xFFFFu)</td></tr>
 <tr class="memdesc:a7dcfbf6b1073af347ef017373c256641"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repeatedly tests all functions wrapped in <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8bbe39125888ba012ec0c63773210e52" title="The vector of the function wrappers to profile multiple times.">repetitionTests</a> for as long as allowed by the time out parameters and reports only about the best performance.  <br /></td></tr>
 <tr class="separator:a7dcfbf6b1073af347ef017373c256641"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d2ffd650cabc0a70426e3629ea37ae6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8d2ffd650cabc0a70426e3629ea37ae6">ExportToCSV</a> (const char *_path, <a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _repetitionCount) noexcept</td></tr>
+<tr class="memdesc:a8d2ffd650cabc0a70426e3629ea37ae6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exports the profiling statistics of the repeated profiling to a CSV file.  <br /></td></tr>
+<tr class="separator:a8d2ffd650cabc0a70426e3629ea37ae6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3cf144bd3fb0742c6ad6d481fe530418"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d03/Export_8hpp.html#aae1e614570e93a9b650cce0549797bed">PROFILE_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a3cf144bd3fb0742c6ad6d481fe530418">FixedCountRepetitionTesting</a> (<a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a> _repetitionCount, bool _reset=true, bool _clear=false)</td></tr>
 <tr class="memdesc:a3cf144bd3fb0742c6ad6d481fe530418"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repeatedly tests all functions wrapped in <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a8bbe39125888ba012ec0c63773210e52" title="The vector of the function wrappers to profile multiple times.">repetitionTests</a> and consecutively reports the profiling statistics.  <br /></td></tr>
 <tr class="separator:a3cf144bd3fb0742c6ad6d481fe530418"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -439,6 +442,51 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#ac80c5c05ab6a1a493c7198a6feb36bd3" title="A result structure to store the variance of the repeated profiling.">varianceResults</a> </dd></dl>
+
+</div>
+</div>
+<a id="a8d2ffd650cabc0a70426e3629ea37ae6" name="a8d2ffd650cabc0a70426e3629ea37ae6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d2ffd650cabc0a70426e3629ea37ae6">&#9670;&#160;</a></span>ExportToCSV()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Profile::RepetitionProfiler::ExportToCSV </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">u64</a>&#160;</td>
+          <td class="paramname"><em>_repetitionCount</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Exports the profiling statistics of the repeated profiling to a CSV file. </p>
+<p>Different from <a class="el" href="../../d4/d00/structProfile_1_1Profiler.html#a0a393726a8276886802b226e1997758e" title="Exports the profiling statistics of the profiler to a CSV file.">Profiler::ExportToCSV</a>, the <code>_path</code> must be a directory where the files will be stored and not directly the name of a file. The files will be named after the nature of the profiling statistics they contain. Namely, the files will be named "Average.csv", "Variance.csv", "Max.csv", and "Min.csv". The individual profiling statistics of each repetition will also be exported to CSV files named after the repetition number. The summary statistics will be in the directory "_path/Summary" and the individual statistics in the directory "_path/Repetitions". </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_path</td><td>The path of the directory where the CSV files will be stored. </td></tr>
+    <tr><td class="paramname">_repetitionCount</td><td>The number of repetitions to export. It cannot be greater than the size of <a class="el" href="../../de/d05/structProfile_1_1RepetitionProfiler.html#a01ff1b156c1e19093bfbd76351a2ce58" title="The pointer to the ProfilerResults storing the results of the repeated profiling.">ptr_repetitionResults</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

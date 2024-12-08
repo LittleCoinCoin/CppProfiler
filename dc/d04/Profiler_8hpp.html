@@ -54,7 +54,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.5.27.111</span>
+   <div id="projectname">CppProfiler<span id="projectnumber">&#160;0.1.6.35.133</span>
    </div>
    <div id="projectbrief">A custom c++ profiler.</div>
   </td>
@@ -131,7 +131,7 @@ $(document).ready(function(){initNavTree('dc/d04/Profiler_8hpp.html','../../'); 
 <code>#include &lt;cstdarg&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;type_traits&gt;</code><br />
-<code>#include &quot;<a class="el" href="../../d7/d04/Timing_8hpp_source.html">Timing.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="../../dc/d03/OSStatistics_8hpp_source.html">OSStatistics.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for Profiler.hpp:</div>
 <div class="dyncontent">
@@ -188,6 +188,10 @@ Macros</h2></td></tr>
 <tr class="separator:a5db053b6103443c53e252eea97ce1745"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21f26789364f9e6444a127e242ead321"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d04/Profiler_8hpp.html#a21f26789364f9e6444a127e242ead321">NB_TRACKS</a>&#160;&#160;&#160;2</td></tr>
 <tr class="separator:a21f26789364f9e6444a127e242ead321"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1acd0ce5557b1164cbfe254350b08d36"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d04/Profiler_8hpp.html#a1acd0ce5557b1164cbfe254350b08d36">PROFILE_TRACK_NAME_LENGTH</a>&#160;&#160;&#160;32</td></tr>
+<tr class="separator:a1acd0ce5557b1164cbfe254350b08d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9e071ca723297272223cc51dd510c3d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d04/Profiler_8hpp.html#ab9e071ca723297272223cc51dd510c3d">PROFILER_NAME_LENGTH</a>&#160;&#160;&#160;32</td></tr>
+<tr class="separator:ab9e071ca723297272223cc51dd510c3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac5732a80012632a8305a8477810771a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d04/Profiler_8hpp.html#aac5732a80012632a8305a8477810771a">U_SIZE_ADAPTER</a>(x)</td></tr>
 <tr class="memdesc:aac5732a80012632a8305a8477810771a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expands to adapt the type of the unsigned integer to be u8, u16, u32, or u64 depending on the value of <code>x</code>.  <br /></td></tr>
 <tr class="separator:aac5732a80012632a8305a8477810771a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -431,6 +435,34 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a1acd0ce5557b1164cbfe254350b08d36" name="a1acd0ce5557b1164cbfe254350b08d36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1acd0ce5557b1164cbfe254350b08d36">&#9670;&#160;</a></span>PROFILE_TRACK_NAME_LENGTH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PROFILE_TRACK_NAME_LENGTH&#160;&#160;&#160;32</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab9e071ca723297272223cc51dd510c3d" name="ab9e071ca723297272223cc51dd510c3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9e071ca723297272223cc51dd510c3d">&#9670;&#160;</a></span>PROFILER_NAME_LENGTH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PROFILER_NAME_LENGTH&#160;&#160;&#160;32</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aac5732a80012632a8305a8477810771a" name="aac5732a80012632a8305a8477810771a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aac5732a80012632a8305a8477810771a">&#9670;&#160;</a></span>U_SIZE_ADAPTER</h2>
 
@@ -449,10 +481,10 @@ Functions</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">    std::conditional_t&lt;(x &lt; (1&lt;&lt;8)), <a class="code hl_typedef" href="../../d8/d02/namespaceProfile.html#afc1ac4271cf22eb275facb710a371a42">Profile::u8</a>, \</div>
 <div class="line">    std::conditional_t&lt;(x &lt; (1&lt;&lt;16)), <a class="code hl_typedef" href="../../d8/d02/namespaceProfile.html#a1198d3c4fb1b6b7afa08f818de800e5a">Profile::u16</a>, \</div>
 <div class="line">    std::conditional_t&lt;(x &lt; (1ULL&lt;&lt;32)), <a class="code hl_typedef" href="../../d8/d02/namespaceProfile.html#a5d5d8ad7813ee80730b4a9db25b34b4d">Profile::u32</a>, <a class="code hl_typedef" href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">Profile::u64</a>&gt;&gt;&gt;</div>
-<div class="ttc" id="anamespaceProfile_html_a1198d3c4fb1b6b7afa08f818de800e5a"><div class="ttname"><a href="../../d8/d02/namespaceProfile.html#a1198d3c4fb1b6b7afa08f818de800e5a">Profile::u16</a></div><div class="ttdeci">unsigned short u16</div><div class="ttdef"><b>Definition:</b> Types.hpp:6</div></div>
-<div class="ttc" id="anamespaceProfile_html_a5d5d8ad7813ee80730b4a9db25b34b4d"><div class="ttname"><a href="../../d8/d02/namespaceProfile.html#a5d5d8ad7813ee80730b4a9db25b34b4d">Profile::u32</a></div><div class="ttdeci">unsigned int u32</div><div class="ttdef"><b>Definition:</b> Types.hpp:7</div></div>
-<div class="ttc" id="anamespaceProfile_html_a61bd654a41b767a1b9ac10cdf397c76a"><div class="ttname"><a href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">Profile::u64</a></div><div class="ttdeci">unsigned long long u64</div><div class="ttdef"><b>Definition:</b> Types.hpp:8</div></div>
-<div class="ttc" id="anamespaceProfile_html_afc1ac4271cf22eb275facb710a371a42"><div class="ttname"><a href="../../d8/d02/namespaceProfile.html#afc1ac4271cf22eb275facb710a371a42">Profile::u8</a></div><div class="ttdeci">unsigned char u8</div><div class="ttdef"><b>Definition:</b> Types.hpp:5</div></div>
+<div class="ttc" id="anamespaceProfile_html_a1198d3c4fb1b6b7afa08f818de800e5a"><div class="ttname"><a href="../../d8/d02/namespaceProfile.html#a1198d3c4fb1b6b7afa08f818de800e5a">Profile::u16</a></div><div class="ttdeci">unsigned short u16</div><div class="ttdef"><b>Definition:</b> Types.hpp:7</div></div>
+<div class="ttc" id="anamespaceProfile_html_a5d5d8ad7813ee80730b4a9db25b34b4d"><div class="ttname"><a href="../../d8/d02/namespaceProfile.html#a5d5d8ad7813ee80730b4a9db25b34b4d">Profile::u32</a></div><div class="ttdeci">unsigned int u32</div><div class="ttdef"><b>Definition:</b> Types.hpp:8</div></div>
+<div class="ttc" id="anamespaceProfile_html_a61bd654a41b767a1b9ac10cdf397c76a"><div class="ttname"><a href="../../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a">Profile::u64</a></div><div class="ttdeci">unsigned long long u64</div><div class="ttdef"><b>Definition:</b> Types.hpp:9</div></div>
+<div class="ttc" id="anamespaceProfile_html_afc1ac4271cf22eb275facb710a371a42"><div class="ttname"><a href="../../d8/d02/namespaceProfile.html#afc1ac4271cf22eb275facb710a371a42">Profile::u8</a></div><div class="ttdeci">unsigned char u8</div><div class="ttdef"><b>Definition:</b> Types.hpp:6</div></div>
 </div><!-- fragment -->
 <p>Expands to adapt the type of the unsigned integer to be u8, u16, u32, or u64 depending on the value of <code>x</code>. </p>
 <p>For example, if 0 &lt;= x &lt; 256, it will return u8; if 256 &lt;= x &lt; 65532 it will return u16; and so on. </p>

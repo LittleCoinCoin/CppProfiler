@@ -1,7 +1,7 @@
 var searchData=
 [
   ['popbackrepetitiontest_0',['PopBackRepetitionTest',['../de/d05/structProfile_1_1RepetitionProfiler.html#a8b61d4af11f66a1bdf60f8c71edd705a',1,'Profile::RepetitionProfiler']]],
-  ['profileblock_1',['ProfileBlock',['../d6/d04/structProfile_1_1ProfileBlock.html#a9b347f372cf781920df3d228369e8522',1,'Profile::ProfileBlock']]],
+  ['profileblock_1',['ProfileBlock',['../d6/d04/structProfile_1_1ProfileBlock.html#a978e696ce88cca2aff987f2eaee1a190',1,'Profile::ProfileBlock']]],
   ['profileblockresult_2',['ProfileBlockResult',['../db/d06/structProfile_1_1ProfileBlockResult.html#a76e401d59b40c0e24668d22244456a96',1,'Profile::ProfileBlockResult']]],
   ['profiler_3',['Profiler',['../d4/d00/structProfile_1_1Profiler.html#a8222d7e97c7e49f97f4ae69fb76161bd',1,'Profile::Profiler']]],
   ['profilerresults_4',['ProfilerResults',['../d2/d02/structProfile_1_1ProfilerResults.html#af6a2b81d972db074092bd710c93c060f',1,'Profile::ProfilerResults']]],

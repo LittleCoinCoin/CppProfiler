@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="node1" class="node">
 <title>Node1</title>
-<g id="a_node1"><a xlink:title="A wrapper around the TestFunction_ProfileBlock when it will be used TestFunction_FixedRepetitionTesti...">
+<g id="a_node1"><a xlink:title="A wrapper around the TestFunction_ProfileBlock when it will be used in repetition tester.">
 <polygon fill="#999999" stroke="#666666" points="141.25,-30.5 0,-30.5 0,0 141.25,0 141.25,-30.5"/>
 <text text-anchor="start" x="8" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">RepetitionTest_TestFunction</text>
 <text text-anchor="middle" x="70.62" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">_ProfileBlock</text>

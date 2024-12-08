@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['u16_0',['u16',['../d8/d02/namespaceProfile.html#a1198d3c4fb1b6b7afa08f818de800e5a',1,'Profile']]],
-  ['u32_1',['u32',['../d8/d02/namespaceProfile.html#a5d5d8ad7813ee80730b4a9db25b34b4d',1,'Profile']]],
-  ['u64_2',['u64',['../d8/d02/namespaceProfile.html#a61bd654a41b767a1b9ac10cdf397c76a',1,'Profile']]],
-  ['u8_3',['u8',['../d8/d02/namespaceProfile.html#afc1ac4271cf22eb275facb710a371a42',1,'Profile']]]
+  ['s16_0',['s16',['../d8/d02/namespaceProfile.html#aad71c4b4a34f64a4eff2cffe913909f9',1,'Profile']]],
+  ['s32_1',['s32',['../d8/d02/namespaceProfile.html#acd3ed2c4ae60d6d3c963055a087a0946',1,'Profile']]],
+  ['s64_2',['s64',['../d8/d02/namespaceProfile.html#a7fe68f8184122b5cbb49ca7506f06d77',1,'Profile']]],
+  ['s8_3',['s8',['../d8/d02/namespaceProfile.html#adc0c34aa08f34025120acc1208b33651',1,'Profile']]]
 ];

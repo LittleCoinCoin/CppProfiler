@@ -1,0 +1,4 @@
+<map id="Profile::Surveyor" name="Profile::Surveyor">
+<area shape="rect" id="node1" title="A struct to give access to internal statistics such memory or performance related." alt="" coords="8,109,123,135"/>
+<area shape="rect" id="node2" href="$d2/d02/structProfile_1_1Surveyor_1_1os__metrics.html" title="On windows, utility struct to manipulate OS memory statistics." alt="" coords="5,5,126,46"/>
+</map>
