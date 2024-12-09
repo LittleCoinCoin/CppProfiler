@@ -14,8 +14,9 @@ target_compile_features(${TargetLibName} PUBLIC cxx_std_20)
 target_compile_definitions(${TargetLibName} PRIVATE 
 
 # Sets the correct export macro
-BUILD_PROFILER_LIB=TRUE 
-USE_PROFILER_LIB=FALSE #optional when BUILD_PROFILER_LIB is defined because it comes in an elif block
+BUILD_PROFILER_LIB
+#Unsetting is optional when BUILD_PROFILER_LIB is defined because it comes after in an elif block
+#USE_PROFILER_LIB
 
 # Usual profiler configuration options.
 PROFILER_ENABLED=TRUE
@@ -42,8 +43,8 @@ target_compile_features(${TargetTestName} PUBLIC cxx_std_20)
 target_compile_definitions(${TargetTestName} PRIVATE 
 
 # Sets the correct export macro
-BUILD_PROFILER_LIB=FALSE #better to have it to avoid the elif block missing USE_PROFILER_LIB
-USE_PROFILER_LIB=TRUE
+#BUILD_PROFILER_LIB
+USE_PROFILER_LIB
 
 # The following compile definitions must be the same as the library to ensure
 # the executable that uses it is expecting the same configuration as the one
