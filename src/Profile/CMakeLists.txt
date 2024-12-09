@@ -13,13 +13,12 @@ target_compile_features(${PROFILER_LIB_NAME} PUBLIC cxx_std_20)
 target_compile_definitions(${PROFILER_LIB_NAME} PRIVATE 
 
 # Sets the correct export macro
-# -- IMPORTANT -- This should be set to FALSE in the target that uses this profiler lib -- IMPORTANT --
-BUILD_PROFILER_LIB=TRUE 
+# -- IMPORTANT -- This should be UNSET in the target that uses this profiler lib -- IMPORTANT --
+BUILD_PROFILER_LIB 
 
 # Optional when BUILD_PROFILER_LIB is defined because it comes in an elif block, but
-# I leave it for clarity.
-# -- IMPORTANT -- This should be set to TRUE in the target that uses this profiler lib -- IMPORTANT --
-USE_PROFILER_LIB=FALSE
+# -- IMPORTANT -- This should be SET in the target that uses this profiler lib -- IMPORTANT --
+#USE_PROFILER_LIB
 
 # Profiler settings
 # -- IMPORTANT -- These should also be set in the target that uses this profiler lib -- IMPORTANT -- 
