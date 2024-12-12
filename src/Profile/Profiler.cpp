@@ -145,25 +145,64 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 	static f64 megaByte = 1<<20;
 	static f64 gigaByte = 1<<30;
 
+	//Build the padding string based on the longest block name using sprintf
+	char padding[256];
+	sprintf(padding, "%%%ds", s_Profiler->longestBlockName);
+
+	//Tabular format
+	//print the names of the columns of data for a block using printf and the pretty spacing
+	printf(padding, "Block Name");
+	printf(" %12s %13s %11s %11s %10s %10s %10s %10s %10s %10s\n",
+		"Hit Count",
+		"Elapsed (ms)",
+		"% of Track",
+		"% of Total",
+		"Data (MB)",
+		"MB/s",
+		"GB/s",
+		"PF",
+		"MB/PF",
+		"Page Size");
+
 	for (ProfileBlockRecorder& record : timings)
 	{
 		if (record.hitCount)
 		{
-			printf("%s[%llu]: %llu (%.2f%% of track; %.2f%% of total",
-				record.blockName, record.hitCount, record.elapsed, elapsed == 0 ? 0 : 100.0f * (f64)record.elapsed / (f64)elapsed,
+			printf(padding, record.blockName);
+			printf(" %12llu %13.4f %11.2f %11.2f",
+				record.hitCount,
+				record.elapsed / (f64)Timer::GetEstimatedCPUFreq(),
+				elapsed == 0 ? 0 : 100.0f * (f64)record.elapsed / (f64)elapsed,
 				_totalElapsedReference == 0 ? 0 : 100.0f * (f64)record.elapsed / (f64)_totalElapsedReference);
+			
 			if (record.processedByteCount > 0)
 			{
 				f64 bandwidth = (f64)record.processedByteCount / (((f64)record.elapsed / (f64)elapsed) * elapsedSec);
-				printf("; %.2fMB at %.2fMB/s | %.2fGB/s", (f64)record.processedByteCount / megaByte, bandwidth / megaByte, bandwidth / gigaByte);
+				printf("%10.2f %11.2f %10.2f",
+					(f64)record.processedByteCount / megaByte,
+					bandwidth / megaByte,
+					bandwidth / gigaByte
+				);
+			}
+			else
+			{
+				printf("%10s %11s %10s", "x", "x", "x");
 			}
 
 			if(record.pageFaultCountTotal > 0)
 			{
-				printf("; %llu PF (%0.4fKB/fault); Page size is %llu bytes", record.pageFaultCountTotal, (f64)record.processedByteCount / ((f64)record.pageFaultCountTotal * 1024.0), Surveyor::GetOSPageSize());
+				printf("%11llu %10.4f %10llu",
+					record.pageFaultCountTotal,
+					(f64)record.processedByteCount / ((f64)record.pageFaultCountTotal * 1024.0),
+					Surveyor::GetOSPageSize()
+				);
+			}
+			else
+			{
+				printf("%11s %10s %10s", "x", "x", "x");
 			}
 
-			printf(")\n");
+			printf("\n");
 		}
 	}
 }
@@ -246,6 +285,7 @@ NB_TIMINGS_TYPE Profile::Profiler::GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _
 		//Assert(profileBlockRecorder != InitialprofileBlockRecorder);
 	}
 	profileBlockRecorder->blockName = _blockName;
+	s_Profiler->longestBlockName = s_Profiler->longestBlockName > (u32)strlen(_blockName) ? s_Profiler->longestBlockName : (u32)strlen(_blockName);
 
 	return profileBlockRecorderIndex;
 }

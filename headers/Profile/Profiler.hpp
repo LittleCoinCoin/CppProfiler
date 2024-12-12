@@ -548,6 +548,12 @@ struct Profiler
 	*/
 	std::array<ProfileTrack, NB_TRACKS> tracks;
 
+	/*!
+	@brief The longest name of a block in the profiler.
+	@details This is used to align the output of the statistics in ::Report.
+	*/
+	u16 longestBlockName = 0;
+
 	Profiler() = default;
 
 	/*!
