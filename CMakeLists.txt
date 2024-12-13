@@ -19,6 +19,7 @@ set(PROFILER_NAME_LENGTH 64 CACHE STRING "Maximal length of a profiler name")
 set(NB_TRACKS 8 CACHE STRING "Maximal number of profiling tracks a profiler can hold")
 set(PROFILE_TRACK_NAME_LENGTH 64 CACHE STRING "Maximal length of a profiling track name")
 set(NB_TIMINGS 256 CACHE STRING "Maximal number of profiling blocks a profiler track can hold")
+set(PROFILE_BLOCK_NAME_LENGTH 64 CACHE STRING "Maximal length of a profile block recorder's name")
 
 # Options to control the build of the tests
 option(BUILD_PROFILER_TESTS "Tests that the profiler can build in all configurations including 
