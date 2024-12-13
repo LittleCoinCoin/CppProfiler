@@ -80,7 +80,7 @@ void Profile::ProfileBlockResult::Capture(ProfileBlockRecorder& _record, NB_TRAC
 	processedByteCount = _record.processedByteCount;
 	proportionInTrack = _trackElapsedReference == 0 ? 0 : 100.0f * (f64)_record.elapsed / (f64)_trackElapsedReference;
 	proportionInTotal = _totalElapsedReference == 0 ? 0 : 100.0f * (f64)_record.elapsed / (f64)_totalElapsedReference;
-	bandwidthInB = _trackElapsedReference == 0 ? 0 : _record.processedByteCount / (((f64)_record.elapsed / (f64)_trackElapsedReference) * elapsedSec);
+	bandwidthInB = _trackElapsedReference == 0 ? 0 : _record.processedByteCount / elapsedSec;
 }
 
 void Profile::ProfileBlockResult::Clear() noexcept
@@ -189,16 +189,17 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 	{
 		if (record.hitCount)
 		{
+			f64 blockElapsedInSec = (f64)record.elapsed / (f64)Timer::GetEstimatedCPUFreq();
 			printf(padding, record.blockName);
 			printf(" %12llu %13.4f %11.2f %11.2f",
 				record.hitCount,
-				1000 * record.elapsed / (f64)Timer::GetEstimatedCPUFreq(),
+				1000 * blockElapsedInSec,
 				elapsed == 0 ? 0 : 100.0f * (f64)record.elapsed / (f64)elapsed,
 				_totalElapsedReference == 0 ? 0 : 100.0f * (f64)record.elapsed / (f64)_totalElapsedReference);
 			
 			if (record.processedByteCount > 0)
 			{
-				f64 bandwidth = (f64)record.processedByteCount / (((f64)record.elapsed / (f64)elapsed) * elapsedSec);
+				f64 bandwidth = (f64)record.processedByteCount / blockElapsedInSec;
 				printf("%10.2f %11.2f %10.2f",
 					(f64)record.processedByteCount / megaByte,
 					bandwidth / megaByte,
@@ -398,6 +399,7 @@ void Profile::Profiler::ExportToCSV(const char* _fileName) noexcept
 				{
 					if (record.hitCount)
 					{
+						f64 blockElaspesSec = (f64)record.elapsed / (f64)Timer::GetEstimatedCPUFreq();
 						fprintf(file, "%s,%llu,%f,%f,%s,%llu,%llu,%f,%f,%f,%llu,%llu,%f\n",
 							track.name, //Track Name
 							track.elapsed, //Track Elapsed
@@ -406,12 +408,12 @@ void Profile::Profiler::ExportToCSV(const char* _fileName) noexcept
 							record.blockName, //Block Name
 							record.hitCount, //Block Hit Count
 							record.elapsed, //Block Elapsed
-							(f64)record.elapsed / (f64)Timer::GetEstimatedCPUFreq(), //Block Elapsed in Seconds
+							blockElaspesSec, //Block Elapsed in Seconds
 							100.0 * (f64)record.elapsed / (f64)track.elapsed, //Block Proportion in Track
 							100.0 * (f64)record.elapsed / (f64)elapsed, //Block Proportion in Total
 							record.pageFaultCountTotal, //Block Associated Page Faults Count
 							record.processedByteCount, //Block Processed Byte Count
-							record.processedByteCount / (((f64)record.elapsed / (f64)track.elapsed) * (f64)track.elapsed / (f64)Timer::GetEstimatedCPUFreq()) //Block Bandwidth In Bytes
+							record.processedByteCount / blockElaspesSec //Block Bandwidth In Bytes
 							);
 					}
 				}
@@ -537,7 +539,7 @@ void Profile::ProfilerResults::ExportToCSV(const char* _path) noexcept
 					100.0 * (f64)tracks[i].timings[j].elapsed / (f64)elapsed, //Block Proportion in Total
 					tracks[i].timings[j].pageFaultCountTotal, //Block Associated Page Faults Count
 					tracks[i].timings[j].processedByteCount, //Block Processed Byte Count
-					(f64)tracks[i].timings[j].processedByteCount / (((f64)tracks[i].timings[j].elapsed / (f64)tracks[i].elapsed) * ((f64)tracks[i].elapsed / (f64)Timer::GetEstimatedCPUFreq())) //Block Bandwidth In Bytes
+					(f64)tracks[i].timings[j].processedByteCount / tracks[i].timings[j].elapsedSec //Block Bandwidth In Bytes
 					);
             }
         }
