@@ -192,7 +192,7 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 			printf(padding, record.blockName);
 			printf(" %12llu %13.4f %11.2f %11.2f",
 				record.hitCount,
-				record.elapsed / (f64)Timer::GetEstimatedCPUFreq(),
+				1000 * record.elapsed / (f64)Timer::GetEstimatedCPUFreq(),
 				elapsed == 0 ? 0 : 100.0f * (f64)record.elapsed / (f64)elapsed,
 				_totalElapsedReference == 0 ? 0 : 100.0f * (f64)record.elapsed / (f64)_totalElapsedReference);
 			
