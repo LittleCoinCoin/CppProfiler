@@ -170,7 +170,7 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 	//Tabular format
 	//print the names of the columns of data for a block using printf and the pretty spacing
 	printf(padding, "Block Name");
-	printf(" %12s %13s %11s %11s %10s %10s %10s %10s %10s %10s\n",
+	printf(" %12s %13s %11s %11s %10s %10s %10s %10s\n",
 		"Hit Count",
 		"Elapsed (ms)",
 		"% of Track",
@@ -178,9 +178,7 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 		"Data (MB)",
 		"MB/s",
 		"GB/s",
-		"PF",
-		"MB/PF",
-		"Page Size");
+		"PF");
 
 	for (ProfileBlockRecorder& record : timings)
 	{
@@ -210,15 +208,11 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 
 			if(record.pageFaultCountTotal > 0)
 			{
-				printf("%11llu %10.4f %10llu",
-					record.pageFaultCountTotal,
-					(f64)record.processedByteCount / ((f64)record.pageFaultCountTotal * 1024.0),
-					Surveyor::GetOSPageSize()
-				);
+				printf("%11llu", record.pageFaultCountTotal);
 			}
 			else
 			{
-				printf("%11s %10s %10s", "x", "x", "x");
+				printf("%11s", "x");
 			}
 
 			printf("\n");
