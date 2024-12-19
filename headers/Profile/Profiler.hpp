@@ -457,11 +457,6 @@ struct ProfileTrack
 	}
 
 	/*!
-	@brief Outputs the profiling statistics of all blocks in the track.
-	*/
-	PROFILE_API void Report(u64 _totalElapsedReference) noexcept;
-
-	/*!
 	@brief Resets the values of the track and its blocks.
 	@details Resetting do not change the names.
 	@see ::ResetTimings
@@ -512,6 +507,12 @@ struct ProfileTrackResult
 	@brief The number of blocks used in the track.
 	*/
 	NB_TIMINGS_TYPE blockCount = 0;
+
+	/*!
+	@brief The longest name of a block in the track this result mirrors.
+	@details This is used to align the output of the statistics in ::Report.
+	*/
+	U_SIZE_ADAPTER(PROFILE_BLOCK_NAME_LENGTH) longestBlockName = 0;
 
 	/*!
 	@brief The array of mirrors to the Profile::ProfileBlockRecorder structs originally
@@ -581,12 +582,6 @@ struct Profiler
 	@brief The tracks in the profiler.
 	*/
 	std::array<ProfileTrack, NB_TRACKS> tracks;
-
-	/*!
-	@brief The longest name of a block in the profiler.
-	@details This is used to align the output of the statistics in ::Report.
-	*/
-	u16 longestBlockName = 0;
 
 	Profiler() = default;
 
