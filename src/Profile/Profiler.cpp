@@ -676,18 +676,18 @@ void Profile::RepetitionProfiler::ComputeVarianceResults(u64 _repetitionCount) n
 		}
 	}
 
-	// finish the standard deviation calculation for the whole profiler
+	// finish the variance calculation for the whole profiler
 	varianceResults.elapsed /= _repetitionCount;
 	varianceResults.elapsedSec /= _repetitionCount;
 	for (IT_TRACKS_TYPE j = 0; j < varianceResults.trackCount; ++j)
 	{
-		// finish the standard deviation calculation for the current track
+		// finish the variance calculation for the current track
 		varianceResults.tracks[j].elapsed /= _repetitionCount;
 		varianceResults.tracks[j].elapsedSec /= _repetitionCount;
 		varianceResults.tracks[j].proportionInTotal /= _repetitionCount;
 		for (IT_TIMINGS_TYPE k = 0; k < varianceResults.tracks[j].blockCount; ++k)
 		{
-			// finish the standard deviation calculation for the current block
+			// finish the variance calculation for the current block
 			varianceResults.tracks[j].timings[k].elapsed /= _repetitionCount;
 			varianceResults.tracks[j].timings[k].elapsedSec /= _repetitionCount;
 			varianceResults.tracks[j].timings[k].hitCount /= _repetitionCount;
