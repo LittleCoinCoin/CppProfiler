@@ -510,23 +510,23 @@ void Profile::ProfilerResults::Clear() noexcept
 void Profile::ProfilerResults::ExportToCSV(const char* _path) noexcept
 {
 #if PROFILER_ENABLED
-    FILE* file = fopen(_path, "w");
-    if (file)
-    {
-        printf("Exporting profiler results to %s\n", _path);
-        fprintf(file, "Estimated CPU Frequency,Profiler Name,Total Elapsed,Total Time in Seconds\n");
-        fprintf(file, "%llu,%s,%llu,%f\n",
+	FILE* file = fopen(_path, "w");
+	if (file)
+	{
+		printf("Exporting profiler results to %s\n", _path);
+		fprintf(file, "Estimated CPU Frequency,Profiler Name,Total Elapsed,Total Time in Seconds\n");
+		fprintf(file, "%llu,%s,%llu,%f\n",
 		Timer::GetEstimatedCPUFreq(), //Estimated CPU Frequency
 		name, //Profiler Name
 		elapsed, //Total Elapsed
 		elapsedSec //Total Time in Seconds
 		);
-        fprintf(file, "Track Name,Track Elapsed,Track Elapsed in Seconds,Track Proportion in Total,Block Name,Block Hit Count,Block Elapsed,Block Elapsed in Seconds,Block Proportion in Track,Block Proportion in Total,Block Associated Page Faults Count,Block Processed Byte Count,Block Bandwidth In Bytes\n");
-        for (IT_TRACKS_TYPE i = 0; i < trackCount; ++i)
-        {
-            for (IT_TIMINGS_TYPE j = 0; j < tracks[i].blockCount; ++j)
-            {
-                fprintf(file, "%s,%llu,%f,%f,%s,%llu,%llu,%f,%f,%f,%llu,%llu,%f\n",
+		fprintf(file, "Track Name,Track Elapsed,Track Elapsed in Seconds,Track Proportion in Total,Block Name,Block Hit Count,Block Elapsed,Block Elapsed in Seconds,Block Proportion in Track,Block Proportion in Total,Block Associated Page Faults Count,Block Processed Byte Count,Block Bandwidth In Bytes\n");
+		for (IT_TRACKS_TYPE i = 0; i < trackCount; ++i)
+		{
+			for (IT_TIMINGS_TYPE j = 0; j < tracks[i].blockCount; ++j)
+			{
+				fprintf(file, "%s,%llu,%f,%f,%s,%llu,%llu,%f,%f,%f,%llu,%llu,%f\n",
 					tracks[i].name, //Track Name
 					tracks[i].elapsed, //Track Elapsed
 					tracks[i].elapsedSec, //Track Elapsed in Seconds
@@ -541,10 +541,10 @@ void Profile::ProfilerResults::ExportToCSV(const char* _path) noexcept
 					tracks[i].timings[j].processedByteCount, //Block Processed Byte Count
 					(f64)tracks[i].timings[j].processedByteCount / tracks[i].timings[j].elapsedSec //Block Bandwidth In Bytes
 					);
-            }
-        }
-        fclose(file);
-    }
+			}
+		}
+		fclose(file);
+	}
 	else
 	{
 		printf("Error: Could not open file %s for writing.\n", _path);
