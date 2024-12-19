@@ -10,6 +10,14 @@
 
 namespace Profile
 {
+#ifndef MEGABYTE
+#define MEGABYTE 1048576ULL
+#endif // !MEGABYTE
+
+#ifndef GIGABYTE
+#define GIGABYTE 1073741824ULL
+#endif // !GIGABYTE
+
 #ifndef NB_TIMINGS //Possibly defined as compilation variable
 	#define NB_TIMINGS 256 
 #endif // !NB_TIMINGS

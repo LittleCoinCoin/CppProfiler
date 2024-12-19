@@ -162,9 +162,6 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 	f64 elapsedSec = (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq();
 	printf("---- Profile Track: %s (%fms; %.2f%% of total) ----\n", name, 1000 * elapsedSec,
 		_totalElapsedReference == 0 ? 0 : 100.0f * (f64)elapsed / (f64)_totalElapsedReference);
-	
-	static f64 megaByte = 1<<20;
-	static f64 gigaByte = 1<<30;
 
 	//Build the padding string based on the longest block name using sprintf
 	char padding[256];
@@ -201,9 +198,9 @@ void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
 			{
 				f64 bandwidth = (f64)record.processedByteCount / blockElapsedInSec;
 				printf("%10.2f %11.2f %10.2f",
-					(f64)record.processedByteCount / megaByte,
-					bandwidth / megaByte,
-					bandwidth / gigaByte
+					(f64)record.processedByteCount / MEGABYTE,
+					bandwidth / MEGABYTE,
+					bandwidth / GIGABYTE
 				);
 			}
 			else
@@ -933,9 +930,6 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 {
 #if PROFILER_ENABLED
 
-	static f64 megaByte = 1 << 20;
-	static f64 gigaByte = 1 << 30;
-
 	ComputeVarianceResults(_repetitionCount);
 
 	FindMaxResults(_repetitionCount);
@@ -1021,24 +1015,24 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 					{
 						printf("%13s: %10.2f %10.2f %10.2f %10.2f\n",
 							"Data (MB)",
-							(f64)minResults.tracks[i].timings[j].processedByteCount / megaByte,
-							(f64)averageResults.tracks[i].timings[j].processedByteCount / megaByte,
-							std::sqrt(varianceResults.tracks[i].timings[j].processedByteCount) / megaByte,
-							(f64)maxResults.tracks[i].timings[j].processedByteCount / megaByte);
+							(f64)minResults.tracks[i].timings[j].processedByteCount / MEGABYTE,
+							(f64)averageResults.tracks[i].timings[j].processedByteCount / MEGABYTE,
+							std::sqrt(varianceResults.tracks[i].timings[j].processedByteCount) / MEGABYTE,
+							(f64)maxResults.tracks[i].timings[j].processedByteCount / MEGABYTE);
 
 						printf("%13s: %10.2f %10.2f %10.2f %10.2f\n",
 							"MB/s",
-							minResults.tracks[i].timings[j].bandwidthInB / megaByte,
-							averageResults.tracks[i].timings[j].bandwidthInB / megaByte,
-							std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / megaByte,
-							maxResults.tracks[i].timings[j].bandwidthInB / megaByte);
+							minResults.tracks[i].timings[j].bandwidthInB / MEGABYTE,
+							averageResults.tracks[i].timings[j].bandwidthInB / MEGABYTE,
+							std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / MEGABYTE,
+							maxResults.tracks[i].timings[j].bandwidthInB / MEGABYTE);
 
 						printf("%13s: %10.2f %10.2f %10.2f %10.2f\n",
 							"GB/s",
-							minResults.tracks[i].timings[j].bandwidthInB / gigaByte,
-							averageResults.tracks[i].timings[j].bandwidthInB / gigaByte,
-							std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / gigaByte,
-							maxResults.tracks[i].timings[j].bandwidthInB / gigaByte);
+							minResults.tracks[i].timings[j].bandwidthInB / GIGABYTE,
+							averageResults.tracks[i].timings[j].bandwidthInB / GIGABYTE,
+							std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / GIGABYTE,
+							maxResults.tracks[i].timings[j].bandwidthInB / GIGABYTE);
 					}
 
 					if (averageResults.tracks[i].timings[j].pageFaultCountTotal > 0)
