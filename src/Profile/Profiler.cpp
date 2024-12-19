@@ -933,6 +933,9 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 {
 #if PROFILER_ENABLED
 
+	static f64 megaByte = 1 << 20;
+	static f64 gigaByte = 1 << 30;
+
 	ComputeVarianceResults(_repetitionCount);
 
 	FindMaxResults(_repetitionCount);
@@ -942,43 +945,111 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 	//go through all blocks and all tracks and print the average results with the
 	//standard deviation, the minimum and the maximum values
 	printf("\n---- Estimated CPU Frequency: %llu ----\n", Timer::GetEstimatedCPUFreq());
-	printf("---- Repetition Profiler Report: %s ({%f, %f(+/-)%f, %f}ms) ----\n",
-		averageResults.name,
-		1000 * minResults.elapsedSec, 1000 * averageResults.elapsedSec, 1000 * std::sqrt(varianceResults.elapsedSec), 1000 * maxResults.elapsedSec);
+	printf("---- Repetition Profiler Report: %s ----\n", averageResults.name);
+
+	//Tabular results at the level of the profiler
+	//Print tabs of the statistics names
+	printf("%14s %10s %10s %10s %10s\n",
+		"" /*empty space for the name of the rows*/, "MIN", "AVG", "StD", "MAX");
+	printf("%13s: %10.4f %10.4f %10.4f %10.4f\n",
+		"Elapsed (ms)",
+		1000 * minResults.elapsedSec,
+		1000 * averageResults.elapsedSec,
+		1000 * std::sqrt(varianceResults.elapsedSec),
+		1000 * maxResults.elapsedSec);
+	
 	for (IT_TRACKS_TYPE i = 0; i < averageResults.trackCount; ++i)
 	{
 		if (averageResults.tracks[i].name != nullptr)
 		{
-			printf("---- Profile Track Results : % s({% f,% f(+/ -) % f,% f}ms; { % .2f, % .2f(+/ -) % .2f, % .2f }%% of total) ----\n",
-				averageResults.tracks[i].name,
-				1000 * minResults.tracks[i].elapsedSec, 1000 * averageResults.tracks[i].elapsedSec,	1000 * std::sqrt(varianceResults.tracks[i].elapsedSec), 1000 * maxResults.tracks[i].elapsedSec,
-				minResults.tracks[i].proportionInTotal, averageResults.tracks[i].proportionInTotal,	std::sqrt(varianceResults.tracks[i].proportionInTotal), maxResults.tracks[i].proportionInTotal);
+			printf("--- Track: %s ---\n", averageResults.tracks[i].name);
+			printf("%14s %10s %10s %10s %10s\n",
+				"" /*empty space for the name of the rows*/, "MIN", "AVG", "StD", "MAX");
+
+			printf("%13s: %10.4f %10.4f %10.4f %10.4f\n",
+				"Elapsed (ms)",
+				1000 * minResults.tracks[i].elapsedSec,
+				1000 * averageResults.tracks[i].elapsedSec,
+				1000 * std::sqrt(varianceResults.tracks[i].elapsedSec),
+				1000 * maxResults.tracks[i].elapsedSec);
+			printf("%13s: %10.4f %10.4f %10.4f %10.4f\n",
+				"% of Total",
+				minResults.tracks[i].proportionInTotal,
+				averageResults.tracks[i].proportionInTotal,
+				std::sqrt(varianceResults.tracks[i].proportionInTotal),
+				maxResults.tracks[i].proportionInTotal);
+
 
 			for (IT_TIMINGS_TYPE j = 0; j < averageResults.tracks[i].blockCount; ++j)
 			{
 				if (averageResults.tracks[i].timings[j].hitCount > 0)
 				{
-					printf("%s[{%llu, %llu(+/-)%f, %llu}]: {%llu, %llu(+/-)%f, %llu} ({%.2f, %.2f(+/-)%.2f, %.2f}%% of track; {%.2f, %.2f(+/-)%.2f, %.2f}%% of total",
-						averageResults.tracks[i].timings[j].blockName,
-						minResults.tracks[i].timings[j].hitCount, averageResults.tracks[i].timings[j].hitCount, std::sqrt(varianceResults.tracks[i].timings[j].hitCount), maxResults.tracks[i].timings[j].hitCount,
-						minResults.tracks[i].timings[j].elapsed, averageResults.tracks[i].timings[j].elapsed, std::sqrt(varianceResults.tracks[i].timings[j].elapsed), maxResults.tracks[i].timings[j].elapsed,
-						minResults.tracks[i].timings[j].proportionInTrack, averageResults.tracks[i].timings[j].proportionInTrack, std::sqrt(varianceResults.tracks[i].timings[j].proportionInTrack), maxResults.tracks[i].timings[j].proportionInTrack,
-						minResults.tracks[i].timings[j].proportionInTotal, averageResults.tracks[i].timings[j].proportionInTotal, std::sqrt(varianceResults.tracks[i].timings[j].proportionInTotal), maxResults.tracks[i].timings[j].proportionInTotal);
+					//Tabular format
+					//print the names of the columns of data for a block using printf and the pretty spacing
+					printf("-- Block: %s --\n", averageResults.tracks[i].timings[j].blockName);
+					printf("%14s %10s %10s %10s %10s\n",
+						""/*empty space for the data name*/, "MIN", "AVG", "StD", "MAX");
+					printf("%13s: %10llu %10llu %10.2f %10llu\n",
+						"Hit Count",
+						minResults.tracks[i].timings[j].hitCount,
+						averageResults.tracks[i].timings[j].hitCount,
+						std::sqrt(varianceResults.tracks[i].timings[j].hitCount),
+						maxResults.tracks[i].timings[j].hitCount);
+
+					printf("%13s: %10.4f %10.4f %10.4f %10.4f\n",
+						"Elapsed (ms)",
+						1000 * minResults.tracks[i].timings[j].elapsedSec,
+						1000 * averageResults.tracks[i].timings[j].elapsedSec,
+						1000 * std::sqrt(varianceResults.tracks[i].timings[j].elapsedSec),
+						1000 * maxResults.tracks[i].timings[j].elapsedSec);
+
+					printf("%13s: %10.4f %10.4f %10.4f %10.4f\n",
+						"% of Track",
+						minResults.tracks[i].timings[j].proportionInTrack,
+						averageResults.tracks[i].timings[j].proportionInTrack,
+						std::sqrt(varianceResults.tracks[i].timings[j].proportionInTrack),
+							maxResults.tracks[i].timings[j].proportionInTrack);
+
+					printf("%13s: %10.4f %10.4f %10.4f %10.4f\n",
+						"% of Total",
+						minResults.tracks[i].timings[j].proportionInTotal,
+						averageResults.tracks[i].timings[j].proportionInTotal,
+						std::sqrt(varianceResults.tracks[i].timings[j].proportionInTotal),
+						maxResults.tracks[i].timings[j].proportionInTotal);
+
 					if (averageResults.tracks[i].timings[j].processedByteCount > 0)
 					{
-						printf("; {%.3f, %.3f(+/-)%.3f, %.3f}MB at {%.3f, %.3f(+/-)%.3f, %.3f}MB/s | {%.3f, %.3f(+/-)%.3f, %.3f}GB/s",
-							(f32)minResults.tracks[i].timings[j].processedByteCount / (1 << 20), (f32)averageResults.tracks[i].timings[j].processedByteCount / (1 << 20), std::sqrt(varianceResults.tracks[i].timings[j].processedByteCount) / (1 << 20), (f32)maxResults.tracks[i].timings[j].processedByteCount / (1 << 20),
-							minResults.tracks[i].timings[j].bandwidthInB / (1 << 20), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 20),	std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / (1 << 20), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 20),
-							minResults.tracks[i].timings[j].bandwidthInB / (1 << 30), averageResults.tracks[i].timings[j].bandwidthInB / (1 << 30),	std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / (1 << 30), maxResults.tracks[i].timings[j].bandwidthInB / (1 << 30));
+						printf("%13s: %10.2f %10.2f %10.2f %10.2f\n",
+							"Data (MB)",
+							(f64)minResults.tracks[i].timings[j].processedByteCount / megaByte,
+							(f64)averageResults.tracks[i].timings[j].processedByteCount / megaByte,
+							std::sqrt(varianceResults.tracks[i].timings[j].processedByteCount) / megaByte,
+							(f64)maxResults.tracks[i].timings[j].processedByteCount / megaByte);
+
+						printf("%13s: %10.2f %10.2f %10.2f %10.2f\n",
+							"MB/s",
+							minResults.tracks[i].timings[j].bandwidthInB / megaByte,
+							averageResults.tracks[i].timings[j].bandwidthInB / megaByte,
+							std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / megaByte,
+							maxResults.tracks[i].timings[j].bandwidthInB / megaByte);
+
+						printf("%13s: %10.2f %10.2f %10.2f %10.2f\n",
+							"GB/s",
+							minResults.tracks[i].timings[j].bandwidthInB / gigaByte,
+							averageResults.tracks[i].timings[j].bandwidthInB / gigaByte,
+							std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / gigaByte,
+							maxResults.tracks[i].timings[j].bandwidthInB / gigaByte);
 					}
-					if ((f64)averageResults.tracks[i].timings[j].pageFaultCountTotal > 0.0)
+
+					if (averageResults.tracks[i].timings[j].pageFaultCountTotal > 0)
 					{
-						printf("; {%.llu, %.llu(+/-)%.f, %.llu}PF ({%0.4f, %0.4f(+/-)%0.4f, %0.4f}KB/fault); Page size is %llu bytes",
-							minResults.tracks[i].timings[j].pageFaultCountTotal, averageResults.tracks[i].timings[j].pageFaultCountTotal, std::sqrt(varianceResults.tracks[i].timings[j].pageFaultCountTotal), maxResults.tracks[i].timings[j].pageFaultCountTotal,
-							(f64)minResults.tracks[i].timings[j].processedByteCount / ((f64)minResults.tracks[i].timings[j].pageFaultCountTotal * 1024.0), (f64)averageResults.tracks[i].timings[j].processedByteCount / ((f64)averageResults.tracks[i].timings[j].pageFaultCountTotal * 1024.0), varianceResults.tracks[i].timings[j].pageFaultCountTotal == 0 ? 0.0 :std::sqrt((f64)varianceResults.tracks[i].timings[j].processedByteCount / ((f64)varianceResults.tracks[i].timings[j].pageFaultCountTotal * 1024.0)), (f64)maxResults.tracks[i].timings[j].processedByteCount / ((f64)maxResults.tracks[i].timings[j].pageFaultCountTotal * 1024.0),
-							Surveyor::GetOSPageSize());
+						printf("%13s: %10llu %10llu %10.2f %10llu\n",
+							"PF",
+							minResults.tracks[i].timings[j].pageFaultCountTotal,
+							averageResults.tracks[i].timings[j].pageFaultCountTotal,
+							std::sqrt(varianceResults.tracks[i].timings[j].pageFaultCountTotal),
+							maxResults.tracks[i].timings[j].pageFaultCountTotal);
 					}
-					printf(")\n");
 				}
 			}
 		}
