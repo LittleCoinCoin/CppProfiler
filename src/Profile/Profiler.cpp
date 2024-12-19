@@ -78,9 +78,9 @@ void Profile::ProfileBlockResult::Capture(ProfileBlockRecorder& _record, NB_TRAC
 	hitCount = _record.hitCount;
 	pageFaultCountTotal = _record.pageFaultCountTotal;
 	processedByteCount = _record.processedByteCount;
-	proportionInTrack = _trackElapsedReference == 0 ? 0 : 100.0f * (f64)_record.elapsed / (f64)_trackElapsedReference;
-	proportionInTotal = _totalElapsedReference == 0 ? 0 : 100.0f * (f64)_record.elapsed / (f64)_totalElapsedReference;
-	bandwidthInB = _trackElapsedReference == 0 ? 0 : (f64)_record.processedByteCount / elapsedSec;
+	proportionInTrack = _trackElapsedReference == 0 ? 0.0f : 100.0f * (f64)_record.elapsed / (f64)_trackElapsedReference;
+	proportionInTotal = _totalElapsedReference == 0 ? 0.0f : 100.0f * (f64)_record.elapsed / (f64)_totalElapsedReference;
+	bandwidthInB = _trackElapsedReference == 0 ? 0.0f : (f64)_record.processedByteCount / elapsedSec;
 }
 
 void Profile::ProfileBlockResult::Clear() noexcept
@@ -99,19 +99,35 @@ void Profile::ProfileBlockResult::Clear() noexcept
 
 void Profile::ProfileBlockResult::Report() noexcept
 {
-	printf("%s[%llu]: %llu (%.2f%% of track; %.2f%% of total",
-		blockName, hitCount, elapsed, proportionInTrack,proportionInTotal);
+	printf("%s %12llu %13.4f %11.2f %11.2f",
+		blockName,
+		hitCount,
+		1000 * elapsedSec,
+		proportionInTrack,
+		proportionInTotal);
+
 	if (processedByteCount > 0)
 	{
-		printf("; %lluMB at %.2fMB/s | %.2fGB/s", processedByteCount / (1<<20), bandwidthInB / (1<<20), bandwidthInB / (1<<30));
+		printf("%10.2f %11.2f %10.2f",
+			(f32)processedByteCount / MEGABYTE,
+			bandwidthInB / MEGABYTE,
+			bandwidthInB / GIGABYTE);
 	}
-
-	if(pageFaultCountTotal > 0)
+	else
 	{
-		printf("; %llu PF (%0.4fKB/fault); Page size is %llu bytes", pageFaultCountTotal, (f64)processedByteCount / ((f64)pageFaultCountTotal * 1024.0), Surveyor::GetOSPageSize());
+		printf("%10s %11s %10s", "x", "x", "x");
 	}
 
-	printf(")\n");
+	if (pageFaultCountTotal > 0)
+	{
+		printf("%11llu", pageFaultCountTotal);
+	}
+	else
+	{
+		printf("%11s", "x");
+	}
+
+	printf("\n");
 }
 
 void Profile::ProfileBlockResult::Reset() noexcept
@@ -138,6 +154,13 @@ void Profile::ProfileTrackResult::Capture(ProfileTrack& _track, u64 _trackIdx, u
 		if (record.hitCount)
 		{
 			timings[blockCount].Capture(record, _trackIdx, _profileBlockRecorderIdx, _track.elapsed, _totalElapsedReference);
+			
+			//find the longest block name
+			if (strlen(timings[blockCount].blockName) > longestBlockName)
+			{
+				longestBlockName = strlen(timings[blockCount].blockName);
+			}
+			
 			blockCount++;
 		}
 		_profileBlockRecorderIdx++;
@@ -155,78 +178,6 @@ void Profile::ProfileTrackResult::Clear() noexcept
 		timings[i].Clear();
 	}
 	blockCount = 0;
-}
-
-void Profile::ProfileTrack::Report(u64 _totalElapsedReference) noexcept
-{
-	f64 elapsedSec = (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq();
-	printf("---- Profile Track: %s (%fms; %.2f%% of total) ----\n", name, 1000 * elapsedSec,
-		_totalElapsedReference == 0 ? 0 : 100.0f * (f64)elapsed / (f64)_totalElapsedReference);
-	
-	static f64 megaByte = 1<<20;
-	static f64 gigaByte = 1<<30;
-
-	//Build the padding string based on the longest block name using sprintf
-	char padding[256];
-	sprintf(padding, "%%%ds", s_Profiler->longestBlockName);
-
-	//Tabular format
-	//print the names of the columns of data for a block using printf and the pretty spacing
-	printf(padding, "Block Name");
-	printf(" %12s %13s %11s %11s %10s %10s %10s %10s %10s %10s\n",
-		"Hit Count",
-		"Elapsed (ms)",
-		"% of Track",
-		"% of Total",
-		"Data (MB)",
-		"MB/s",
-		"GB/s",
-		"PF",
-		"MB/PF",
-		"Page Size");
-
-	for (ProfileBlockRecorder& record : timings)
-	{
-		if (record.hitCount)
-		{
-			f64 blockElapsedInSec = (f64)record.elapsed / (f64)Timer::GetEstimatedCPUFreq();
-			printf(padding, record.blockName);
-			printf(" %12llu %13.4f %11.2f %11.2f",
-				record.hitCount,
-				1000 * blockElapsedInSec,
-				elapsed == 0 ? 0 : 100.0f * (f64)record.elapsed / (f64)elapsed,
-				_totalElapsedReference == 0 ? 0 : 100.0f * (f64)record.elapsed / (f64)_totalElapsedReference);
-			
-			if (record.processedByteCount > 0)
-			{
-				f64 bandwidth = (f64)record.processedByteCount / blockElapsedInSec;
-				printf("%10.2f %11.2f %10.2f",
-					(f64)record.processedByteCount / megaByte,
-					bandwidth / megaByte,
-					bandwidth / gigaByte
-				);
-			}
-			else
-			{
-				printf("%10s %11s %10s", "x", "x", "x");
-			}
-
-			if(record.pageFaultCountTotal > 0)
-			{
-				printf("%11llu %10.4f %10llu",
-					record.pageFaultCountTotal,
-					(f64)record.processedByteCount / ((f64)record.pageFaultCountTotal * 1024.0),
-					Surveyor::GetOSPageSize()
-				);
-			}
-			else
-			{
-				printf("%11s %10s %10s", "x", "x", "x");
-			}
-
-			printf("\n");
-		}
-	}
 }
 
 void Profile::ProfileTrack::Clear() noexcept
@@ -267,11 +218,32 @@ void Profile::ProfileTrack::ResetTimings() noexcept
 
 void Profile::ProfileTrackResult::Report() noexcept
 {
-	printf("---- Profile Track Results: %s (%fms; %.2f%% of total) ----\n", name, 1000 * elapsedSec, proportionInTotal);
+	f64 elapsedSec = (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq();
+	printf("---- Profile Track: %s (%fms; %.2f%% of total) ----\n", name, 1000 * elapsedSec, proportionInTotal);
+
+	//Build the padding string based on the longest block name using sprintf
+	char padding[32];
+	sprintf(padding, "%%%ds", longestBlockName);
+
+	//Tabular format
+	//print the names of the columns of data for a block using printf and the pretty spacing
+	printf(padding, "Block Name");
+	printf(" %12s %13s %11s %11s %10s %10s %10s %10s\n",
+		"Hit Count",
+		"Elapsed (ms)",
+		"% of Track",
+		"% of Total",
+		"Data (MB)",
+		"MB/s",
+		"GB/s",
+		"PF");
+
 	for (ProfileBlockResult& record : timings)
 	{
 		if (record.hitCount)
 		{
+			sprintf(padding, "%%%ds", longestBlockName - (U_SIZE_ADAPTER(PROFILE_BLOCK_NAME_LENGTH))strlen(record.blockName));
+			printf(padding, "");
 			record.Report();
 		}
 	}
@@ -307,7 +279,6 @@ NB_TIMINGS_TYPE Profile::Profiler::GetProfileBlockRecorderIndex(NB_TRACKS_TYPE _
 		//Assert(profileBlockRecorder != InitialprofileBlockRecorder);
 	}
 	profileBlockRecorder->SetBlockName(_blockName);
-	s_Profiler->longestBlockName = s_Profiler->longestBlockName > (u32)strlen(_blockName) ? s_Profiler->longestBlockName : (u32)strlen(_blockName);
 
 	return profileBlockRecorderIndex;
 }
@@ -444,16 +415,10 @@ void Profile::Profiler::Initialize() noexcept
 void Profile::Profiler::Report() noexcept
 {
 #if PROFILER_ENABLED
-	printf("\n---- Estimated CPU Frequency: %llu ----\n", Timer::GetEstimatedCPUFreq());
-	printf("---- Profiler Report: %s (%fms) ----\n", name, 1000 * (f64)elapsed / (f64)Timer::GetEstimatedCPUFreq());
-
-	for (ProfileTrack& track : tracks)
-	{
-		if (track.hasBlock)
-		{
-			track.Report(elapsed);
-		}
-	}
+	ProfilerResults* results = new ProfilerResults();
+	results->Capture(this);
+	results->Report();
+	delete results;
 #else
 	printf("Profiler report was called but it is disabled. Report is therefore empty and will be skipped.\nThe profiler can be enabled by defining _PROFILER_ENABLED in the compiler options.\n");
 #endif
@@ -556,6 +521,7 @@ void Profile::ProfilerResults::ExportToCSV(const char* _path) noexcept
 
 void Profile::ProfilerResults::Report() noexcept
 {
+	printf("\n---- Estimated CPU Frequency: %llu ----\n", Timer::GetEstimatedCPUFreq());
 	printf("---- ProfilerResults: %s (%fms) ----\n", name, 1000 * elapsedSec);
 	
 	for (IT_TRACKS_TYPE i = 0; i < trackCount; ++i)
@@ -933,9 +899,6 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 {
 #if PROFILER_ENABLED
 
-	static f64 megaByte = 1 << 20;
-	static f64 gigaByte = 1 << 30;
-
 	ComputeVarianceResults(_repetitionCount);
 
 	FindMaxResults(_repetitionCount);
@@ -1021,24 +984,24 @@ void Profile::RepetitionProfiler::Report(u64 _repetitionCount) noexcept
 					{
 						printf("%13s: %10.2f %10.2f %10.2f %10.2f\n",
 							"Data (MB)",
-							(f64)minResults.tracks[i].timings[j].processedByteCount / megaByte,
-							(f64)averageResults.tracks[i].timings[j].processedByteCount / megaByte,
-							std::sqrt(varianceResults.tracks[i].timings[j].processedByteCount) / megaByte,
-							(f64)maxResults.tracks[i].timings[j].processedByteCount / megaByte);
+							(f64)minResults.tracks[i].timings[j].processedByteCount / MEGABYTE,
+							(f64)averageResults.tracks[i].timings[j].processedByteCount / MEGABYTE,
+							std::sqrt(varianceResults.tracks[i].timings[j].processedByteCount) / MEGABYTE,
+							(f64)maxResults.tracks[i].timings[j].processedByteCount / MEGABYTE);
 
 						printf("%13s: %10.2f %10.2f %10.2f %10.2f\n",
 							"MB/s",
-							minResults.tracks[i].timings[j].bandwidthInB / megaByte,
-							averageResults.tracks[i].timings[j].bandwidthInB / megaByte,
-							std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / megaByte,
-							maxResults.tracks[i].timings[j].bandwidthInB / megaByte);
+							minResults.tracks[i].timings[j].bandwidthInB / MEGABYTE,
+							averageResults.tracks[i].timings[j].bandwidthInB / MEGABYTE,
+							std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / MEGABYTE,
+							maxResults.tracks[i].timings[j].bandwidthInB / MEGABYTE);
 
 						printf("%13s: %10.2f %10.2f %10.2f %10.2f\n",
 							"GB/s",
-							minResults.tracks[i].timings[j].bandwidthInB / gigaByte,
-							averageResults.tracks[i].timings[j].bandwidthInB / gigaByte,
-							std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / gigaByte,
-							maxResults.tracks[i].timings[j].bandwidthInB / gigaByte);
+							minResults.tracks[i].timings[j].bandwidthInB / GIGABYTE,
+							averageResults.tracks[i].timings[j].bandwidthInB / GIGABYTE,
+							std::sqrt(varianceResults.tracks[i].timings[j].bandwidthInB) / GIGABYTE,
+							maxResults.tracks[i].timings[j].bandwidthInB / GIGABYTE);
 					}
 
 					if (averageResults.tracks[i].timings[j].pageFaultCountTotal > 0)
