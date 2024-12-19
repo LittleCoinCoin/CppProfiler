@@ -34,7 +34,7 @@ void Profile::ProfileBlockRecorder::SetBlockNameFmt(const char* _fmt, ...)
 	int length = std::vsnprintf(nullptr, 0, _fmt, args);
 	va_end(args);
 
-	if (length > sizeof(blockName))
+	if (length > PROFILE_BLOCK_NAME_LENGTH)
 	{
 		printf("Warning: Tried to a blockName for the profiler that is too long for the buffer. The blockName will be truncated.\n");
 	}
@@ -42,7 +42,7 @@ void Profile::ProfileBlockRecorder::SetBlockNameFmt(const char* _fmt, ...)
 	if (length > 0)
 	{
 		va_start(args, _fmt);
-		std::vsnprintf(blockName, sizeof(blockName), _fmt, args);
+		std::vsnprintf(blockName, PROFILE_BLOCK_NAME_LENGTH, _fmt, args);
 		va_end(args);
 	}
 }
@@ -320,7 +320,7 @@ void Profile::Profiler::SetProfilerNameFmt(const char* _fmt, ...)
 	int length = std::vsnprintf(nullptr, 0, _fmt, args);
 	va_end(args);
 
-	if (length > sizeof(name))
+	if (length > PROFILER_NAME_LENGTH)
 	{
 		printf("Warning: Tried to a name for the profiler that is too long for the buffer. The name will be truncated.\n");
 	}
@@ -328,7 +328,7 @@ void Profile::Profiler::SetProfilerNameFmt(const char* _fmt, ...)
 	if (length > 0)
 	{
 		va_start(args, _fmt);
-		std::vsnprintf(name, sizeof(name), _fmt, args);
+		std::vsnprintf(name, PROFILER_NAME_LENGTH, _fmt, args);
 		va_end(args);
 	}
 }
@@ -343,7 +343,7 @@ void Profile::Profiler::SetTrackNameFmt(NB_TRACKS_TYPE _trackIdx, const char* _f
 		int length = std::vsnprintf(nullptr, 0, _fmt, args);
 		va_end(args);
 
-		if (length > sizeof(tracks[_trackIdx].name))
+		if (length > PROFILE_TRACK_NAME_LENGTH)
 		{
 			printf("Warning: Tried to set a track name that is too long for the buffer. Track index: %d. The name will be truncated.\n", _trackIdx);
 		}
@@ -351,7 +351,7 @@ void Profile::Profiler::SetTrackNameFmt(NB_TRACKS_TYPE _trackIdx, const char* _f
 		if (length > 0)
 		{
 			va_start(args, _fmt);
-			std::vsnprintf(tracks[_trackIdx].name, sizeof(tracks[_trackIdx].name), _fmt, args);
+			std::vsnprintf(tracks[_trackIdx].name, PROFILE_TRACK_NAME_LENGTH, _fmt, args);
 			va_end(args);
 		}
 	}
