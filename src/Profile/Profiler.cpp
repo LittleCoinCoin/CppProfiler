@@ -80,7 +80,7 @@ void Profile::ProfileBlockResult::Capture(ProfileBlockRecorder& _record, NB_TRAC
 	processedByteCount = _record.processedByteCount;
 	proportionInTrack = _trackElapsedReference == 0 ? 0 : 100.0f * (f64)_record.elapsed / (f64)_trackElapsedReference;
 	proportionInTotal = _totalElapsedReference == 0 ? 0 : 100.0f * (f64)_record.elapsed / (f64)_totalElapsedReference;
-	bandwidthInB = _trackElapsedReference == 0 ? 0 : _record.processedByteCount / elapsedSec;
+	bandwidthInB = _trackElapsedReference == 0 ? 0 : (f64)_record.processedByteCount / elapsedSec;
 }
 
 void Profile::ProfileBlockResult::Clear() noexcept
